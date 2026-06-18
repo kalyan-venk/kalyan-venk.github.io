@@ -261,7 +261,7 @@ tbody tr:hover { background: rgba(255,255,255,0.02); }
 .il-app { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
 .il-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .il-field label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; color: var(--text); }
-.il-field textarea { width: 100%; min-height: 175px; resize: vertical; background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; font: inherit; font-size: 0.98rem; line-height: 1.6; outline: none; transition: border-color 0.15s; }
+.il-field textarea { width: 100%; min-height: 260px; resize: vertical; background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; font: inherit; font-size: 0.98rem; line-height: 1.6; outline: none; transition: border-color 0.15s; }
 .il-field textarea:focus { border-color: var(--accent); }
 .il-field textarea::placeholder { color: var(--text-faint); }
 .il-controls { display: flex; gap: 14px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
