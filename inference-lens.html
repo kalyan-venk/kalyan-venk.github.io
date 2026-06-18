@@ -53,16 +53,18 @@
     <p class="kicker reveal">Live demo</p>
     <h2 class="section-title reveal">Score two responses and watch a judge get fooled</h2>
     <p class="section-sub reveal">Paste two responses, or load the built in sample. Two trained models pick the one they think is better. The case I want you to see is when they confidently choose the worse, padded answer. That is not a bug. That is the whole point.</p>
-    <div class="embed-shell reveal">
-      <div class="embed-bar">
-        <span class="dot" style="background:#fb7185;"></span>
-        <span class="dot" style="background:#fbbf24;"></span>
-        <span class="dot" style="background:#4ade80;"></span>
-        <span class="url">kalyan-venk-inference-lens.hf.space</span>
+    <div class="il-app reveal">
+      <div class="il-inputs">
+        <div class="il-field"><label>Response A</label><textarea id="il-a" placeholder="Paste the first answer here..."></textarea></div>
+        <div class="il-field"><label>Response B</label><textarea id="il-b" placeholder="Paste the second answer here..."></textarea></div>
       </div>
-      <iframe class="embed-frame" src="https://kalyan-venk-inference-lens.hf.space" title="Inference-Lens live scorer" loading="lazy"></iframe>
+      <div class="il-controls">
+        <button id="il-sample" class="btn btn-ghost">Load a sample pair</button>
+        <button id="il-score" class="btn btn-primary">Score responses</button>
+      </div>
+      <div id="il-results" class="il-results"></div>
     </div>
-    <p class="section-sub reveal" style="margin-top:14px; font-size:0.9rem;">If the demo is asleep it may take 30 seconds to wake. You can also open it in a <a href="https://kalyan-venk-inference-lens.hf.space" target="_blank" rel="noopener" style="color:var(--indigo)">full tab here</a>.</p>
+    <p class="section-sub reveal" style="margin-top:14px; font-size:0.9rem;">Runs entirely in your browser, the real trained models, nothing sent anywhere.</p>
   </div>
 </section>
 
@@ -164,6 +166,8 @@
 </footer>
 
 <script src="assets/script.js"></script>
+<script src="assets/model.js"></script>
+<script src="assets/scorer.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 window.addEventListener('load', () => {
