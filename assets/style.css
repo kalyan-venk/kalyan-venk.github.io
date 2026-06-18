@@ -257,6 +257,37 @@ tbody tr:hover { background: rgba(255,255,255,0.02); }
 .embed-bar .url { margin-left: 12px; font-family: var(--mono); font-size: 0.8rem; color: var(--text-faint); }
 .embed-frame { width: 100%; height: 760px; border: 0; display: block; background: var(--bg); }
 
+/* ---------- client-side scorer (native demo) ---------- */
+.il-app { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+.il-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.il-field label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; color: var(--text); }
+.il-field textarea { width: 100%; min-height: 175px; resize: vertical; background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; font: inherit; font-size: 0.98rem; line-height: 1.6; outline: none; transition: border-color 0.15s; }
+.il-field textarea:focus { border-color: var(--accent); }
+.il-field textarea::placeholder { color: var(--text-faint); }
+.il-controls { display: flex; gap: 14px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+.il-results { opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+.il-results.show { opacity: 1; transform: none; margin-top: 26px; }
+.il-verdict { background: linear-gradient(120deg, rgba(99,102,241,0.12), rgba(168,85,247,0.10)); border: 1px solid rgba(129,140,248,0.35); border-radius: var(--radius-sm); padding: 22px 26px; line-height: 1.75; font-size: 1.05rem; color: var(--text-dim); }
+.il-verdict b { color: #c7d0ff; }
+.il-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.il-scorecard { background: var(--bg-soft); border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 18px 20px; }
+.il-sc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.il-sc-name { font-weight: 700; }
+.il-sc-pick { font-size: 0.76rem; color: #c7d0ff; background: rgba(129,140,248,0.18); padding: 3px 11px; border-radius: 999px; font-family: var(--mono); }
+.il-sc-row { display: flex; align-items: center; gap: 10px; margin: 9px 0; }
+.il-sc-lbl { width: 14px; color: var(--text-faint); font-weight: 700; font-size: 0.9rem; }
+.il-bar { flex: 1; height: 10px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+.il-fill { height: 100%; border-radius: 99px; background: #39414f; transition: width 0.55s cubic-bezier(.2,.7,.2,1); }
+.il-fill.win { background: var(--grad); }
+.il-sc-num { width: 50px; text-align: right; color: var(--text-dim); font-family: var(--mono); font-size: 0.88rem; }
+.il-features { margin-top: 16px; }
+.il-feat-title { font-weight: 600; margin-bottom: 10px; color: var(--text); }
+.il-feat-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.il-feat-table th { background: var(--surface-2); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-dim); text-align: left; padding: 11px 14px; }
+.il-feat-table td { padding: 11px 14px; border-top: 1px solid var(--border-soft); color: var(--text); }
+.il-feat-table td.il-note { color: var(--text-faint); font-size: 0.85rem; }
+@media (max-width: 700px) { .il-inputs, .il-cards { grid-template-columns: 1fr; } }
+
 /* contact */
 .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .contact-card { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 26px; transition: all 0.2s; }
