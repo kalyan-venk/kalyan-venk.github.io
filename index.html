@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalyan Venkatesh - LLM Agents, Evaluation and Trustworthiness</title>
-<meta name="description" content="MLOps and LLMOps engineer building and stress-testing the automated judges inside LLM systems. Evaluator reliability and agent monitoring research with live demos.">
-<meta property="og:title" content="Kalyan Venkatesh - LLM Evaluation and Trustworthiness">
-<meta property="og:description" content="I build and break the automated judges inside AI systems. Live demos, two research projects, real adversarial results.">
+<title>Kalyan Venkatesh - ML Engineer, Inference Reliability and LLM Evaluation</title>
+<meta name="description" content="ML Engineer working on systems that hold up when it matters. Multi-agent inference reliability and LLM evaluation, with live demos and real adversarial results.">
+<meta property="og:title" content="Kalyan Venkatesh - Inference Reliability and LLM Evaluation">
+<meta property="og:description" content="I build the automated judges inside AI systems, then I try to break them. Two research projects, one live demo.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,17 +33,17 @@
 
 <header class="hero">
   <div class="wrap">
-    <span class="eyebrow reveal"><span class="blip"></span>LLM Agents, Evaluation and Trustworthiness</span>
-    <h1 class="reveal">I build and break the <span class="grad">automated judges</span> hiding inside AI systems.</h1>
-    <p class="lead reveal d1">Every LLM pipeline ships with a model that grades other models and decides what goes out the door. The field pours its attention into the workers and almost nobody audits the inspector. That blind spot is my entire research direction, and I have the adversarial numbers to show why it matters.</p>
+    <span class="eyebrow reveal"><span class="blip"></span>Inference reliability · LLM evaluation</span>
+    <h1 class="reveal">I build the <span class="grad">automated judges</span> inside AI systems. Then I try to break them.</h1>
+    <p class="lead reveal d1">I have spent 3 plus years on one problem. ML systems that hold up when it actually matters, not just on a benchmark. Every LLM pipeline now leans on a model that grades other models, and almost nobody asks whether that judge can be fooled. I do, and I have the adversarial numbers to show what happens.</p>
     <div class="cta-row reveal d2">
       <a href="inference-lens.html#demo" class="btn btn-primary">Try the live scorer &rarr;</a>
       <a href="about.html" class="btn btn-ghost">About me</a>
     </div>
     <div class="trust reveal d3">
-      <span><span class="ok">●</span> MS Computer Science, DePaul</span>
-      <span><span class="ok">●</span> MLOps and LLMOps focus</span>
-      <span><span class="ok">●</span> 2 research projects, both live</span>
+      <span><span class="ok">●</span> First author research, targeting ICSE 2027</span>
+      <span><span class="ok">●</span> Production ML across 26 deployments</span>
+      <span><span class="ok">●</span> MS Computer Science, DePaul, 2026</span>
     </div>
   </div>
 </header>
@@ -51,7 +51,7 @@
 <section style="padding-top:24px;">
   <div class="wrap">
     <div class="stats">
-      <div class="stat reveal"><div class="num"><span data-count="182" data-suffix="K">0</span></div><div class="lbl">human preference labels analyzed</div></div>
+      <div class="stat reveal"><div class="num"><span data-count="170" data-suffix="K+">0</span></div><div class="lbl">human preference annotations analyzed</div></div>
       <div class="stat reveal d1"><div class="num"><span data-count="78.4" data-suffix="%" data-dp="1">0</span></div><div class="lbl">false preference rate under attack</div></div>
       <div class="stat reveal d2"><div class="num">+<span data-count="32" data-suffix="pp">0</span></div><div class="lbl">accuracy lift for a weak agent</div></div>
       <div class="stat reveal d3"><div class="num"><span data-count="8" data-suffix="">0</span></div><div class="lbl">model architectures stress-tested</div></div>
@@ -62,16 +62,16 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">The thesis</p>
-    <h2 class="section-title reveal">Two projects, one uncomfortable question</h2>
-    <p class="section-sub reveal">Picture an AI pipeline as a factory floor. Models do the work, and standing over them is a quality inspector deciding what ships. My work is two hard looks at that inspector. One asks whether it can be fooled. The other asks whether hiring it even helped.</p>
+    <h2 class="section-title reveal">Two projects, one question I could not let go of</h2>
+    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work, and standing over them is a quality inspector deciding what ships. Everyone studies the workers. I went and audited the inspector. One project asks whether it can be fooled. The other asks whether hiring it even helped.</p>
     <div class="proj-grid">
       <a href="inference-lens.html" class="card reveal">
         <span class="glow" style="background:#6366f1;"></span>
-        <span class="tag">Trustworthiness · Live demo</span>
+        <span class="tag">Can the judge be fooled · Live demo</span>
         <h3>Inference-Lens</h3>
-        <p>Three scoring models trained on real human preference data, then attacked with a published adversarial benchmark. Two models that look identical on a clean leaderboard came apart by more than 75 points the moment something tried to break them.</p>
+        <p>I trained scoring models on real human preference data, then put them under systematic adversarial pressure. Two models that looked identical on a clean benchmark came apart by more than 75 points the moment something tried to deceive them. The judge can be fooled, and how badly depends on the architecture.</p>
         <div class="metrics">
-          <div><div class="m-num">182K</div><div class="m-lbl">labeled responses</div></div>
+          <div><div class="m-num">170K+</div><div class="m-lbl">preference labels</div></div>
           <div><div class="m-num">419</div><div class="m-lbl">adversarial pairs</div></div>
           <div><div class="m-num">3</div><div class="m-lbl">model architectures</div></div>
         </div>
@@ -79,13 +79,13 @@
       </a>
       <a href="agentic-llmops.html" class="card reveal d1">
         <span class="glow" style="background:#a855f7;"></span>
-        <span class="tag">Master's research · Paper in progress</span>
+        <span class="tag">First author research · ICSE 2027</span>
         <h3>Agentic LLMOps</h3>
-        <p>A critic and fixer layer dropped into a multi-agent code generation pipeline, with no retraining. Ten phases of experiments produced one sharp law. The value of monitoring is inversely proportional to how good the model already is.</p>
+        <p>A three agent monitor, Planner, Critic, Fixer, that catches and corrects bad LLM output at runtime without retraining. It delivered a statistically significant gain. But the finding I care about is the failure condition. Above roughly 65 percent baseline, monitoring made models worse.</p>
         <div class="metrics">
+          <div><div class="m-num">+4.85pp</div><div class="m-lbl">pass@1, p=0.010</div></div>
           <div><div class="m-num">10</div><div class="m-lbl">research phases</div></div>
-          <div><div class="m-num">5</div><div class="m-lbl">models tested</div></div>
-          <div><div class="m-num">95%</div><div class="m-lbl">CI bounds</div></div>
+          <div><div class="m-num">5</div><div class="m-lbl">model families</div></div>
         </div>
         <span class="arrow">Read the research &rarr;</span>
       </a>
@@ -95,9 +95,9 @@
 
 <section>
   <div class="wrap">
-    <p class="kicker reveal">The signature result</p>
+    <p class="kicker reveal">The finding I keep coming back to</p>
     <h2 class="section-title reveal">More monitoring is not always better</h2>
-    <p class="section-sub reveal">Add a critic and fixer to a weak coding agent and it jumps 32 points. Add the exact same layer to a strong one and it quietly loses ground. Every model I tested landed on the same downward line. The hard part of the job is knowing which side of it your model sits on before you ship.</p>
+    <p class="section-sub reveal">Add a critic and fixer to a weak coding agent and it jumps 32 points. Add the exact same layer to a strong one and it quietly loses ground. Every model I tested landed on the same downward line, with the crossover around 65 percent baseline. Knowing which side of that line your model sits on, before you ship, is the actual job.</p>
     <div class="chart-card reveal">
       <h4>Monitoring benefit versus baseline capability</h4>
       <p class="cap">Each point is a model. X axis is how good it is on its own, Y axis is what the monitoring pipeline added or removed.</p>
@@ -109,11 +109,11 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">Why it matters</p>
-    <h2 class="section-title reveal">You cannot pick an evaluator from clean benchmark numbers</h2>
+    <h2 class="section-title reveal">You cannot pick an evaluator from a clean benchmark</h2>
     <div class="finding-grid">
-      <div class="finding reveal"><strong>Standard evaluation hides the gap.</strong> Logistic Regression and XGBoost scored almost the same on clean data. Under adversarial attack one collapsed to a 78.4 percent false preference rate while the other barely flinched. The leaderboard never told you which to trust.</div>
-      <div class="finding reveal d1"><strong>Length is not quality.</strong> Across 182,000 human judgments the most verbose answers had the lowest preference rate at 48.9 percent. Shorter, warmer responses won. Any model that leans on length gets played.</div>
-      <div class="finding reveal d2"><strong>The fixer, not the critic, is the bottleneck.</strong> Scaling the critic did nothing. A bigger judge gives better scores but cannot rescue a fixer that introduces new bugs. Knowing where the real constraint sits is half the battle.</div>
+      <div class="finding reveal"><strong>The leaderboard hides the gap.</strong> Logistic Regression and XGBoost scored almost the same on clean data. Under attack one collapsed to a 78.4 percent false preference rate and the other barely flinched. Nothing on the benchmark told you which to trust.</div>
+      <div class="finding reveal d1"><strong>Length is not quality.</strong> Across 170,000 plus human judgments the most verbose answers had the lowest preference rate at 48.9 percent. Shorter, warmer ones won. Any model leaning on length gets played.</div>
+      <div class="finding reveal d2"><strong>Knowing where it breaks is half the value.</strong> A reliability system that helps weak models and hurts strong ones is only safe if you know the crossover. That failure condition is a finding, not a footnote.</div>
     </div>
   </div>
 </section>
@@ -121,11 +121,11 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">How I work</p>
-    <h2 class="section-title reveal">Research that ships, not research that sits in a drawer</h2>
+    <h2 class="section-title reveal">Reliability is the whole point, not a nice to have</h2>
     <div class="feature-grid">
-      <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3.2v5.3c0 4.6-3.2 7.8-7.5 9.5-4.3-1.7-7.5-4.9-7.5-9.5V5.7L12 2.5z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg></div><h4>Adversarial first</h4><p>Clean accuracy is table stakes. I assume someone will try to game the system and I measure exactly how far it bends before it breaks.</p></div>
-      <div class="feature reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5a8.5 8.5 0 0 1 14.3-3.2l2.2 2.2"/><path d="M20.5 4v4.5H16"/><path d="M20.5 14.5a8.5 8.5 0 0 1-14.3 3.2L4 15.5"/><path d="M3.5 20v-4.5H8"/></svg></div><h4>Reproducible by default</h4><p>Local inference through Ollama, tracked with MLflow, pinned dependencies. Every result can be rerun, not just believed.</p></div>
-      <div class="feature reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></div><h4>Live, not just written</h4><p>The scoring pipeline runs as a public app you can poke at right now. A working demo beats a paragraph claiming it works.</p></div>
+      <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3.2v5.3c0 4.6-3.2 7.8-7.5 9.5-4.3-1.7-7.5-4.9-7.5-9.5V5.7L12 2.5z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg></div><h4>Assume someone will break it</h4><p>Clean accuracy is table stakes. I build expecting an adversary, then measure exactly how far the system bends before it gives.</p></div>
+      <div class="feature reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5a8.5 8.5 0 0 1 14.3-3.2l2.2 2.2"/><path d="M20.5 4v4.5H16"/><path d="M20.5 14.5a8.5 8.5 0 0 1-14.3 3.2L4 15.5"/><path d="M3.5 20v-4.5H8"/></svg></div><h4>Prove it, do not claim it</h4><p>Local inference, MLflow tracking, pinned dependencies, confidence intervals. Every result can be rerun, not just believed.</p></div>
+      <div class="feature reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></div><h4>Ship it live</h4><p>The scoring pipeline runs as a public app you can poke right now. A working demo beats a paragraph claiming it works.</p></div>
     </div>
   </div>
 </section>
@@ -143,8 +143,8 @@
 <section>
   <div class="wrap">
     <div class="cta-band reveal">
-      <h2>Hiring for MLOps or LLMOps?</h2>
-      <p>I am graduating June 2026 and looking for teams that care about whether their AI systems can actually be trusted. Let us talk.</p>
+      <h2>Hiring for ML or AI Engineering?</h2>
+      <p>I graduate June 2026 and I am looking for teams that care whether their AI actually holds up in production. That is the only thing I have ever worked on. Let us talk.</p>
       <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
         <a href="mailto:adavivenkatesh@gmail.com" class="btn btn-primary">Email me</a>
         <a href="about.html" class="btn btn-ghost">See the full background</a>
@@ -157,7 +157,7 @@
   <div class="wrap footer-inner">
     <div class="col">
       <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
-      <p class="muted" style="margin-top:0; max-width:280px;">LLM agents, evaluation, and trustworthiness. Built and broken in public.</p>
+      <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters. Built and broken in public.</p>
     </div>
     <div class="col">
       <h5>Projects</h5>
