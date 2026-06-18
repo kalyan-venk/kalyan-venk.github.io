@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalyan Venkatesh - LLM Agents, Evaluation and Trustworthiness</title>
+<meta name="description" content="MLOps and LLMOps engineer building and stress-testing the automated judges inside LLM systems. Evaluator reliability and agent monitoring research with live demos.">
+<meta property="og:title" content="Kalyan Venkatesh - LLM Evaluation and Trustworthiness">
+<meta property="og:description" content="I build and break the automated judges inside AI systems. Live demos, two research projects, real adversarial results.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.className = 'js';</script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand"><span class="mark">KV</span>Kalyan Venkatesh</a>
+    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="inference-lens.html">Inference-Lens</a>
+      <a href="agentic-llmops.html">Agentic LLMOps</a>
+      <a href="about.html">About</a>
+      <a href="inference-lens.html#demo" class="nav-cta">Live demo</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow reveal"><span class="blip"></span>LLM Agents, Evaluation and Trustworthiness</span>
+    <h1 class="reveal">I build and break the <span class="grad">automated judges</span> hiding inside AI systems.</h1>
+    <p class="lead reveal d1">Every LLM pipeline ships with a model that grades other models and decides what goes out the door. The field pours its attention into the workers and almost nobody audits the inspector. That blind spot is my entire research direction, and I have the adversarial numbers to show why it matters.</p>
+    <div class="cta-row reveal d2">
+      <a href="inference-lens.html#demo" class="btn btn-primary">Try the live scorer &rarr;</a>
+      <a href="about.html" class="btn btn-ghost">About me</a>
+    </div>
+    <div class="trust reveal d3">
+      <span><span class="ok">●</span> MS Computer Science, DePaul</span>
+      <span><span class="ok">●</span> MLOps and LLMOps focus</span>
+      <span><span class="ok">●</span> 2 research projects, both live</span>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:24px;">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat reveal"><div class="num"><span data-count="182" data-suffix="K">0</span></div><div class="lbl">human preference labels analyzed</div></div>
+      <div class="stat reveal d1"><div class="num"><span data-count="78.4" data-suffix="%" data-dp="1">0</span></div><div class="lbl">false preference rate under attack</div></div>
+      <div class="stat reveal d2"><div class="num">+<span data-count="32" data-suffix="pp">0</span></div><div class="lbl">accuracy lift for a weak agent</div></div>
+      <div class="stat reveal d3"><div class="num"><span data-count="8" data-suffix="">0</span></div><div class="lbl">model architectures stress-tested</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">The thesis</p>
+    <h2 class="section-title reveal">Two projects, one uncomfortable question</h2>
+    <p class="section-sub reveal">Picture an AI pipeline as a factory floor. Models do the work, and standing over them is a quality inspector deciding what ships. My work is two hard looks at that inspector. One asks whether it can be fooled. The other asks whether hiring it even helped.</p>
+    <div class="proj-grid">
+      <a href="inference-lens.html" class="card reveal">
+        <span class="glow" style="background:#6366f1;"></span>
+        <span class="tag">Trustworthiness · Live demo</span>
+        <h3>Inference-Lens</h3>
+        <p>Three scoring models trained on real human preference data, then attacked with a published adversarial benchmark. Two models that look identical on a clean leaderboard came apart by more than 75 points the moment something tried to break them.</p>
+        <div class="metrics">
+          <div><div class="m-num">182K</div><div class="m-lbl">labeled responses</div></div>
+          <div><div class="m-num">419</div><div class="m-lbl">adversarial pairs</div></div>
+          <div><div class="m-num">3</div><div class="m-lbl">model architectures</div></div>
+        </div>
+        <span class="arrow">Explore and try it live &rarr;</span>
+      </a>
+      <a href="agentic-llmops.html" class="card reveal d1">
+        <span class="glow" style="background:#a855f7;"></span>
+        <span class="tag">Master's research · Paper in progress</span>
+        <h3>Agentic LLMOps</h3>
+        <p>A critic and fixer layer dropped into a multi-agent code generation pipeline, with no retraining. Ten phases of experiments produced one sharp law. The value of monitoring is inversely proportional to how good the model already is.</p>
+        <div class="metrics">
+          <div><div class="m-num">10</div><div class="m-lbl">research phases</div></div>
+          <div><div class="m-num">5</div><div class="m-lbl">models tested</div></div>
+          <div><div class="m-num">95%</div><div class="m-lbl">CI bounds</div></div>
+        </div>
+        <span class="arrow">Read the research &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">The signature result</p>
+    <h2 class="section-title reveal">More monitoring is not always better</h2>
+    <p class="section-sub reveal">Add a critic and fixer to a weak coding agent and it jumps 32 points. Add the exact same layer to a strong one and it quietly loses ground. Every model I tested landed on the same downward line. The hard part of the job is knowing which side of it your model sits on before you ship.</p>
+    <div class="chart-card reveal">
+      <h4>Monitoring benefit versus baseline capability</h4>
+      <p class="cap">Each point is a model. X axis is how good it is on its own, Y axis is what the monitoring pipeline added or removed.</p>
+      <div class="chart-holder"><canvas id="homeScatter"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">Why it matters</p>
+    <h2 class="section-title reveal">You cannot pick an evaluator from clean benchmark numbers</h2>
+    <div class="finding-grid">
+      <div class="finding reveal"><strong>Standard evaluation hides the gap.</strong> Logistic Regression and XGBoost scored almost the same on clean data. Under adversarial attack one collapsed to a 78.4 percent false preference rate while the other barely flinched. The leaderboard never told you which to trust.</div>
+      <div class="finding reveal d1"><strong>Length is not quality.</strong> Across 182,000 human judgments the most verbose answers had the lowest preference rate at 48.9 percent. Shorter, warmer responses won. Any model that leans on length gets played.</div>
+      <div class="finding reveal d2"><strong>The fixer, not the critic, is the bottleneck.</strong> Scaling the critic did nothing. A bigger judge gives better scores but cannot rescue a fixer that introduces new bugs. Knowing where the real constraint sits is half the battle.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">How I work</p>
+    <h2 class="section-title reveal">Research that ships, not research that sits in a drawer</h2>
+    <div class="feature-grid">
+      <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3.2v5.3c0 4.6-3.2 7.8-7.5 9.5-4.3-1.7-7.5-4.9-7.5-9.5V5.7L12 2.5z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg></div><h4>Adversarial first</h4><p>Clean accuracy is table stakes. I assume someone will try to game the system and I measure exactly how far it bends before it breaks.</p></div>
+      <div class="feature reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5a8.5 8.5 0 0 1 14.3-3.2l2.2 2.2"/><path d="M20.5 4v4.5H16"/><path d="M20.5 14.5a8.5 8.5 0 0 1-14.3 3.2L4 15.5"/><path d="M3.5 20v-4.5H8"/></svg></div><h4>Reproducible by default</h4><p>Local inference through Ollama, tracked with MLflow, pinned dependencies. Every result can be rerun, not just believed.</p></div>
+      <div class="feature reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></div><h4>Live, not just written</h4><p>The scoring pipeline runs as a public app you can poke at right now. A working demo beats a paragraph claiming it works.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">Toolkit</p>
+    <h2 class="section-title reveal">What I build with</h2>
+    <div class="tags reveal" style="gap:10px;">
+      <span>Python</span><span>scikit-learn</span><span>XGBoost</span><span>PyTorch</span><span>transformers</span><span>sentence-transformers</span><span>LangGraph</span><span>Ollama</span><span>MLflow</span><span>Streamlit</span><span>Docker</span><span>Hugging Face</span><span>HumanEval</span><span>HH-RLHF</span><span>LLM-Bar</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2>Hiring for MLOps or LLMOps?</h2>
+      <p>I am graduating June 2026 and looking for teams that care about whether their AI systems can actually be trusted. Let us talk.</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="mailto:adavivenkatesh@gmail.com" class="btn btn-primary">Email me</a>
+        <a href="about.html" class="btn btn-ghost">See the full background</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="col">
+      <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
+      <p class="muted" style="margin-top:0; max-width:280px;">LLM agents, evaluation, and trustworthiness. Built and broken in public.</p>
+    </div>
+    <div class="col">
+      <h5>Projects</h5>
+      <a href="inference-lens.html">Inference-Lens</a>
+      <a href="agentic-llmops.html">Agentic LLMOps</a>
+      <a href="inference-lens.html#demo">Live demo</a>
+    </div>
+    <div class="col">
+      <h5>Elsewhere</h5>
+      <a href="https://github.com/kalyan-venk" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:adavivenkatesh@gmail.com">Email</a>
+    </div>
+  </div>
+  <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh. Built with care, hosted on GitHub Pages.</p></div>
+</footer>
+
+<script src="assets/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+window.addEventListener('load', () => {
+  if (!window.Chart) return;
+  applyChartTheme();
+  const ctx = document.getElementById('homeScatter');
+  if (!ctx) return;
+  const data = [
+    { x: 20, y: 32, m: 'Code Llama 7B' },
+    { x: 72, y: -4, m: 'Llama 3.1 8B' },
+    { x: 77, y: -1, m: 'DeepSeek Coder 6.7B' },
+    { x: 90, y: -3, m: 'Qwen2.5 Coder 7B' },
+  ];
+  new Chart(ctx, {
+    type: 'scatter',
+    data: { datasets: [{
+      label: 'Models',
+      data: data,
+      pointRadius: 9, pointHoverRadius: 12,
+      backgroundColor: ['#5eead4','#fbbf24','#818cf8','#fb7185'],
+      borderColor: 'rgba(255,255,255,0.4)', borderWidth: 1.5,
+    },
+    {
+      label: 'Trend', type: 'line',
+      data: [{x:15,y:35},{x:95,y:-9}],
+      borderColor: 'rgba(192,132,252,0.55)', borderDash: [6,6], borderWidth: 2,
+      pointRadius: 0, fill: false,
+    }] },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => c.raw.m ? `${c.raw.m}: ${c.raw.y>0?'+':''}${c.raw.y}pp at ${c.raw.x}% baseline` : '' } }
+      },
+      scales: {
+        x: { title: { display: true, text: 'Baseline pass@1 (%)', color: '#6b7488' }, min: 10, max: 95, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { title: { display: true, text: 'Monitoring delta (pp)', color: '#6b7488' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

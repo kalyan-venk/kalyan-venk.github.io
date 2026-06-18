@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic LLMOps - Kalyan Venkatesh</title>
+<meta name="description" content="Master's research on a critic-fixer monitoring layer for multi-agent code generation. Ten phases, five models, confidence intervals, ablation, and cross-benchmark generalization.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.className = 'js';</script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand"><span class="mark">KV</span>Kalyan Venkatesh</a>
+    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="inference-lens.html">Inference-Lens</a>
+      <a href="agentic-llmops.html" class="active">Agentic LLMOps</a>
+      <a href="about.html">About</a>
+      <a href="inference-lens.html#demo" class="nav-cta">Live demo</a>
+    </div>
+  </div>
+</nav>
+
+<header class="proj-hero">
+  <div class="wrap">
+    <span class="eyebrow reveal"><span class="blip"></span>Master's research · CSC 695, DePaul · paper in progress</span>
+    <h1 class="reveal">Agentic LLMOps</h1>
+    <p class="lead reveal d1">Can you drop a lightweight critic and fixer layer into a multi-agent code generation pipeline and get better results without retraining anything? Ten phases of experiments across five models turned that into a precise, defensible law, complete with confidence intervals and an ablation that says exactly which part does the work.</p>
+    <div class="meta reveal d2">
+      <span class="chip">LangGraph</span>
+      <span class="chip">Ollama</span>
+      <span class="chip">MLflow</span>
+      <span class="chip">HumanEval</span>
+      <span class="chip">HumanEval+</span>
+      <span class="chip">MBPP</span>
+      <span class="chip">Python 3.12</span>
+    </div>
+    <div class="cta-row reveal d3" style="margin-top:28px;">
+      <a href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener" class="btn btn-primary">View on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:30px;">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat reveal"><div class="num"><span data-count="10">0</span></div><div class="lbl">research phases over two quarters</div></div>
+      <div class="stat reveal d1"><div class="num"><span data-count="5">0</span></div><div class="lbl">model architectures tested</div></div>
+      <div class="stat reveal d2"><div class="num">+<span data-count="31" data-suffix="pp">0</span></div><div class="lbl">lift for the weakest model</div></div>
+      <div class="stat reveal d3"><div class="num"><span data-count="73.4" data-suffix="%" data-dp="1">0</span></div><div class="lbl">of attempted fixes reverted by the gate</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">The architecture</p>
+    <h2 class="section-title reveal">Three agents and a do-no-harm gate</h2>
+    <p class="section-sub reveal">A Planner writes a solution. A Critic scores it for hallucination risk between 0 and 1. If that score crosses a threshold the Fixer rewrites the code, and a Post-Critic scores the result. A reversion gate then checks whether the rewrite actually improved the score and discards it if it did not. Everything runs locally through Ollama. No API calls, no fine-tuning, fully reproducible.</p>
+    <div class="pipeline reveal">
+      <div class="flow">
+        <div class="node accent"><div class="nm">Planner</div><div class="role">writes the code</div></div>
+        <span class="edge">&rarr;</span>
+        <div class="node"><div class="nm">Pre-Critic</div><div class="role">scores risk 0 to 1</div></div>
+        <span class="edge">&rarr;</span>
+        <div class="node accent"><div class="nm">Fixer</div><div class="role">rewrites if over &tau;</div></div>
+        <span class="edge">&rarr;</span>
+        <div class="node gate"><div class="nm">Reversion gate</div><div class="role">keep only if better</div></div>
+        <span class="edge">&rarr;</span>
+        <div class="node"><div class="nm">Post-Critic</div><div class="role">final score</div></div>
+      </div>
+    </div>
+    <p class="section-sub reveal" style="margin-top:16px;">A baseline of Planner straight to Post-Critic runs alongside every condition, so each result is a clean before and after. The operating threshold &tau; settles at 0.70.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">The central law</p>
+    <h2 class="section-title reveal">The weaker the model, the more monitoring helps</h2>
+    <p class="section-sub reveal">Same pipeline, same critic and fixer, five different Planner models. The weak coding model gained more than 30 points. The strong ones lost a little. The relationship was monotonic and held across every phase and every threshold tested. I call it the Inverse Capability Hypothesis.</p>
+    <div class="two-col">
+      <div class="chart-card reveal">
+        <h4>Monitoring delta by model</h4>
+        <p class="cap">Change in pass@1 from adding the monitoring pipeline, single-trial endpoints.</p>
+        <div class="chart-holder"><canvas id="deltaChart"></canvas></div>
+      </div>
+      <div class="tbl-wrap reveal" style="align-self:start;">
+        <table>
+          <thead><tr><th>Model</th><th>Base</th><th>Monitored</th><th>&Delta;</th></tr></thead>
+          <tbody>
+            <tr><td>StarCoder2 7B</td><td>~0%</td><td>~0%</td><td><span class="pill warn">floor</span></td></tr>
+            <tr><td>Code Llama 7B</td><td>20%</td><td>52%</td><td><span class="pill good">+32</span></td></tr>
+            <tr><td>Llama 3.1 8B</td><td>72%</td><td>68%</td><td><span class="pill bad">-4</span></td></tr>
+            <tr><td>DeepSeek Coder 6.7B</td><td>77%</td><td>76%</td><td><span class="pill warn">-1</span></td></tr>
+            <tr><td>Qwen2.5 Coder 7B</td><td>90%</td><td>87%</td><td><span class="pill bad">-3</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="finding reveal" style="margin-top:20px;"><strong>StarCoder2 is the floor case that proves the rule from below.</strong> At roughly zero baseline the fixer has nothing to work with, so the benefit collapses back to nothing. The gain is largest in the middle-low band, where the model is wrong often but not hopeless.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">Making it defensible</p>
+    <h2 class="section-title reveal">Error bars on the headline claim</h2>
+    <p class="section-sub reveal">A single deterministic run has zero variance and no confidence interval, and reviewers at a venue like ICSE or FSE will challenge a number with no error bar. So I reran the two endpoints as three genuinely independent trials each, with a non-deterministic planner, and computed 95 percent intervals. Both endpoints exclude zero, which is what makes the law statistically defensible rather than a pair of lucky runs.</p>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead><tr><th>Model</th><th>&tau;</th><th>Trials</th><th>Mean &Delta; (pp)</th><th>95% CI</th><th>Excludes zero</th></tr></thead>
+        <tbody>
+          <tr><td>Code Llama 7B</td><td>0.60</td><td>3</td><td>+30.3</td><td>+24.1 to +36.6</td><td><span class="pill good">yes</span></td></tr>
+          <tr><td>Code Llama 7B</td><td>0.70</td><td>3</td><td>+31.0</td><td>+26.7 to +35.3</td><td><span class="pill good">yes</span></td></tr>
+          <tr><td>Qwen2.5 Coder 7B</td><td>0.60</td><td>3</td><td>-4.0</td><td>-6.5 to -1.5</td><td><span class="pill good">yes</span></td></tr>
+          <tr><td>Qwen2.5 Coder 7B</td><td>0.70</td><td>3</td><td>-2.0</td><td>tight, near -2.0</td><td><span class="pill good">yes</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">What actually does the work</p>
+    <h2 class="section-title reveal">Ablation, one change at a time</h2>
+    <p class="section-sub reveal">Between the net-negative Phase 2 and the net-positive Phase 3, three things changed at once: an 8B fixer, the problem statement handed to the fixer as context, and the reversion gate. I turned each one off in isolation on Code Llama to see which carried the result.</p>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead><tr><th>Configuration</th><th>pass@1</th><th>Contribution of the missing piece</th></tr></thead>
+        <tbody>
+          <tr><td>Baseline, no monitoring</td><td>20%</td><td>reference</td></tr>
+          <tr><td>Full pipeline, all on</td><td>52%</td><td>control</td></tr>
+          <tr><td>Without problem context</td><td>48%</td><td><span class="pill good">context worth +4pp</span></td></tr>
+          <tr><td>With 3B fixer instead of 8B</td><td>51%</td><td><span class="pill warn">model upgrade worth +1pp</span></td></tr>
+          <tr><td>Without the reversion gate</td><td>53%</td><td><span class="pill warn">gate costs 1pp here</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="finding reveal" style="margin-top:20px;"><strong>The surprising part is the gate.</strong> On a weak model the gate slightly lowers raw pass@1, because almost any fix is an improvement when you start at 20 percent. Its real value shows up on strong models, where it reverts bad rewrites and stops monitoring from doing harm. Giving the fixer the problem statement was the single biggest lever on the weak model.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">Core findings</p>
+    <h2 class="section-title reveal">What ten phases showed</h2>
+    <div class="finding-grid">
+      <div class="finding reveal"><strong>Monitoring benefit is inversely proportional to baseline capability.</strong> The central result, now backed by 95 percent intervals that exclude zero at both ends. A model that already gets nine of ten right has little to gain and real risk of harm. A model that gets two of ten right has everything to gain.</div>
+      <div class="finding reveal d1"><strong>The reversion gate is a safety device, not an accelerator.</strong> It reverts 73.4 percent of attempted fixes. On weak models that costs a point of raw accuracy, on strong models it is what keeps the pipeline from going negative. Do no harm.</div>
+      <div class="finding reveal d2"><strong>The fixer, not the critic, is the bottleneck.</strong> Scaling the critic to 8B did nothing in Phase 2. A bigger judge gives better scores but cannot rescue a fixer that introduces fresh bugs.</div>
+      <div class="finding reveal d3"><strong>Context beats raw model size for the fixer.</strong> The ablation says handing the fixer the problem statement mattered more than upgrading its parameter count.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">The full arc</p>
+    <h2 class="section-title reveal">Ten phases, from first signal to publishable</h2>
+    <div class="timeline reveal">
+      <div class="tl-item"><div class="ph">Phase 1</div><h4>Baseline and a calibration trap</h4><p>3B models throughout. The critic detected risk reliably but the small fixer was net negative. Setting the threshold too low made the fixer fire on 74 percent of problems and dropped accuracy by 18 points. Threshold calibration clearly mattered.</p></div>
+      <div class="tl-item"><div class="ph">Phase 2</div><h4>A bigger critic was not the answer</h4><p>Scaling the critic to 8B while keeping a 3B fixer stayed net negative across all 18 conditions. This pinned the bottleneck on the fixer, not the critic.</p></div>
+      <div class="tl-item"><div class="ph">Phase 3</div><h4>The turning point</h4><p>An 8B fixer, the problem statement as context, and a reversion gate together flipped the direction to a positive +4.85 point average, with a 95 percent CI of +3.36 to +6.34 and p of 0.010. The gate reverted 73.4 percent of fixes.</p></div>
+      <div class="tl-item"><div class="ph">Phase 4 and 4b</div><h4>Cross-model comparison</h4><p>Extended to Code Llama 7B with a full sweep. Code Llama gained 32 points, the largest in the study, and the inverse relationship between capability and benefit became visible.</p></div>
+      <div class="tl-item"><div class="ph">Phase 5</div><h4>The pattern holds</h4><p>Added DeepSeek Coder 6.7B at -1 point and Qwen2.5 Coder 7B at -3 points. The inverse law held consistently across architectures.</p></div>
+      <div class="tl-item"><div class="ph">Phase 6</div><h4>Threshold and retry sweep</h4><p>Swept &tau; across 0.60, 0.70, 0.75. At 0.70 the system stopped over-triggering with no loss for weak models, and 0.75 was identical, marking the plateau. For Llama 3.1 8B the fixer trigger rate fell from 46 to 10 percent and latency dropped 39 percent. A single temperature retry lifted Code Llama's pass@2 from 20 to 38 percent.</p></div>
+      <div class="tl-item"><div class="ph">Phase 7</div><h4>Confidence intervals on the endpoints</h4><p>Prompted by advisor feedback that single-trial numbers would not survive review. Three independent trials at the two endpoints gave +30 to +31 points for Code Llama and -2 to -4 for Qwen, both with intervals that exclude zero.</p></div>
+      <div class="tl-item"><div class="ph">Phase 8</div><h4>Component ablation</h4><p>One change at a time on Code Llama. Problem context was the biggest single lever at +4 points, the fixer model upgrade added +1, and the gate slightly lowered raw accuracy on a weak model while remaining the safeguard for strong ones.</p></div>
+      <div class="tl-item"><div class="ph">Phase 9</div><h4>Extending intervals to all five models, and a methodology catch</h4><p>Ran the interval study across the remaining models, then caught a real flaw. The planner caches were built deterministically, so the three trials were identical and carried no genuine variance. Worth flagging honestly rather than reporting fake error bars.</p></div>
+      <div class="tl-item"><div class="ph">Phase 10</div><h4>Fixing the variance, then cross-benchmark generalization</h4><p>Regenerated the caches with a non-deterministic planner for true multi-trial intervals, then tested whether the law survives harder benchmarks. HumanEval+ with 164 problems and extra edge-case tests probes whether the fixer mends logic or only syntax, and MBPP tests a different problem distribution. Built to run on GPU through Docker, aimed at an ICSE or FSE submission.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap prose">
+    <p class="kicker reveal">Status</p>
+    <h2 class="reveal">Where it stands</h2>
+    <p class="reveal">The experiment phases are complete. A conference paper is in progress, targeting a software engineering or LLMOps venue in mid 2026. The work is supervised by Prof. Vahid Alizadeh and Prof. Noriko Tomuro at DePaul University.</p>
+    <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="col">
+      <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
+      <p class="muted" style="margin-top:0; max-width:280px;">LLM agents, evaluation, and trustworthiness.</p>
+    </div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens.html">Inference-Lens</a><a href="agentic-llmops.html">Agentic LLMOps</a><a href="inference-lens.html#demo">Live demo</a></div>
+    <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
+  </div>
+  <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
+</footer>
+
+<script src="assets/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+window.addEventListener('load', () => {
+  if (!window.Chart) return;
+  applyChartTheme();
+  const ctx = document.getElementById('deltaChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Code Llama 7B', 'StarCoder2 7B', 'DeepSeek 6.7B', 'Qwen2.5 7B', 'Llama 3.1 8B'],
+      datasets: [{
+        data: [32, 0, -1, -3, -4],
+        backgroundColor: ['#4ade80','#fbbf24','#fbbf24','#fb7185','#fb7185'],
+        borderRadius: 8, barThickness: 42,
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => (c.parsed.y>0?'+':'') + c.parsed.y + ' pp' } } },
+      scales: {
+        y: { title: { display: true, text: 'pass@1 delta (pp)', color: '#6b7488' }, grid: { color: 'rgba(255,255,255,0.06)' } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>
