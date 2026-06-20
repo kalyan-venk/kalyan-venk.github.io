@@ -158,6 +158,7 @@
       <div class="finding reveal d1"><strong>The reversion gate is a safety device, not an accelerator.</strong> It reverts 73.4 percent of attempted fixes. On weak models that costs a point. On strong models it is what keeps the whole thing from going negative. Do no harm.</div>
       <div class="finding reveal d2"><strong>The fixer, not the critic, is the bottleneck.</strong> Scaling the critic to 8B did nothing early on. A bigger judge gives better scores but cannot rescue a fixer that introduces fresh bugs.</div>
       <div class="finding reveal d3"><strong>Context beat raw model size.</strong> The ablation says handing the fixer the problem statement mattered more than upgrading its parameter count.</div>
+      <div class="finding reveal"><strong>It generalizes beyond one benchmark.</strong> On HumanEval+ and MBPP, both harder than the original HumanEval, the weak model still gained around 30 points and the strong models still lost a little. The law is not a quirk of a single dataset.</div>
     </div>
   </div>
 </section>
@@ -176,7 +177,7 @@
       <div class="tl-item"><div class="ph">Phase 7</div><h4>Confidence intervals on the endpoints</h4><p>My advisor pointed out that single-trial numbers would not survive review. So I reran the two endpoints as three independent trials each. Code Llama landed at +30 to +31 points and Qwen at -2 to -4, both excluding zero.</p></div>
       <div class="tl-item"><div class="ph">Phase 8</div><h4>Component ablation</h4><p>One change at a time on Code Llama. Problem context was the biggest single lever at +4 points, the fixer model upgrade added +1, and the gate slightly lowered raw accuracy on a weak model while staying the safeguard for strong ones.</p></div>
       <div class="tl-item"><div class="ph">Phase 9</div><h4>Extending intervals, and an honest catch</h4><p>I ran the interval study across the remaining models, then caught my own flaw. The planner caches were built deterministically, so the three trials were identical and carried no real variance. Worth flagging rather than reporting fake error bars.</p></div>
-      <div class="tl-item"><div class="ph">Phase 10</div><h4>Fixing the variance, then generalization</h4><p>Regenerated the caches with a non-deterministic planner for genuine intervals, then tested whether the law survives harder benchmarks. HumanEval+ with 164 problems probes whether the fixer mends logic or only syntax, and MBPP tests a different distribution. Built to run on GPU through Docker, aimed at the ICSE submission.</p></div>
+      <div class="tl-item"><div class="ph">Phase 10</div><h4>Cross-benchmark generalization, and it held</h4><p>Regenerated the caches with a non-deterministic planner for genuine intervals, then ran the law on two harder benchmarks. On HumanEval+ Code Llama gained about 32 points and Qwen lost about 4. On MBPP Code Llama gained 30 and Qwen lost a few. The inverse capability law held on both, so the central finding is not a quirk of HumanEval. This is the evidence that anchors the submission.</p></div>
     </div>
   </div>
 </section>
@@ -185,7 +186,7 @@
   <div class="wrap prose">
     <p class="kicker reveal">Status</p>
     <h2 class="reveal">Where it stands</h2>
-    <p class="reveal">All ten experiment phases are done. I am writing it up as first author with Prof. Vahid Alizadeh and Prof. Noriko Tomuro as faculty co-authors at DePaul, targeting ICSE 2027. The cross-benchmark work in Phase 10 exists specifically to make the central claim hold up under review.</p>
+    <p class="reveal">All ten experiment phases are done. I am writing it up as first author with Prof. Vahid Alizadeh and Prof. Noriko Tomuro as faculty co-authors at DePaul, targeting ICSE 2027. The Phase 10 cross-benchmark runs were built to test whether the claim holds beyond HumanEval, and it did. The law held on both HumanEval+ and MBPP.</p>
     <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
   </div>
 </section>
