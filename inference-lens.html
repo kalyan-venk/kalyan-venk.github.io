@@ -2,20 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="canonical" href="https://kalyanvenk.com/inference-lens.html">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inference-Lens - Kalyan Venkatesh</title>
 <meta name="description" content="Can the LLM-as-judge be fooled? I trained scoring models on human preference data and put them under adversarial pressure. Try the live scorer.">
 <meta property="og:title" content="Inference-Lens - can the AI judge be fooled?">
 <meta property="og:description" content="I trained scoring models on human preference data, then attacked them. Two models tied on a clean benchmark came apart by over 75 points under pressure.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://kalyan-venk.github.io/inference-lens.html">
-<meta property="og:image" content="https://kalyan-venk.github.io/assets/og-image.png">
+<meta property="og:url" content="https://kalyanvenk.com/inference-lens.html">
+<meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Inference-Lens - can the AI judge be fooled?">
 <meta name="twitter:description" content="Two models tied on a clean benchmark came apart by over 75 points under adversarial pressure.">
-<meta name="twitter:image" content="https://kalyan-venk.github.io/assets/og-image.png">
+<meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -43,8 +44,11 @@
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>Can the judge be fooled</span>
     <h1 class="reveal">Inference-Lens</h1>
-    <p class="lead reveal d1">LLM as judge is the default evaluation paradigm now. Almost nobody is asking how easily that judge can be deceived. So I built a system to find out. I trained scoring models on real human preference data, then put them under systematic adversarial pressure to see where they break and by how much.</p>
+    <p class="lead reveal d1">LLM as judge is the default evaluation paradigm now. Almost nobody is asking how easily that judge can be deceived. So I built an NLP evaluation pipeline to find out. At its core it is a natural language text classification problem: I trained scoring models on 170K+ real human preference annotations, then put them under systematic adversarial NLP pressure to see where they break and by how much.</p>
     <div class="meta reveal d2">
+      <span class="chip">Natural Language Processing</span>
+      <span class="chip">Text Classification</span>
+      <span class="chip">Adversarial NLP</span>
       <span class="chip">HH-RLHF</span>
       <span class="chip">LLM-Bar</span>
       <span class="chip">scikit-learn</span>
@@ -81,9 +85,9 @@
 <section>
   <div class="wrap prose">
     <p class="kicker reveal">The setup</p>
-    <h2 class="reveal">Honest human judgment, then adversarial pressure</h2>
-    <p class="reveal">I started from Anthropic's HH-RLHF dataset, 170,000 plus human preference annotations. A rater sees two AI responses to the same conversation and just picks the one they prefer. No rubric, no scoring guide, only judgment. That is the honest signal I trained on.</p>
-    <p class="reveal">Then I went looking for trouble. LLM-Bar gives me 419 pairs built specifically to fool automated judges. My plan was simple. Train scoring models on the clean preference data, then see how each one behaves the moment something is engineered to trip it.</p>
+    <h2 class="reveal">Honest human judgment on natural language, then adversarial pressure</h2>
+    <p class="reveal">I started from Anthropic's HH-RLHF dataset, 170,000 plus human preference annotations. A rater sees two AI responses to the same conversation and just picks the one they prefer. No rubric, no scoring guide, only judgment. That is the honest NLP signal I trained on. The task is fundamentally one of natural language understanding: can a model learn what humans find genuinely useful or convincing in text?</p>
+    <p class="reveal">Then I went looking for trouble. LLM-Bar gives me 419 adversarially constructed NLP pairs built specifically to fool automated text evaluators. My plan was simple: train NLP scoring models on the clean preference data, then see how each architecture behaves the moment something is engineered to trip it.</p>
 
     <h2 class="reveal">Three things I walked away with</h2>
     <div class="finding reveal"><strong>Clean accuracy near 0.50 is the point, not the failure.</strong> Logistic Regression, XGBoost, and a DeBERTa-v3-small fine-tune all landed around 0.50 AUC-ROC on clean evaluation. Surface features like readability and length just do not predict what a human prefers.</div>
@@ -154,9 +158,9 @@
     <p class="kicker reveal">Takeaways</p>
     <h2 class="reveal">What a team should walk away with</h2>
     <ul class="reveal">
-      <li>Clean benchmark accuracy tells you almost nothing about whether an evaluator can be trusted under attack. Two models tied on AUC-ROC differed by over 75 points the moment I applied pressure.</li>
-      <li>Pick your automated judge by stress-testing it, not by reading a leaderboard. Know which attack families break which architecture and by how much.</li>
-      <li>Be suspicious of any quality signal that tracks length. Across this dataset, longer meant less preferred.</li>
+      <li>Clean benchmark accuracy tells you almost nothing about whether an NLP evaluator can be trusted under adversarial attack. Two models tied on AUC-ROC differed by over 75 points the moment I applied NLP perturbation pressure.</li>
+      <li>Pick your automated NLP judge by stress-testing it against adversarial text, not by reading a leaderboard. Know which NLP attack families break which architecture and by how much.</li>
+      <li>Be suspicious of any quality signal that tracks length. Across 170K+ natural language judgments, longer text meant less preferred.</li>
     </ul>
     <p class="reveal">The full pipeline, all three model architectures, the clustering notebooks, and the LLM-Bar stress-test are on GitHub.</p>
     <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/Inference-Lens" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
