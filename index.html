@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <link rel="canonical" href="https://kalyanvenk.com/">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalyan Venkatesh - LLM Evaluation and Trustworthiness</title>
-<meta name="description" content="ML and AI engineer working on LLM evaluation and trustworthiness. I measure when the automated judges and monitors inside AI systems can be trusted, and build the ones that hold up.">
-<meta property="og:title" content="Kalyan Venkatesh - LLM Evaluation and Trustworthiness">
-<meta property="og:description" content="Making LLM systems you can actually trust. Two research projects on evaluating and hardening the judges and monitors inside AI pipelines.">
+<title>Kalyan Venkatesh - ML Engineer, AI Systems That Hold Up</title>
+<meta name="description" content="ML Engineer targeting Data Scientist, AI Engineer, ML Engineer, and Software Engineer roles. Research on LLM evaluation and agent reliability, plus a production MLOps pipeline built phase by phase.">
+<meta property="og:title" content="Kalyan Venkatesh - ML Engineer, AI Systems That Hold Up">
+<meta property="og:description" content="Making AI and ML systems you can actually trust. Research on evaluating and hardening the judges and monitors inside AI pipelines, plus a production MLOps pipeline built the same way.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalyanvenk.com/">
 <meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Kalyan Venkatesh - LLM Evaluation and Trustworthiness">
-<meta name="twitter:description" content="Making LLM systems you can actually trust.">
+<meta name="twitter:title" content="Kalyan Venkatesh - ML Engineer, AI Systems That Hold Up">
+<meta name="twitter:description" content="Making AI and ML systems you can actually trust.">
 <meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,6 +34,7 @@
       <a href="index.html" class="active">Home</a>
       <a href="inference-lens.html">Inference-Lens</a>
       <a href="agentic-llmops.html">Agentic LLMOps</a>
+      <a href="predictops.html">PredictOps</a>
       <a href="about.html">About</a>
       <a href="inference-lens.html#demo" class="nav-cta">Live demo</a>
     </div>
@@ -42,15 +43,15 @@
 
 <header class="hero">
   <div class="wrap">
-    <span class="eyebrow reveal"><span class="blip"></span>LLM evaluation and trustworthiness</span>
-    <h1 class="reveal">Making LLM systems you can <span class="grad">actually trust.</span></h1>
-    <p class="lead reveal d1">I have spent 3 plus years on one problem. ML systems that hold up when it actually matters, not just on a benchmark. Every LLM pipeline leans on an automated judge that grades its output and a monitor meant to catch its failures, and most teams simply assume both work. My research measures when you can trust them and builds the ones that do. That is the whole thread, from evaluating the judge to hardening the monitor.</p>
+    <span class="eyebrow reveal"><span class="blip"></span>ML Engineer &middot; AI systems that hold up</span>
+    <h1 class="reveal">Making AI and ML systems you can <span class="grad">actually trust.</span></h1>
+    <p class="lead reveal d1">I have spent 3 plus years on one problem. ML systems that hold up when it actually matters, not just on a benchmark. Every LLM pipeline leans on an automated judge that grades its output and a monitor meant to catch its failures, and most teams simply assume both work. My research measures when you can trust them and builds the ones that do. The same instinct now runs into a production MLOps pipeline built the same way, phase by phase, proof over claims.</p>
     <div class="cta-row reveal d2">
       <a href="inference-lens.html#demo" class="btn btn-primary">Try the live scorer &rarr;</a>
       <a href="about.html" class="btn btn-ghost">About me</a>
     </div>
     <div class="trust reveal d3">
-      <span><span class="ok">●</span> First author research, targeting ICSE 2027</span>
+      <span><span class="ok">●</span> First-author research, under peer review</span>
       <span><span class="ok">●</span> Production ML across 26 deployments</span>
       <span><span class="ok">●</span> MS Computer Science, DePaul, 2026</span>
     </div>
@@ -63,7 +64,7 @@
       <div class="stat reveal"><div class="num"><span data-count="170" data-suffix="K+">0</span></div><div class="lbl">human preference annotations analyzed</div></div>
       <div class="stat reveal d1"><div class="num"><span data-count="78.4" data-suffix="%" data-dp="1">0</span></div><div class="lbl">false preference rate under attack</div></div>
       <div class="stat reveal d2"><div class="num">+<span data-count="32" data-suffix="pp">0</span></div><div class="lbl">accuracy lift for a weak agent</div></div>
-      <div class="stat reveal d3"><div class="num"><span data-count="8" data-suffix="">0</span></div><div class="lbl">model architectures stress-tested</div></div>
+      <div class="stat reveal d3"><div class="num"><span data-count="8" data-suffix="">0</span></div><div class="lbl">model architectures stress-tested, across both research projects</div></div>
     </div>
   </div>
 </section>
@@ -71,8 +72,8 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">The thesis</p>
-    <h2 class="section-title reveal">Two projects, one question I could not let go of</h2>
-    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work, and standing over them is a quality inspector deciding what ships. Everyone studies the workers. I went and audited the inspector. One project asks whether it can be fooled. The other asks whether hiring it even helped.</p>
+    <h2 class="section-title reveal">Two questions about trust, and the range to back them up</h2>
+    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work, and standing over them is a quality inspector deciding what ships. Everyone studies the workers. I went and audited the inspector. One project asks whether it can be fooled. The other asks whether hiring it even helped. A third project is the range piece: the same "prove it, don't claim it" rigor applied to the unglamorous MLOps loop most portfolios skip.</p>
     <div class="proj-grid">
       <a href="inference-lens.html" class="card reveal">
         <span class="glow" style="background:#6366f1;"></span>
@@ -88,7 +89,7 @@
       </a>
       <a href="agentic-llmops.html" class="card reveal d1">
         <span class="glow" style="background:#a855f7;"></span>
-        <span class="tag">First author research · ICSE 2027</span>
+        <span class="tag">First-author research · under peer review</span>
         <h3>Agentic LLMOps</h3>
         <p>A three agent monitor, Planner, Critic, Fixer, that catches and corrects bad LLM output at runtime without retraining. It delivered a statistically significant gain. But the finding I care about is the failure condition. Above roughly 65 percent baseline, monitoring made models worse.</p>
         <div class="metrics">
@@ -97,6 +98,18 @@
           <div><div class="m-num">5</div><div class="m-lbl">model families</div></div>
         </div>
         <span class="arrow">Read the research &rarr;</span>
+      </a>
+      <a href="predictops.html" class="card reveal d2">
+        <span class="glow" style="background:#22c55e;"></span>
+        <span class="tag">Production MLOps · build in progress</span>
+        <h3>PredictOps</h3>
+        <p>A deliberately boring tabular model with all the depth put into the ops loop around it: cross-validated training comparison, a validated FastAPI serving layer, a multi-stage Docker build, and next, a CI gate that can block a bad model from shipping. Most portfolio projects stop at the trained model. This one is about everything after.</p>
+        <div class="metrics">
+          <div><div class="m-num">3/7</div><div class="m-lbl">build phases shipped</div></div>
+          <div><div class="m-num">0.846</div><div class="m-lbl">CV ROC-AUC</div></div>
+          <div><div class="m-num">4</div><div class="m-lbl">served endpoints</div></div>
+        </div>
+        <span class="arrow">See what's built &rarr;</span>
       </a>
     </div>
   </div>
@@ -144,7 +157,7 @@
     <p class="kicker reveal">Toolkit</p>
     <h2 class="section-title reveal">What I build with</h2>
     <div class="tags reveal" style="gap:10px;">
-      <span>Python</span><span>NLP</span><span>text classification</span><span>scikit-learn</span><span>XGBoost</span><span>PyTorch</span><span>transformers</span><span>sentence-transformers</span><span>LangGraph</span><span>Ollama</span><span>MLflow</span><span>Streamlit</span><span>Docker</span><span>Hugging Face</span><span>HumanEval</span><span>HH-RLHF</span><span>LLM-Bar</span><span>adversarial NLP</span>
+      <span>Python</span><span>NLP</span><span>text classification</span><span>scikit-learn</span><span>XGBoost</span><span>PyTorch</span><span>transformers</span><span>sentence-transformers</span><span>LangGraph</span><span>Ollama</span><span>MLflow</span><span>FastAPI</span><span>Pydantic</span><span>GitHub Actions</span><span>Evidently</span><span>Streamlit</span><span>Docker</span><span>Hugging Face</span><span>HumanEval</span><span>HH-RLHF</span><span>LLM-Bar</span><span>adversarial NLP</span>
     </div>
   </div>
 </section>
@@ -172,6 +185,7 @@
       <h5>Projects</h5>
       <a href="inference-lens.html">Inference-Lens</a>
       <a href="agentic-llmops.html">Agentic LLMOps</a>
+      <a href="predictops.html">PredictOps</a>
       <a href="inference-lens.html#demo">Live demo</a>
     </div>
     <div class="col">
@@ -194,7 +208,7 @@ window.addEventListener('load', () => {
   if (!ctx) return;
   const data = [
     { x: 20, y: 32, m: 'Code Llama 7B' },
-    { x: 72, y: -4, m: 'Llama 3.1 8B' },
+    { x: 65, y: 0.7, m: 'Llama 3.1 8B (not significant)' },
     { x: 77, y: -1, m: 'DeepSeek Coder 6.7B' },
     { x: 90, y: -3, m: 'Qwen2.5 Coder 7B' },
   ];
