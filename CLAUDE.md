@@ -44,6 +44,22 @@ longer needed for this particular demo.
 
 ## Current state
 
+- **Second pass, same day (2026-07-13):** fixed the Graduate Research Engineer
+  timeline entry on `about.html` (was "Sep 2025 to present," now "Sep 2025 to
+  Jun 2026" since Kalyan graduates then and the role can't outlive his MS).
+  Added a "Software engineering" skill category to `about.html`'s toolkit
+  (Java, Spring Boot, REST APIs, PostgreSQL, Flyway, JUnit, Data structures,
+  Git) and the same Java/Spring Boot tags to `index.html`'s toolkit, so the
+  site doesn't read as ML-only when he's also targeting SWE roles. This is
+  deliberately just skill tags, not a Vaultex writeup (that's still excluded,
+  see above) — the reasoning was to show real breadth without overclaiming a
+  project that doesn't exist on this site. Every em dash (`&mdash;`) that had
+  crept into `predictops.html`'s and `agentic-llmops.html`'s prose during the
+  first pass was cut and rewritten as separate sentences or commas, per
+  Kalyan's explicit "remove all em dashes, humanize the content" instruction
+  (checked against the `humanizer` skill's Wikipedia-based AI-writing-pattern
+  guide, installed mid-session at `~/.claude/skills/humanizer/SKILL.md` since
+  it isn't picked up as an invocable skill until a fresh session starts).
 - As of 2026-07-13, a content pass landed: `predictops.html` added (new
   project page, honestly framed as 3-of-7 build phases done, no fabricated
   results for phases 4-7 which haven't happened yet), ICSE 2027 removed from
