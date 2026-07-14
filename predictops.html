@@ -89,14 +89,14 @@
         <div class="node gate"><div class="nm">Docker</div><div class="role">multi-stage, docker-compose</div></div>
       </div>
     </div>
-    <div class="finding reveal" style="margin-top:20px;"><strong>The simpler model actually won.</strong> Logistic Regression beat XGBoost on 5-fold CV ROC-AUC, 0.846 to 0.842, and held the edge on held-out test data too (0.842 vs 0.837). That's the real result of the comparison, not a foregone conclusion picked to look tidy &mdash; the pipeline just reports whichever model wins and serves that one.</div>
+    <div class="finding reveal" style="margin-top:20px;"><strong>The simpler model actually won.</strong> Logistic Regression beat XGBoost on 5-fold CV ROC-AUC, 0.846 to 0.842, and held the edge on held-out test data too (0.842 vs 0.837). That's the real result of the comparison, not a foregone conclusion picked to look tidy. The pipeline just reports whichever model wins and serves that one.</div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <p class="kicker reveal">Where it actually stands</p>
-    <h2 class="section-title reveal">Three phases done, four to go &mdash; shown, not hidden</h2>
+    <h2 class="section-title reveal">Three phases done, four to go.</h2>
     <p class="section-sub reveal">This project is built one working phase at a time, each committed separately, each with its own "why" before moving on. Here's exactly what's real right now and what's next, instead of rounding up.</p>
     <div class="two-col">
       <div class="tbl-wrap reveal" style="align-self:start;">
@@ -114,7 +114,7 @@
           </tbody>
         </table>
       </div>
-      <div class="finding reveal" style="align-self:start;"><strong>Phase 4 is the centerpiece, deliberately saved for next.</strong> A GitHub Actions workflow that lints, tests, and then runs a model-quality assertion &mdash; a build fails if a model doesn't clear a ROC-AUC threshold, the same way a broken unit test fails a build. That's the difference between "I trained a model" and "a bad model literally cannot reach production here," and it's the whole reason this project exists.</div>
+      <div class="finding reveal" style="align-self:start;"><strong>Phase 4 is the centerpiece, deliberately saved for next.</strong> A GitHub Actions workflow that lints, tests, and then runs a model-quality assertion. A build fails if a model doesn't clear a ROC-AUC threshold, the same way a broken unit test fails a build. That's the difference between "I trained a model" and "a bad model literally cannot reach production here," and it's the whole reason this project exists.</div>
     </div>
   </div>
 </section>
@@ -123,7 +123,7 @@
   <div class="wrap prose">
     <p class="kicker reveal">Why this project exists</p>
     <h2 class="reveal">The model is the boring part on purpose</h2>
-    <p class="reveal">My other two projects are LLM research. This one is the breadth piece that sits next to them: a plain tabular classification problem (customer churn, never the headline) so nobody mistakes the domain for the point. The point is the ops loop &mdash; the part almost every portfolio project skips because it stops at the trained model. A pipeline that prevents leakage, a served API with real input validation and a health check, a container that only ships what it needs, and next, a CI gate that can actually fail a merge. That's the same instinct behind the other two projects, applied to the plumbing instead of the research question: build the part that makes the system trustworthy, not just the part that demos well.</p>
+    <p class="reveal">My other two projects are LLM research. This one is the breadth piece that sits next to them: a plain tabular classification problem (customer churn, never the headline) so nobody mistakes the domain for the point. The point is the ops loop, the part almost every portfolio project skips because it stops at the trained model. A pipeline that prevents leakage, a served API with real input validation and a health check, a container that only ships what it needs, and next, a CI gate that can actually fail a merge. That's the same instinct behind the other two projects, applied to the plumbing instead of the research question: build the part that makes the system trustworthy, not just the part that demos well.</p>
   </div>
 </section>
 
