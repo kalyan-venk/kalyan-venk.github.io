@@ -44,6 +44,26 @@ longer needed for this particular demo.
 
 ## Current state
 
+- **2026-07-15: PredictOps went from 3/7 to 7/7 build phases.** All of Phase 4-7
+  actually shipped in the PredictOps repo (CI eval gate at ROC-AUC >= 0.80, MLflow
+  registry Staging->Production promotion, Evidently-with-PSI drift detection at a
+  0.15 per-feature threshold, and a Makefile wiring the full loop). `predictops.html`
+  and `index.html`'s project card were updated to match: 3/7 -> 7/7, the phase table
+  all "done," the hero eyebrow/lead copy no longer says "build in progress" or "next."
+  Two new finding boxes added (Phase 5-6 registry+PSI, and a Phase 3 revisit). While
+  verifying resume claims against the actual repo the same session, the Docker
+  multi-stage build turned out not to actually slim the runtime image (it copied the
+  entire builder environment including MLflow/Evidently/pytest/ruff) — fixed by
+  splitting `predictops/config.py` out of `train.py` and giving the final Docker
+  stage its own `requirements-serve.txt`. Real measured result: 1.66GB -> 733MB (56%),
+  not the earlier claimed ~1.2GB -> ~340MB (72%) which was never actually measured.
+  This site's copy, and the 4 resume `.tex` files in `job-scanner/base-resume-latex-
+  files/`, now both use the real number. **Open flag as of this pass:** the repo had
+  reverted to private since the last session's public flip (contradicting this
+  file's earlier note that it was made public), so the "View on GitHub" links and
+  CI badge don't resolve for real visitors yet. Flagged to Kalyan; needs him to flip
+  it public via GitHub settings (or `gh auth refresh -s repo` so Claude can do it via
+  API next time) since the available token lacked admin scope to do it directly.
 - **Second pass, same day (2026-07-13):** fixed the Graduate Research Engineer
   timeline entry on `about.html` (was "Sep 2025 to present," now "Sep 2025 to
   Jun 2026" since Kalyan graduates then and the role can't outlive his MS).

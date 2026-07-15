@@ -5,17 +5,17 @@
 <link rel="canonical" href="https://kalyanvenk.com/predictops.html">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PredictOps - Kalyan Venkatesh</title>
-<meta name="description" content="A production MLOps pipeline built to prove the ops loop, not the model: training comparison, FastAPI serving, Docker, with a CI eval gate, MLflow registry, and drift detection underway.">
-<meta property="og:title" content="PredictOps - a production MLOps pipeline, built phase by phase">
-<meta property="og:description" content="Most portfolio projects stop at a trained model. This one is about everything after: serving, containerization, a CI gate that can block a bad model, and drift detection.">
+<meta name="description" content="A production MLOps pipeline built to prove the ops loop, not the model: training comparison, FastAPI serving, Docker, a CI eval gate, MLflow registry promotion, and PSI-based drift detection, all shipped.">
+<meta property="og:title" content="PredictOps - a production MLOps pipeline, all 7 phases shipped">
+<meta property="og:description" content="Most portfolio projects stop at a trained model. This one is about everything after: serving, containerization, a CI gate that blocks a bad model, registry promotion, and drift detection.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalyanvenk.com/predictops.html">
 <meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PredictOps - a production MLOps pipeline, built phase by phase">
-<meta name="twitter:description" content="Most portfolio projects stop at a trained model. This one is about everything after: serving, containerization, a CI gate, drift detection.">
+<meta name="twitter:title" content="PredictOps - a production MLOps pipeline, all 7 phases shipped">
+<meta name="twitter:description" content="Most portfolio projects stop at a trained model. This one is about everything after: serving, containerization, a CI gate, registry promotion, drift detection.">
 <meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,9 +43,9 @@
 
 <header class="proj-hero">
   <div class="wrap">
-    <span class="eyebrow reveal"><span class="blip"></span>Production MLOps · build in progress</span>
+    <span class="eyebrow reveal"><span class="blip"></span>Production MLOps · all 7 phases shipped</span>
     <h1 class="reveal">PredictOps</h1>
-    <p class="lead reveal d1">Every ML Engineer job description lists Docker, FastAPI, CI/CD, MLflow. Almost none of them list a novel model architecture. So this project deliberately uses a boring, well-understood tabular classification problem and puts all the depth into the ops loop around it: the training comparison, the serving contract, the container, and next the CI gate that can actually block a bad model before it ships. The model is not the point. The system around it is.</p>
+    <p class="lead reveal d1">Every ML Engineer job description lists Docker, FastAPI, CI/CD, MLflow. Almost none of them list a novel model architecture. So this project deliberately uses a boring, well-understood tabular classification problem and puts all the depth into the ops loop around it: the training comparison, the serving contract, the container, a CI gate that actually blocks a bad model before it ships, registry promotion, and drift detection. The model is not the point. The system around it is.</p>
     <div class="meta reveal d2">
       <span class="chip">scikit-learn</span>
       <span class="chip">XGBoost</span>
@@ -65,7 +65,7 @@
 <section style="padding-top:30px;">
   <div class="wrap">
     <div class="stats">
-      <div class="stat reveal"><div class="num"><span data-count="3">0</span>/7</div><div class="lbl">build phases shipped</div></div>
+      <div class="stat reveal"><div class="num"><span data-count="7">0</span>/7</div><div class="lbl">build phases shipped</div></div>
       <div class="stat reveal d1"><div class="num"><span data-count="0.846" data-dp="3">0</span></div><div class="lbl">CV ROC-AUC, winning model</div></div>
       <div class="stat reveal d2"><div class="num"><span data-count="4">0</span></div><div class="lbl">served REST endpoints</div></div>
       <div class="stat reveal d3"><div class="num"><span data-count="2">0</span></div><div class="lbl">candidate models compared</div></div>
@@ -96,8 +96,8 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">Where it actually stands</p>
-    <h2 class="section-title reveal">Three phases done, four to go.</h2>
-    <p class="section-sub reveal">This project is built one working phase at a time, each committed separately, each with its own "why" before moving on. Here's exactly what's real right now and what's next, instead of rounding up.</p>
+    <h2 class="section-title reveal">All seven phases shipped.</h2>
+    <p class="section-sub reveal">This project was built one working phase at a time, each committed separately, each with its own "why" before moving on. Here's exactly what's real, instead of rounding up.</p>
     <div class="two-col">
       <div class="tbl-wrap reveal" style="align-self:start;">
         <table>
@@ -107,14 +107,19 @@
             <tr><td>1 &middot; Training + MLflow</td><td><span class="pill good">done</span></td></tr>
             <tr><td>2 &middot; FastAPI serving</td><td><span class="pill good">done</span></td></tr>
             <tr><td>3 &middot; Multi-stage Docker</td><td><span class="pill good">done</span></td></tr>
-            <tr><td>4 &middot; CI eval gate</td><td><span class="pill warn">next</span></td></tr>
-            <tr><td>5 &middot; MLflow registry + promotion</td><td><span class="pill warn">planned</span></td></tr>
-            <tr><td>6 &middot; Evidently drift detection</td><td><span class="pill warn">planned</span></td></tr>
-            <tr><td>7 &middot; Wire the full loop</td><td><span class="pill warn">planned</span></td></tr>
+            <tr><td>4 &middot; CI eval gate</td><td><span class="pill good">done</span></td></tr>
+            <tr><td>5 &middot; MLflow registry + promotion</td><td><span class="pill good">done</span></td></tr>
+            <tr><td>6 &middot; Evidently drift detection</td><td><span class="pill good">done</span></td></tr>
+            <tr><td>7 &middot; Wire the full loop</td><td><span class="pill good">done</span></td></tr>
           </tbody>
         </table>
       </div>
-      <div class="finding reveal" style="align-self:start;"><strong>Phase 4 is the centerpiece, deliberately saved for next.</strong> A GitHub Actions workflow that lints, tests, and then runs a model-quality assertion. A build fails if a model doesn't clear a ROC-AUC threshold, the same way a broken unit test fails a build. That's the difference between "I trained a model" and "a bad model literally cannot reach production here," and it's the whole reason this project exists.</div>
+      <div class="finding reveal" style="align-self:start;"><strong>Phase 4 was the centerpiece.</strong> A GitHub Actions workflow lints, tests, and then runs a model-quality assertion: ROC-AUC &ge; 0.80 or the build fails, the same way a broken unit test fails a build. Verified by shipping a deliberately degraded model, watching CI go red, then fixing it. That's the difference between "I trained a model" and "a bad model literally cannot reach production here."</div>
+    </div>
+
+    <div class="two-col" style="margin-top:28px;">
+      <div class="finding reveal" style="align-self:start;"><strong>Phase 5-6: registry promotion and real PSI, not a rounded-off drift score.</strong> The winning run gets registered in the MLflow model registry and promoted Staging &rarr; Production. Drift detection runs Evidently with PSI (Population Stability Index) as the actual per-column stattest, comparing a reference split against a synthetically shifted "current" split, tripping an alert when any feature's PSI exceeds 0.15.</div>
+      <div class="finding reveal" style="align-self:start;"><strong>Phase 3 revisited: multi-stage Docker that actually earns the name.</strong> The first pass copied the entire build environment (MLflow, Evidently, pytest, ruff) into the runtime image. Splitting serving-only dependencies out cut the served image from 1.66GB to 733MB, a 56% reduction, from an actual measured build, not an estimate.</div>
     </div>
   </div>
 </section>
@@ -123,7 +128,7 @@
   <div class="wrap prose">
     <p class="kicker reveal">Why this project exists</p>
     <h2 class="reveal">The model is the boring part on purpose</h2>
-    <p class="reveal">My other two projects are LLM research. This one is the breadth piece that sits next to them: a plain tabular classification problem (customer churn, never the headline) so nobody mistakes the domain for the point. The point is the ops loop, the part almost every portfolio project skips because it stops at the trained model. A pipeline that prevents leakage, a served API with real input validation and a health check, a container that only ships what it needs, and next, a CI gate that can actually fail a merge. That's the same instinct behind the other two projects, applied to the plumbing instead of the research question: build the part that makes the system trustworthy, not just the part that demos well.</p>
+    <p class="reveal">My other two projects are LLM research. This one is the breadth piece that sits next to them: a plain tabular classification problem (customer churn, never the headline) so nobody mistakes the domain for the point. The point is the ops loop, the part almost every portfolio project skips because it stops at the trained model. A pipeline that prevents leakage, a served API with real input validation and a health check, a container that only ships what it needs, and a CI gate that actually fails a merge. That's the same instinct behind the other two projects, applied to the plumbing instead of the research question: build the part that makes the system trustworthy, not just the part that demos well.</p>
   </div>
 </section>
 
@@ -131,7 +136,7 @@
   <div class="wrap prose">
     <p class="kicker reveal">Status</p>
     <h2 class="reveal">Where it stands</h2>
-    <p class="reveal">Phases 0 through 3 are done and pushed: a compared, cross-validated training pipeline, a validated FastAPI serving layer, and a multi-stage Docker build. Phase 4, the CI eval gate, is next. Actively building.</p>
+    <p class="reveal">All seven phases are done and pushed: a compared, cross-validated training pipeline, a validated FastAPI serving layer, a multi-stage Docker build, a CI eval gate that blocks a regressed model, MLflow registry promotion, and PSI-based drift detection. The full loop runs end to end with one command.</p>
     <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/PredictOps" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
   </div>
 </section>
