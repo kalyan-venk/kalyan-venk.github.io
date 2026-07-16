@@ -58,12 +58,16 @@ longer needed for this particular demo.
   stage its own `requirements-serve.txt`. Real measured result: 1.66GB -> 733MB (56%),
   not the earlier claimed ~1.2GB -> ~340MB (72%) which was never actually measured.
   This site's copy, and the 4 resume `.tex` files in `job-scanner/base-resume-latex-
-  files/`, now both use the real number. **Open flag as of this pass:** the repo had
-  reverted to private since the last session's public flip (contradicting this
-  file's earlier note that it was made public), so the "View on GitHub" links and
-  CI badge don't resolve for real visitors yet. Flagged to Kalyan; needs him to flip
-  it public via GitHub settings (or `gh auth refresh -s repo` so Claude can do it via
-  API next time) since the available token lacked admin scope to do it directly.
+  files/`, now both use the real number. The repo had reverted to private since the
+  last session's public flip; Kalyan flipped it public again himself later in this
+  same session, so the "View on GitHub" link now resolves for real visitors.
+  **Still open, carrying into next session:** the CI badge on `predictops.html`
+  is red, but not because of the code — Kalyan's GitHub account has a billing
+  problem ("recent account payments have failed or spending limit needs
+  increasing") that stops the Actions job before it even starts. Nothing to fix on
+  this site's end; the badge will self-resolve once billing is fixed and a new push
+  runs. Don't "fix" it by hiding or reframing the badge — it's telling the truth
+  about current state.
 - **Second pass, same day (2026-07-13):** fixed the Graduate Research Engineer
   timeline entry on `about.html` (was "Sep 2025 to present," now "Sep 2025 to
   Jun 2026" since Kalyan graduates then and the role can't outlive his MS).
@@ -192,6 +196,16 @@ chart — no local dependency to install.
 
 ## Working conventions for this repo
 
+- **Internal links are extensionless.** As of 2026-07-16, nav/footer/inline
+  links, `canonical`, and `og:url` all use `/about` style paths, not
+  `about.html`. GitHub Pages resolves these natively (no Jekyll config,
+  `.nojekyll`, or redirect needed) — confirmed this works without a build
+  step. Homepage links to `/` rather than `index.html`. Local testing with
+  a plain static server (e.g. `python3 -m http.server`) will 404 on the
+  extensionless paths since that resolution is GitHub Pages-specific; only
+  production (or a Pages-accurate server) will show it working. When adding
+  a new page, follow this pattern for its links rather than reintroducing
+  `.html`.
 - **Don't let commits attribute to Claude.** Kalyan doesn't want `claude`
   showing up in this repo's GitHub contributors graph since recruiters view
   it. Check for an `attribution` block (empty `commit`/`pr` strings) in
