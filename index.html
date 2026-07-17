@@ -35,6 +35,7 @@
       <a href="inference-lens">Inference-Lens</a>
       <a href="agentic-llmops">Agentic LLMOps</a>
       <a href="predictops">PredictOps</a>
+      <a href="job-scanner">Job Scanner</a>
       <a href="about">About</a>
       <a href="inference-lens#demo" class="nav-cta">Live demo</a>
     </div>
@@ -45,7 +46,7 @@
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>ML Engineer &middot; AI systems that hold up</span>
     <h1 class="reveal">Making AI and ML systems you can <span class="grad">actually trust.</span></h1>
-    <p class="lead reveal d1">I have spent 3 plus years on one problem. ML systems that hold up when it actually matters, not just on a benchmark. Every LLM pipeline leans on an automated judge that grades its output and a monitor meant to catch its failures, and most teams simply assume both work. My research measures when you can trust them and builds the ones that do. The same instinct now runs into a production MLOps pipeline built the same way, phase by phase, proof over claims.</p>
+    <p class="lead reveal d1">I have spent 3 plus years on one problem. ML systems that hold up when it actually matters, not just on a benchmark. Every LLM pipeline leans on an automated judge that grades its output and a monitor meant to catch its failures and most teams simply assume both work. My research measures when you can trust them and builds the ones that do. The same instinct now runs into a production MLOps pipeline built the same way, phase by phase, proof over claims.</p>
     <div class="cta-row reveal d2">
       <a href="inference-lens#demo" class="btn btn-primary">Try the live scorer &rarr;</a>
       <a href="about" class="btn btn-ghost">About me</a>
@@ -72,14 +73,14 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">The thesis</p>
-    <h2 class="section-title reveal">Two questions about trust, and the range to back them up</h2>
-    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work, and standing over them is a quality inspector deciding what ships. Everyone studies the workers. I went and audited the inspector. One project asks whether it can be fooled. The other asks whether hiring it even helped. A third project is the range piece: the same "prove it, don't claim it" rigor applied to the unglamorous MLOps loop most portfolios skip.</p>
+    <h2 class="section-title reveal">Two questions about trust and the range to back them up</h2>
+    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work and standing over them is a quality inspector deciding what ships. Everyone studies the workers. I went and audited the inspector. One project asks whether it can be fooled. The other asks whether hiring it even helped. A third is the range piece: the same "prove it, don't claim it" rigor applied to the unglamorous MLOps loop most portfolios skip. The fourth is what happened when I pointed the same agent work at my own job search: a compound AI system that has been running every 10 minutes since.</p>
     <div class="proj-grid">
       <a href="inference-lens" class="card reveal">
         <span class="glow" style="background:#6366f1;"></span>
         <span class="tag">Can the judge be fooled · Live demo</span>
         <h3>Inference-Lens</h3>
-        <p>Built an NLP text classification pipeline, trained scoring models on real human preference data, then put them under systematic adversarial pressure. Two models that looked identical on a clean benchmark came apart by more than 75 points the moment something tried to deceive them. The judge can be fooled, and how badly depends on the NLP architecture.</p>
+        <p>Built an NLP text classification pipeline, trained scoring models on real human preference data, then put them under systematic adversarial pressure. Two models that looked identical on a clean benchmark came apart by more than 75 points the moment something tried to deceive them. The judge can be fooled and how badly depends on the NLP architecture.</p>
         <div class="metrics">
           <div><div class="m-num">170K+</div><div class="m-lbl">preference labels</div></div>
           <div><div class="m-num">419</div><div class="m-lbl">adversarial pairs</div></div>
@@ -103,13 +104,25 @@
         <span class="glow" style="background:#22c55e;"></span>
         <span class="tag">Production MLOps · shipped</span>
         <h3>PredictOps</h3>
-        <p>A deliberately boring tabular model with all the depth put into the ops loop around it: cross-validated training comparison, a validated FastAPI serving layer, a multi-stage Docker build, a CI gate that blocks a bad model from shipping, MLflow registry promotion, and PSI-based drift detection. Most portfolio projects stop at the trained model. This one is about everything after.</p>
+        <p>A deliberately boring tabular model with all the depth put into the ops loop around it: cross-validated training comparison, a validated FastAPI serving layer, a multi-stage Docker build, a CI gate that blocks a bad model from shipping, MLflow registry promotion and PSI-based drift detection. Most portfolio projects stop at the trained model. This one is about everything after.</p>
         <div class="metrics">
           <div><div class="m-num">7/7</div><div class="m-lbl">build phases shipped</div></div>
           <div><div class="m-num">0.846</div><div class="m-lbl">CV ROC-AUC</div></div>
           <div><div class="m-num">4</div><div class="m-lbl">served endpoints</div></div>
         </div>
         <span class="arrow">See what's built &rarr;</span>
+      </a>
+      <a href="job-scanner" class="card reveal d3">
+        <span class="glow" style="background:#5eead4;"></span>
+        <span class="tag">Agent engineering &#183; in production</span>
+        <h3>Job Scanner</h3>
+        <p>I work on agents, so I pointed one at my own job search and scaled it up. 630 companies polled every 10 minutes across 8 applicant tracking platforms, a cost tiered pipeline that triages, judges, writes and checks its own output and a human in the loop it cannot bypass. A naive staleness check inside it once called 61% of live jobs dead. Working out why was the best thing I learned building it.</p>
+        <div class="metrics">
+          <div><div class="m-num">630</div><div class="m-lbl">companies polled</div></div>
+          <div><div class="m-num">8</div><div class="m-lbl">platforms, 10 adapters</div></div>
+          <div><div class="m-num">0</div><div class="m-lbl">sent without me</div></div>
+        </div>
+        <span class="arrow">See how it works &rarr;</span>
       </a>
     </div>
   </div>
@@ -186,6 +199,7 @@
       <a href="inference-lens">Inference-Lens</a>
       <a href="agentic-llmops">Agentic LLMOps</a>
       <a href="predictops">PredictOps</a>
+      <a href="job-scanner">Job Scanner</a>
       <a href="inference-lens#demo">Live demo</a>
     </div>
     <div class="col">
