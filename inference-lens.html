@@ -35,6 +35,7 @@
       <a href="inference-lens" class="active">Inference-Lens</a>
       <a href="agentic-llmops">Agentic LLMOps</a>
       <a href="predictops">PredictOps</a>
+      <a href="job-scanner">Job Scanner</a>
       <a href="about">About</a>
       <a href="#demo" class="nav-cta">Live demo</a>
     </div>
@@ -91,7 +92,7 @@
     <p class="reveal">Then I went looking for trouble. LLM-Bar gives me 419 adversarially constructed NLP pairs built specifically to fool automated text evaluators. My plan was simple: train NLP scoring models on the clean preference data, then see how each architecture behaves the moment something is engineered to trip it.</p>
 
     <h2 class="reveal">Three things I walked away with</h2>
-    <div class="finding reveal"><strong>Clean accuracy near 0.50 is the point, not the failure.</strong> Logistic Regression, XGBoost, and a DeBERTa-v3-small fine-tune all landed around 0.50 AUC-ROC on clean evaluation. Surface features like readability and length just do not predict what a human prefers.</div>
+    <div class="finding reveal"><strong>Clean accuracy near 0.50 is the point, not the failure.</strong> Logistic Regression, XGBoost and a DeBERTa-v3-small fine-tune all landed around 0.50 AUC-ROC on clean evaluation. Surface features like readability and length just do not predict what a human prefers.</div>
     <div class="finding reveal"><strong>Identical on paper, opposite under attack.</strong> Under a Neighbor attack, Logistic Regression picked the worse manipulated answer 78.4 percent of the time, almost four times in five. XGBoost, trained on the same data, degraded only 2.4 percent. No clean benchmark would ever show you that gap.</div>
     <div class="finding reveal"><strong>Length is the opposite of quality.</strong> Three clustering algorithms over the full dataset agreed on four archetypes. The most verbose cluster had the lowest preference rate at 48.9 percent. The shorter, conversational one had the highest at 51.6 percent.</div>
   </div>
@@ -117,7 +118,7 @@
   <div class="wrap">
     <p class="kicker reveal">The headline</p>
     <h2 class="section-title reveal">Two models, identical on paper, opposite under fire</h2>
-    <p class="section-sub reveal">All three models scored near 0.50 AUC-ROC on clean evaluation. The real separation only shows up once you attack them, and that is the argument of the whole project.</p>
+    <p class="section-sub reveal">All three models scored near 0.50 AUC-ROC on clean evaluation. The real separation only shows up once you attack them and that is the argument of the whole project.</p>
     <div class="tbl-wrap reveal">
       <table>
         <thead><tr><th>Model</th><th>Clean AUC-ROC</th><th>Worst case under attack</th><th>Verdict</th></tr></thead>
@@ -136,7 +137,7 @@
   <div class="wrap">
     <p class="kicker reveal">What the data said</p>
     <h2 class="section-title reveal">Length is the opposite of quality</h2>
-    <p class="section-sub reveal">Before I touched a single label, I wanted to know what the response space naturally looks like. Three clustering algorithms over the full dataset all landed on the same four archetypes, which told me the structure was real. Then I checked which one humans actually preferred, and it surprised me.</p>
+    <p class="section-sub reveal">Before I touched a single label, I wanted to know what the response space naturally looks like. Three clustering algorithms over the full dataset all landed on the same four archetypes, which told me the structure was real. Then I checked which one humans actually preferred and it surprised me.</p>
     <div class="two-col">
       <div class="chart-card reveal">
         <h4>Human preference rate by archetype</h4>
@@ -150,7 +151,7 @@
         <div class="arch reveal d3"><div class="top"><h4>Verbose Inconsistent</h4><span class="pill bad">48.9%</span></div><span class="meta">the longest responses, the lowest pick rate</span><div class="bar"><i style="width:30%; background:var(--bad);"></i></div></div>
       </div>
     </div>
-    <div class="finding reveal" style="margin-top:20px;"><strong>The longest responses were the least preferred.</strong> I went in assuming elaborate answers would win. The humans disagreed. A scorer that rewards length is not measuring quality, it is measuring word count, and that is exactly the lever an adversary pulls.</div>
+    <div class="finding reveal" style="margin-top:20px;"><strong>The longest responses were the least preferred.</strong> I went in assuming elaborate answers would win. The humans disagreed. A scorer that rewards length is not measuring quality, it is measuring word count and that is exactly the lever an adversary pulls.</div>
   </div>
 </section>
 
@@ -163,7 +164,7 @@
       <li>Pick your automated NLP judge by stress-testing it against adversarial text, not by reading a leaderboard. Know which NLP attack families break which architecture and by how much.</li>
       <li>Be suspicious of any quality signal that tracks length. Across 170K+ natural language judgments, longer text meant less preferred.</li>
     </ul>
-    <p class="reveal">The full pipeline, all three model architectures, the clustering notebooks, and the LLM-Bar stress-test are on GitHub.</p>
+    <p class="reveal">The full pipeline, all three model architectures, the clustering notebooks and the LLM-Bar stress-test are on GitHub.</p>
     <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/Inference-Lens" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
   </div>
 </section>
@@ -174,7 +175,7 @@
       <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
       <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
     </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Agentic LLMOps</a><a href="predictops">PredictOps</a><a href="#demo">Live demo</a></div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Agentic LLMOps</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="#demo">Live demo</a></div>
     <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/Inference-Lens" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
   </div>
   <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>

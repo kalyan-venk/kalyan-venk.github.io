@@ -35,6 +35,7 @@
       <a href="inference-lens">Inference-Lens</a>
       <a href="agentic-llmops">Agentic LLMOps</a>
       <a href="predictops">PredictOps</a>
+      <a href="job-scanner">Job Scanner</a>
       <a href="about" class="active">About</a>
       <a href="inference-lens#demo" class="nav-cta">Live demo</a>
     </div>
@@ -45,7 +46,7 @@
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>About</span>
     <h1 class="reveal">Kalyan <span class="grad">Venkatesh</span></h1>
-    <p class="lead reveal d1">I have spent 3 plus years on one problem. ML systems that hold up when it actually matters, not just on a benchmark. I am finishing my MS in Computer Science at DePaul, graduating June 2026, and I am looking for Data Scientist, ML Engineer, AI Engineer, and Software Engineer roles.</p>
+    <p class="lead reveal d1">I have spent 3 plus years on one problem. ML systems that hold up when it actually matters, not just on a benchmark. I am finishing my MS in Computer Science at DePaul, graduating June 2026 and I am looking for Data Scientist, ML Engineer, AI Engineer and Software Engineer roles.</p>
     <div class="cta-row reveal d2" style="margin-top:26px;">
       <a href="mailto:adavivenkatesh@gmail.com" class="btn btn-primary">Email me</a>
       <a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
@@ -57,8 +58,8 @@
   <div class="wrap prose">
     <p class="kicker reveal">The throughline</p>
     <h2 class="reveal">Every system I built had a human on the other end</h2>
-    <p class="reveal">That is the honest center of how I work. At sensen.ai my models produced court admissible enforcement tickets sent to real people. A model confusing a B for an 8 in bad lighting was not a wrong number on a dashboard, it was someone's problem. We had cases where that went wrong, and that is what I was building against. It taught me to stop trusting clean metrics and start asking the harder question. Does this still work six months after I shipped it, and can I prove it.</p>
-    <p class="reveal">My two research projects are two angles on that same instinct. <a href="agentic-llmops" style="color:var(--indigo)">Agentic LLMOps</a> asks whether a runtime monitor inside an agent loop actually helps, and finds the exact point where it starts to hurt. <a href="inference-lens" style="color:var(--indigo)">Inference-Lens</a> asks whether the automated judge we all rely on can be fooled, and shows how badly. The thread across all of it is simple. I want ML pipelines that work the way they are supposed to, with measurable and trustworthy output at every layer.</p>
+    <p class="reveal">That is the honest center of how I work. At sensen.ai my models produced court admissible enforcement tickets sent to real people. A model confusing a B for an 8 in bad lighting was not a wrong number on a dashboard, it was someone's problem. We had cases where that went wrong and that is what I was building against. It taught me to stop trusting clean metrics and start asking the harder question. Does this still work six months after I shipped it and can I prove it.</p>
+    <p class="reveal">My two research projects are two angles on that same instinct. <a href="agentic-llmops" style="color:var(--indigo)">Agentic LLMOps</a> asks whether a runtime monitor inside an agent loop actually helps and finds the exact point where it starts to hurt. <a href="inference-lens" style="color:var(--indigo)">Inference-Lens</a> asks whether the automated judge we all rely on can be fooled and shows how badly. The thread across all of it is simple. I want ML pipelines that work the way they are supposed to, with measurable and trustworthy output at every layer.</p>
   </div>
 </section>
 
@@ -67,9 +68,9 @@
     <p class="kicker reveal">Where I have done it</p>
     <h2 class="section-title reveal">Experience</h2>
     <div class="timeline reveal">
-      <div class="tl-item"><div class="ph">Sep 2025 to Jun 2026 · DePaul University</div><h4>Graduate Research Engineer</h4><p>First author on the multi-agent inference reliability work, alongside two faculty co-authors, currently under peer review. I own it end to end, from the problem to the architecture to the statistics. Ten phases, five model families, a statistically significant +4.85 point gain, and the Inverse Capability Hypothesis that says where monitoring stops helping.</p></div>
-      <div class="tl-item"><div class="ph">2022 to 2024 · sensen.ai</div><h4>Data Scientist</h4><p>Built the model validation framework that became the standard validation workflow across 26 global deployments, mapping every vehicle event to track accuracy continuously with reports a non-technical council member could read. Rebuilt the ETL behind weekly invoicing from 3 plus hours down to under 2, and the ticket generation pipeline from roughly 800ms to 480ms per instance.</p></div>
-      <div class="tl-item"><div class="ph">2021 to 2022 · AECOM and Siri</div><h4>Data Engineer</h4><p>Built Python and Pandas pipelines for cleaning and monthly cost consolidation, cutting dashboard turnaround from 3 hours to under 1, and tuned SQL across cost databases from roughly 20 seconds to 8. Early career, but the instinct was already there. Take messy and manual, make it clean, fast, and repeatable.</p></div>
+      <div class="tl-item"><div class="ph">Sep 2025 to Jun 2026 · DePaul University</div><h4>Graduate Research Engineer</h4><p>First author on the multi-agent inference reliability work, alongside two faculty co-authors, currently under peer review. I own it end to end, from the problem to the architecture to the statistics. Ten phases, five model families, a statistically significant +4.85 point gain and the Inverse Capability Hypothesis that says where monitoring stops helping.</p></div>
+      <div class="tl-item"><div class="ph">2022 to 2024 · sensen.ai</div><h4>Data Scientist</h4><p>Built the model validation framework that became the standard validation workflow across 26 global deployments, mapping every vehicle event to track accuracy continuously with reports a non-technical council member could read. Rebuilt the ETL behind weekly invoicing from 3 plus hours down to under 2 and the ticket generation pipeline from roughly 800ms to 480ms per instance.</p></div>
+      <div class="tl-item"><div class="ph">2021 to 2022 · AECOM and Siri</div><h4>Data Engineer</h4><p>Built Python and Pandas pipelines for cleaning and monthly cost consolidation, cutting dashboard turnaround from 3 hours to under 1 and tuned SQL across cost databases from roughly 20 seconds to 8. Early career, but the instinct was already there. Take messy and manual, make it clean, fast and repeatable.</p></div>
     </div>
   </div>
 </section>
@@ -120,7 +121,7 @@
         <span class="glow" style="background:#a855f7;"></span>
         <span class="tag">First-author · under peer review</span>
         <h3>Agentic LLMOps</h3>
-        <p>A three agent runtime monitor for code generation. A real +4.85 point gain, and the failure condition that matters. Above roughly 65 percent baseline, monitoring hurts.</p>
+        <p>A three agent runtime monitor for code generation. A real +4.85 point gain and the failure condition that matters. Above roughly 65 percent baseline, monitoring hurts.</p>
         <span class="arrow">Read more &rarr;</span>
       </a>
       <a href="inference-lens" class="card reveal d1">
@@ -134,7 +135,7 @@
         <span class="glow" style="background:#22c55e;"></span>
         <span class="tag">Production MLOps · in progress</span>
         <h3>PredictOps</h3>
-        <p>A cross-validated training pipeline, a validated FastAPI serving layer, and a multi-stage Docker build, with a CI eval gate and drift detection next.</p>
+        <p>A cross-validated training pipeline, a validated FastAPI serving layer and a multi-stage Docker build, with a CI eval gate and drift detection next.</p>
         <span class="arrow">Read more &rarr;</span>
       </a>
     </div>
@@ -160,7 +161,7 @@
       <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
       <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
     </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Agentic LLMOps</a><a href="predictops">PredictOps</a><a href="inference-lens#demo">Live demo</a></div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Agentic LLMOps</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="inference-lens#demo">Live demo</a></div>
     <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
   </div>
   <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>

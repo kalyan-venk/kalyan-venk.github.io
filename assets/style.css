@@ -336,3 +336,44 @@ tbody tr:hover { background: rgba(255,255,255,0.02); }
   .nav-toggle { display: block; }
   .hero { padding: 80px 0 50px; }
 }
+
+/* ---------- animated agent flow diagram (assets/flow.js) ---------- */
+.agentflow { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 26px 22px 20px; overflow-x: auto; }
+.agentflow svg { display: block; width: 100%; height: auto; }
+.agentflow svg.wide { min-width: 900px; }
+.agentflow svg.xwide { min-width: 1100px; }
+
+.fnode rect { fill: var(--surface-2); stroke: var(--border); stroke-width: 1; }
+.fnode .nm { fill: var(--text); font: 700 13px var(--sans); }
+.fnode .role { fill: var(--text-faint); font: 400 10.5px var(--mono); }
+.fnode.accent rect { fill: var(--accent-soft); stroke: rgba(129,140,248,0.55); }
+.fnode.gate rect { fill: rgba(94,234,212,0.07); stroke: rgba(94,234,212,0.45); }
+.fnode.human rect { fill: rgba(240,171,252,0.07); stroke: rgba(240,171,252,0.45); }
+.fnode.term rect { fill: rgba(74,222,128,0.07); stroke: rgba(74,222,128,0.4); }
+.fnode.sink rect { fill: transparent; stroke: var(--border-soft); stroke-dasharray: 4 4; }
+
+.fedge { fill: none; stroke: var(--border); stroke-width: 1.5; }
+.fedge.branch { stroke-dasharray: 5 5; stroke: #2c3450; }
+.flabel { fill: var(--text-faint); font: 400 10px var(--mono); }
+.fcap { fill: var(--text-faint); font: 400 10.5px var(--mono); letter-spacing: 0.04em; }
+
+.pkt { transition: fill 0.25s linear; }
+.pkt.live  { fill: var(--indigo); filter: drop-shadow(0 0 5px rgba(129,140,248,0.85)); }
+.pkt.ok    { fill: var(--good);   filter: drop-shadow(0 0 5px rgba(74,222,128,0.85)); }
+.pkt.warn  { fill: var(--warn);   filter: drop-shadow(0 0 5px rgba(251,191,36,0.85)); }
+.pkt.muted { fill: #59617a; filter: none; opacity: 0.75; }
+
+.flow-legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border-soft); }
+.flow-legend div { display: flex; align-items: flex-start; gap: 9px; font-size: 0.82rem; color: var(--text-dim); }
+.flow-legend .k { width: 9px; height: 9px; border-radius: 50%; flex: none; margin-top: 6px; }
+.flow-legend .k.live  { background: var(--indigo); box-shadow: 0 0 6px rgba(129,140,248,0.8); }
+.flow-legend .k.ok    { background: var(--good);   box-shadow: 0 0 6px rgba(74,222,128,0.8); }
+.flow-legend .k.warn  { background: var(--warn);   box-shadow: 0 0 6px rgba(251,191,36,0.8); }
+.flow-legend .k.muted { background: #59617a; }
+
+@media (max-width: 720px) { .agentflow { padding: 18px 14px 14px; } }
+@media (prefers-reduced-motion: reduce) { .pkt { transition: none; } }
+
+/* redacted platform names — the real names are not in the DOM at all */
+.redact { filter: blur(5px); user-select: none; pointer-events: none; color: var(--text-dim); letter-spacing: 0.06em; }
+.redact-note { color: var(--text-faint); font-size: 0.86rem; margin-top: 14px; }
