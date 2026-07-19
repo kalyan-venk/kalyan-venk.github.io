@@ -1,13 +1,13 @@
 // mark JS active so reveal/anim styles apply (no-JS still shows content)
 document.documentElement.className = 'js';
 
-// theme: default dark, remember the visitor's choice. The <head> inline script
+// theme: default light, remember the visitor's choice. The <head> inline script
 // usually sets this before paint; this is a fallback if that ever changes.
 (function () {
   var root = document.documentElement;
   if (!root.getAttribute('data-theme')) {
-    var t = 'dark';
-    try { t = localStorage.getItem('kv-theme') || 'dark'; } catch (e) {}
+    var t = 'light';
+    try { t = localStorage.getItem('kv-theme') || 'light'; } catch (e) {}
     root.setAttribute('data-theme', t);
   }
 })();
