@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inference-Lens · Blueprint - Kalyan Venkatesh</title>
+<meta name="description" content="2 live, zoomable blueprints of the Inference-Lens project: the system design (stages of progression) and the full code map with data lineage.">
+<script>
+  /* set theme before paint to avoid a flash */
+  (function(){var t="dark";try{t=localStorage.getItem("kv-theme")||"dark";}catch(e){}document.documentElement.setAttribute("data-theme",t);})();
+</script>
+<style>
+/* ===========================================================================
+   Inference-Lens Blueprint - self-contained.
+   Design tokens mirrored from kalyan-venk.github.io/assets/style.css so this
+   page can be dropped into the repo or previewed standalone.
+   =========================================================================== */
+:root{
+  --bg:#07080d; --bg-soft:#0c0e16; --surface:#11141f; --surface-2:#161a28;
+  --surface-3:#1c2132; --border:#232a3d; --border-soft:#1a2030;
+  --text:#eef1f7; --text-dim:#aeb6c7; --text-faint:#6b7488;
+  --indigo:#818cf8; --violet:#c084fc; --cyan:#5eead4; --pink:#f0abfc;
+  --accent:var(--indigo); --accent-soft:rgba(129,140,248,0.12);
+  --good:#4ade80; --warn:#fbbf24; --bad:#fb7185;
+  --grad:linear-gradient(135deg,#6366f1 0%,#a855f7 55%,#ec4899 100%);
+  --grad-text:linear-gradient(120deg,#a5b4fc 0%,#e9d5ff 50%,#99f6e4 100%);
+  --radius:18px; --radius-sm:12px; --maxw:1280px;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --shadow:0 24px 60px -20px rgba(0,0,0,0.6);
+  --glow:0 0 0 1px rgba(129,140,248,0.18),0 18px 50px -18px rgba(124,58,237,0.45);
+}
+/* light theme: the page chrome flips; the diagram frames stay dark (see .dgm-frame) */
+:root[data-theme="light"]{
+  --bg:#f5f6fb; --bg-soft:#eceef6; --surface:#ffffff; --surface-2:#f2f4fa;
+  --surface-3:#e8ebf5; --border:#d5dae8; --border-soft:#e3e7f1;
+  --text:#141827; --text-dim:#4b5266; --text-faint:#7b8399;
+  --accent-soft:rgba(99,102,241,0.12);
+  --grad-text:linear-gradient(120deg,#4f46e5 0%,#9333ea 50%,#0d9488 100%);
+  --shadow:0 20px 45px -22px rgba(30,40,80,0.28);
+  --glow:0 0 0 1px rgba(99,102,241,0.22),0 14px 40px -18px rgba(124,58,237,0.22);
+}
+:root[data-theme="light"] body::after{opacity:0}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60rem 40rem at 12% -8%,rgba(99,102,241,0.18),transparent 60%),
+    radial-gradient(50rem 40rem at 100% 0%,rgba(168,85,247,0.14),transparent 55%),
+    radial-gradient(50rem 50rem at 50% 120%,rgba(34,211,238,0.10),transparent 55%)}
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);
+  background-size:56px 56px;mask-image:radial-gradient(circle at 50% 20%,black,transparent 85%)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;position:relative;z-index:1}
+.grad{background:var(--grad-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.mono{font-family:var(--mono)}
+a{color:var(--indigo);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* header */
+header.top{border-bottom:1px solid var(--border-soft);background:rgba(7,8,13,0.7);
+  backdrop-filter:blur(16px);position:sticky;top:0;z-index:60}
+:root[data-theme="light"] header.top{background:rgba(245,246,251,0.82)}
+.top-inner{max-width:var(--maxw);margin:0 auto;padding:14px 26px;display:flex;
+  align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{font-weight:800;letter-spacing:-.02em;font-size:1.02rem;display:flex;align-items:center;gap:9px;color:var(--text)}
+.brand .mark{width:30px;height:30px;border-radius:9px;background:var(--grad);display:inline-flex;
+  align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#fff;box-shadow:var(--glow)}
+.top-links{display:flex;gap:6px;flex-wrap:wrap}
+.top-links a{padding:7px 13px;border-radius:999px;font-size:.85rem;color:var(--text-dim);font-weight:500}
+.top-links a:hover{color:var(--text);background:var(--surface);text-decoration:none}
+
+/* light / dark toggle (organic sliding knob, matches the main site) */
+.theme-switch{background:none;border:0;padding:6px 4px;margin-left:6px;cursor:pointer;display:inline-flex;align-items:center}
+.ts-track{width:50px;height:26px;border-radius:999px;background:#1c2132;border:1px solid var(--border);position:relative;transition:background .25s,border-color .25s}
+.ts-knob{position:absolute;top:2px;left:25px;width:20px;height:20px;border-radius:50%;background:#c7cede;display:inline-flex;align-items:center;justify-content:center;transition:left .28s cubic-bezier(.2,.8,.2,1),background .25s;box-shadow:0 2px 6px rgba(0,0,0,0.4)}
+.ts-knob svg{width:12px;height:12px;position:absolute;transition:opacity .2s}
+.ts-sun{color:#8a6400;opacity:0}
+.ts-moon{color:#2a2f45;opacity:1}
+.theme-switch:hover .ts-track{border-color:var(--indigo)}
+:root[data-theme="light"] .ts-track{background:#dce4f2;border-color:#c3ccdb}
+:root[data-theme="light"] .ts-knob{left:3px;background:#fbbf24}
+:root[data-theme="light"] .ts-sun{opacity:1}
+:root[data-theme="light"] .ts-moon{opacity:0}
+
+/* hero */
+.hero{padding:64px 0 26px}
+.kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);margin-bottom:14px}
+h1{font-size:clamp(2rem,5vw,3.1rem);line-height:1.08;letter-spacing:-.03em;font-weight:800;text-wrap:balance}
+.hero p.lead{color:var(--text-dim);max-width:62ch;margin-top:18px;font-size:1.06rem}
+.hero .note{margin-top:20px;font-size:.92rem;color:var(--text-faint);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hint-pill{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border:1px solid var(--border);
+  border-radius:999px;background:var(--surface-2);color:var(--text-dim);font-size:.84rem}
+.hint-pill svg{width:15px;height:15px;color:var(--cyan)}
+
+/* section shell */
+section.dgm-section{padding:40px 0 12px;position:relative;z-index:1}
+.sec-head{margin-bottom:8px}
+.sec-head h2{font-size:clamp(1.5rem,3.4vw,2.1rem);letter-spacing:-.02em;font-weight:800}
+.sec-head h2 .num{font-family:var(--mono);font-size:.9rem;color:var(--indigo);
+  border:1px solid var(--border);border-radius:8px;padding:3px 9px;margin-right:12px;vertical-align:middle}
+.sec-head p{color:var(--text-dim);max-width:74ch;margin-top:12px}
+
+/* diagram frame — flips with the page theme */
+.dgm-frame{margin-top:24px;border:1px solid var(--border);border-radius:var(--radius);
+  background:linear-gradient(180deg,var(--surface-2),var(--bg-soft));
+  box-shadow:var(--shadow);overflow:hidden}
+.dgm-bar{display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;
+  padding:11px 16px;border-bottom:1px solid var(--border-soft);background:var(--surface)}
+.dgm-bar .tag{font-family:var(--mono);font-size:.72rem;color:var(--text-faint);letter-spacing:.05em;
+  padding:4px 9px;border:1px solid var(--border);border-radius:7px;background:var(--surface-2);white-space:nowrap}
+.dgm-controls{margin-left:auto;font-family:var(--mono);font-size:.72rem;color:var(--text-faint);
+  letter-spacing:.04em;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.dgm-controls svg{width:13px;height:13px;color:var(--indigo)}
+
+/* the flow breadcrumb — one chip per stage, hover to spotlight it in the diagram */
+.flowsteps{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.fstep{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600;color:var(--text-dim);
+  background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:4px 10px;cursor:pointer;
+  transition:transform .15s,border-color .15s,color .15s,background .15s}
+.fstep .fdot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--indigo)}
+.fstep:hover{color:var(--text);border-color:var(--indigo);transform:translateY(-1px);background:var(--accent-soft)}
+.fstep:hover .fdot{box-shadow:0 0 7px currentColor}
+.farrow{color:var(--text-faint);opacity:.55;font-size:.72rem}
+
+/* the scroll viewport that holds the SVG */
+.dgm-wrap{position:relative;overflow:auto;cursor:crosshair;
+  background:radial-gradient(42rem 30rem at 30% -12%,var(--accent-soft),transparent 70%),var(--bg-soft)}
+.dgm-wrap svg.dgm{display:block;width:100%;height:auto;min-width:960px}
+.dgm-wrap.zoomready svg.dgm{cursor:none}
+
+/* magnifier lens (rectangular), background follows the theme */
+.lens{position:absolute;pointer-events:none;border-radius:12px;overflow:hidden;display:none;
+  border:2px solid rgba(129,140,248,0.75);box-shadow:0 0 0 2px var(--bg),0 22px 50px -14px rgba(0,0,0,0.55);
+  background:var(--bg-soft);z-index:20}
+.lens svg{position:absolute;left:0;top:0}
+.lens.on{display:block}
+
+/* node fills by kind — CSS beats the inline fills, so the diagram recolours on a
+   theme flip. Dark defaults first, light overrides after. */
+.nk-resource,.nk-data{fill:#12182a;stroke:#3b4570}
+.nk-stage,.nk-module{fill:#161a28;stroke:#2b3350}
+.nk-stageKey{fill:#1b1f39;stroke:#4f5696}
+.nk-gate{fill:#16232c;stroke:#347470}
+.nk-artifact,.nk-meta{fill:#12131c;stroke:#2a2f45}
+.nk-result{fill:#191426;stroke:#5b3f86}
+.nk-notebook{fill:#14140f;stroke:#4d4a2a}
+.nk-config{fill:#101a17;stroke:#2c5148}
+.nk-deploy{fill:#1a1220;stroke:#6b3a6b}
+.band-box{stroke:#20283f}
+.e-grey{stroke:#2a2f45}
+.e-indigo{stroke:#3b4570}
+.e-amber{stroke:#5b4a24}
+.e-green{stroke:#2c5148}
+.e-pink{stroke:#4a2f4a}
+svg .em-good{fill:#4ade80}
+svg .em-warn{fill:#fbbf24}
+svg .em-bad{fill:#fb7185}
+.nk.hl{stroke:var(--indigo)!important;stroke-width:2.4px;filter:drop-shadow(0 0 8px rgba(129,140,248,.75))}
+
+:root[data-theme="light"] .nk-resource,:root[data-theme="light"] .nk-data{fill:#eef2fb;stroke:#aab6e2}
+:root[data-theme="light"] .nk-stage,:root[data-theme="light"] .nk-module{fill:#f4f6fc;stroke:#c8d0e6}
+:root[data-theme="light"] .nk-stageKey{fill:#e9ecfc;stroke:#9aa6ec}
+:root[data-theme="light"] .nk-gate{fill:#e4f4f0;stroke:#79c3b8}
+:root[data-theme="light"] .nk-artifact,:root[data-theme="light"] .nk-meta{fill:#f2f3f9;stroke:#cbd2e5}
+:root[data-theme="light"] .nk-result{fill:#f5eefc;stroke:#c6ace7}
+:root[data-theme="light"] .nk-notebook{fill:#f7f3e4;stroke:#d4ca8f}
+:root[data-theme="light"] .nk-config{fill:#e6f4ee;stroke:#8ac6b3}
+:root[data-theme="light"] .nk-deploy{fill:#f9eef8;stroke:#d6a3d6}
+:root[data-theme="light"] .band-box{stroke:#cdd5e8}
+:root[data-theme="light"] .e-grey{stroke:#cfd6e6}
+:root[data-theme="light"] .e-indigo{stroke:#b3bde3}
+:root[data-theme="light"] .e-amber{stroke:#cdbc86}
+:root[data-theme="light"] .e-green{stroke:#8cc4b1}
+:root[data-theme="light"] .e-pink{stroke:#dbabdb}
+:root[data-theme="light"] svg .em-good{fill:#15a34a}
+:root[data-theme="light"] svg .em-warn{fill:#b07d09}
+:root[data-theme="light"] svg .em-bad{fill:#e11d48}
+
+/* node text styles (applied to <text> via class) */
+svg .n-title{font-family:var(--sans);font-weight:700;fill:var(--text)}
+svg .n-sub{font-family:var(--mono);fill:var(--text-faint)}
+svg .n-line{font-family:var(--sans);fill:var(--text-dim)}
+svg .n-mono{font-family:var(--mono);fill:var(--text-dim)}
+svg .band-label{font-family:var(--mono);fill:var(--text-faint);letter-spacing:.1em}
+svg .stage-num{font-family:var(--mono);fill:var(--indigo);font-weight:600}
+svg .result{font-family:var(--sans);fill:var(--text-dim)}
+svg .result b{fill:var(--text)}
+
+/* packets */
+.pkt{transition:fill .25s linear}
+.pkt.data{fill:var(--indigo);filter:drop-shadow(0 0 5px rgba(129,140,248,.85))}
+.pkt.adv{fill:var(--warn);filter:drop-shadow(0 0 5px rgba(251,191,36,.85))}
+.pkt.out{fill:var(--good);filter:drop-shadow(0 0 5px rgba(74,222,128,.85))}
+.pkt.muted{fill:#59617a;opacity:.7}
+
+/* legend */
+.legend{display:flex;gap:22px;flex-wrap:wrap;padding:14px 18px;border-top:1px solid var(--border-soft);
+  background:var(--surface);font-size:.86rem;color:var(--text-dim)}
+.legend div{display:flex;align-items:center;gap:9px}
+.legend .k{width:12px;height:12px;border-radius:50%;flex:none}
+.legend .k.data{background:var(--indigo);box-shadow:0 0 6px rgba(129,140,248,.8)}
+.legend .k.adv{background:var(--warn);box-shadow:0 0 6px rgba(251,191,36,.8)}
+.legend .k.out{background:var(--good);box-shadow:0 0 6px rgba(74,222,128,.8)}
+.legend .k.node{background:var(--surface-2);border:1px solid var(--border);border-radius:3px}
+
+/* read-along notes under each diagram */
+.readalong{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-2);padding:16px 18px}
+.card h4{font-size:.95rem;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.card h4 .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.card p{font-size:.88rem;color:var(--text-dim)}
+.card code{font-family:var(--mono);font-size:.82rem;color:var(--cyan);background:rgba(94,234,212,0.08);padding:1px 5px;border-radius:5px}
+
+footer{margin:60px 0 40px;padding-top:24px;border-top:1px solid var(--border-soft);color:var(--text-faint);font-size:.86rem}
+
+@media (max-width:640px){
+  .hero{padding:40px 0 18px}
+  .dgm-wrap{max-height:70vh}
+}
+@media (prefers-reduced-motion:reduce){.pkt{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <a href="/" class="brand"><span class="mark">KV</span>Kalyan Venkatesh</a>
+    <nav class="top-links">
+      <a href="index.html">Home</a>
+      <a href="inference-lens.html">Inference-Lens</a>
+      <a href="agentic-llmops.html">Multi-Agent Inference Reliability</a>
+      <a href="predictops.html">PredictOps</a>
+      <a href="job-scanner.html">Job Scanner</a>
+      <a href="about.html">About</a>
+    </nav>
+    <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
+      <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="kicker">Inference-Lens · Blueprint</p>
+    <h1>System design &amp; <span class="grad">Code map</span> Visuals</h1>
+    <p class="lead">
+      2 live blueprints of Inference-Lens, the study of whether an automated LLM judge can be fooled.
+      The first traces the <b>stages of progression</b>: what data came in, what each stage did, and what it produced.
+      The second is the <b>code map</b>: every file in the repo, its job, and how one data artifact becomes the next.
+    </p>
+    <div class="note">
+      <span class="hint-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg>
+        Hover anywhere on a diagram and a lens magnifies it, so you can read every label without shrinking the picture.
+      </span>
+      <span>The moving dots are data in flight, coloured by what kind of data it is.</span>
+    </div>
+  </section>
+
+  <!-- ============================ DIAGRAM 1 ============================ -->
+  <section class="dgm-section" id="system">
+    <div class="sec-head">
+      <h2><span class="num">01</span>System design, the stages in run order</h2>
+      <p>
+        Read it top to bottom. On the left are the <b>resources</b> that feed in, the datasets and pretrained models.
+        The centre spine is the <b>pipeline</b> in run order. The right shows the <b>artifacts</b> each stage writes to disk.
+        The amber path is LLM-Bar. It stays out of training entirely and only enters at the stress-test, which is the whole point of the project.
+      </p>
+    </div>
+
+    <div class="dgm-frame">
+      <div class="dgm-bar">
+        <span class="tag">system.blueprint</span>
+        <div class="flowsteps" data-steps="system"></div>
+        <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>hover a chip, or the diagram, to zoom</span>
+      </div>
+      <div class="dgm-wrap" id="wrap-system">
+        <svg class="dgm" id="svg-system" role="img" aria-label="System design of Inference-Lens as a top-to-bottom pipeline with resources feeding in from the left and artifacts produced on the right."></svg>
+      </div>
+      <div class="legend">
+        <div><span class="k data"></span>HH-RLHF data in flight (training path)</div>
+        <div><span class="k adv"></span>LLM-Bar adversarial pairs (held out, stress-test only)</div>
+        <div><span class="k out"></span>Trained / served output</div>
+        <div><span class="k node"></span>Stage · resource · artifact</div>
+      </div>
+    </div>
+
+    <div class="readalong">
+      <div class="card"><h4><span class="dot" style="background:var(--indigo)"></span>The clean scores are the finding</h4>
+        <p>All 3 models land near <b>0.50 AUC-ROC</b> on the held-out HH-RLHF test set. That is not a failure. It says surface features like length, readability and overlap do not reliably predict human preference.</p></div>
+      <div class="card"><h4><span class="dot" style="background:var(--warn)"></span>Same benchmark, opposite robustness</h4>
+        <p>Under the Neighbor attack, Logistic Regression's false-preference rate hits <b>78.4%</b> (picks the worse answer 4 in 5). XGBoost, tied on the clean benchmark, barely moves. Architecture decides robustness, not the headline score.</p></div>
+      <div class="card"><h4><span class="dot" style="background:var(--cyan)"></span>Length ≠ quality</h4>
+        <p>Unsupervised clustering found the most <code>verbose-inconsistent</code> archetype had the <b>lowest</b> chosen-rate (48.9%); the shorter <code>conversational-engaging</code> one the highest (51.6%).</p></div>
+    </div>
+  </section>
+
+  <!-- ============================ DIAGRAM 2 ============================ -->
+  <section class="dgm-section" id="code">
+    <div class="sec-head">
+      <h2><span class="num">02</span>Code map, every file and the data lineage</h2>
+      <p>
+        Same project, a different lens. The centre spine is the <b>data lineage</b>: how one artifact on disk becomes the next,
+        from raw arrow to parquet to embeddings to clusters to models to the stress-test CSV to the live demo. Around it sit the actual
+        <b>files</b>. The notebooks that drive each step are on the left, the Python package modules that do the work attach to the spine,
+        and the config, meta and deploy files sit on the right. Every file in the repo is here with its one-line job.
+      </p>
+    </div>
+
+    <div class="dgm-frame">
+      <div class="dgm-bar">
+        <span class="tag">code.blueprint</span>
+        <div class="flowsteps" data-steps="code"></div>
+        <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>hover a chip, or the diagram, to zoom</span>
+      </div>
+      <div class="dgm-wrap" id="wrap-code">
+        <svg class="dgm" id="svg-code" role="img" aria-label="Code map of Inference-Lens: every file with its role, arranged around the data lineage spine."></svg>
+      </div>
+      <div class="legend">
+        <div><span class="k data"></span>Data flowing through the lineage spine</div>
+        <div><span class="k out"></span>Trained model artifact produced</div>
+        <div><span class="k node"></span>File · module · artifact</div>
+        <div><span style="font-family:var(--mono);font-size:.8rem;color:var(--text-faint)">italic monospace = a file on disk</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Inference-Lens · DSC 478, DePaul University. Data: Anthropic HH-RLHF (Bai et al. 2022) and LLM-Bar (Zeng et al., EMNLP 2023).
+    Built for study and interview prep. Numbers reconciled against <span class="mono">reports/*.csv</span> and the repo source.
+  </footer>
+
+</main>
+
+<script>
+/* ===========================================================================
+   Tiny SVG diagram engine - declarative nodes/edges, flowing packets, lens.
+   Self-contained; no external deps. Coordinates are on a fixed pixel grid so
+   connectors stay predictable.
+   =========================================================================== */
+(function(){
+  "use strict";
+  var NS="http://www.w3.org/2000/svg";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function el(tag,attrs,parent){
+    var e=document.createElementNS(NS,tag);
+    if(attrs) for(var k in attrs){ if(attrs[k]!==null&&attrs[k]!==undefined) e.setAttribute(k,attrs[k]); }
+    if(parent) parent.appendChild(e);
+    return e;
+  }
+  function text(parent,x,y,str,cls,size,anchor,weight){
+    var t=el("text",{x:x,y:y,class:cls,"font-size":size,"text-anchor":anchor||"start"},parent);
+    if(weight) t.setAttribute("font-weight",weight);
+    t.textContent=str; return t;
+  }
+  function clampText(svg){ var ts=svg.querySelectorAll("text[data-avail]"); for(var i=0;i<ts.length;i++){ var t=ts[i],a=parseFloat(t.getAttribute("data-avail")),L=0; try{L=t.getComputedTextLength();}catch(e){} if(L>a+0.5){ t.setAttribute("textLength",Math.max(12,Math.round(a))); t.setAttribute("lengthAdjust","spacingAndGlyphs"); } else { t.removeAttribute("textLength"); } } }
+
+  var KIND={
+    resource:{fill:"#141a2b",stroke:"#3a4karma"}, // placeholder (overwritten below)
+  };
+  // colour per node kind: [fill, stroke, accentText]
+  var STYLE={
+    resource:["#12182a","#3b4570"],
+    stage:   ["#161a28","#232a3d"],
+    stageKey:["#1b1f39","#4f5696"],
+    gate:    ["#16232c","#347470"],
+    artifact:["#12131c","#2a2f45"],
+    result:  ["#191426","#5b3f86"],
+    module:  ["#161a28","#2b3350"],
+    notebook:["#14140f","#4d4a2a"],
+    config:  ["#101a17","#2c5148"],
+    meta:    ["#12131c","#262b3d"],
+    deploy:  ["#1a1220","#6b3a6b"],
+    data:    ["#12182a","#3b4570"]
+  };
+
+  /* ---- render one diagram from a spec ---- */
+  function render(svg, spec){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.setAttribute("viewBox","0 0 "+spec.w+" "+spec.h);
+
+    // defs: subtle node gradient sheen
+    var defs=el("defs",{},svg);
+    var g=el("linearGradient",{id:svg.id+"-sheen",x1:0,y1:0,x2:0,y2:1},defs);
+    el("stop",{offset:"0%","stop-color":"#ffffff","stop-opacity":"0.03"},g);
+    el("stop",{offset:"100%","stop-color":"#000000","stop-opacity":"0.10"},g);
+
+    var edgeLayer=el("g",{class:"edges"},svg);
+    var bandLayer=el("g",{class:"bands"},svg);
+    var nodeLayer=el("g",{class:"nodes"},svg);
+
+    // draw bands (background zones)
+    (spec.bands||[]).forEach(function(b){
+      el("rect",{x:b.x,y:b.y,width:b.w,height:b.h,rx:16,fill:"none",class:"band-box",
+        stroke:b.stroke||"#1a2030","stroke-dasharray":"4 6","stroke-width":1},bandLayer);
+      if(b.label) text(bandLayer,b.x+16,b.y+22,b.label,"band-label",12,"start");
+    });
+
+    // index nodes by id, draw them
+    var idx={};
+    spec.nodes.forEach(function(n){
+      idx[n.id]=n;
+      var st=STYLE[n.kind]||STYLE.stage;
+      var x=n.x,y=n.y,w=n.w,h=n.h;
+      el("rect",{x:x,y:y,width:w,height:h,rx:13,class:"nk nk-"+n.kind,"data-id":n.id,fill:st[0],stroke:st[1],"stroke-width":1.2},nodeLayer);
+      el("rect",{x:x,y:y,width:w,height:h,rx:13,fill:"url(#"+svg.id+"-sheen)",stroke:"none"},nodeLayer);
+      // left accent stripe for key stages / results
+      if(n.stripe) el("rect",{x:x,y:y+8,width:4,height:h-16,rx:2,fill:n.stripe},nodeLayer);
+
+      var padL=x+ (n.stripe?18:16);
+      var avail=(x+w)-padL-12;
+      var ty=y+22;
+      if(n.tag){ text(nodeLayer,x+w-12,y+20,n.tag,"stage-num",12.5,"end","600"); }
+      text(nodeLayer,padL,ty,n.title,"n-title",n.titleSize||15.5,"start","700").setAttribute("data-avail",avail);
+      ty+=16;
+      if(n.sub){ text(nodeLayer,padL,ty,n.sub,"n-sub",12,"start").setAttribute("data-avail",avail); ty+=15; }
+      (n.lines||[]).forEach(function(ln){
+        var cls = ln.mono ? "n-mono" : "n-line";
+        if(ln.cls) cls += " "+ln.cls;
+        var t=text(nodeLayer,padL,ty, (ln.t!==undefined?ln.t:ln), cls, ln.size||12.4,"start");
+        if(ln.fill) t.setAttribute("fill",ln.fill);
+        t.setAttribute("data-avail",avail);
+        ty+= (ln.gap||14.5);
+      });
+    });
+
+    // draw edges as paths with ids; return anchor helper
+    function anchor(node,side){
+      var n=idx[node];
+      switch(side){
+        case "t": return {x:n.x+n.w/2, y:n.y};
+        case "b": return {x:n.x+n.w/2, y:n.y+n.h};
+        case "l": return {x:n.x, y:n.y+n.h/2};
+        case "r": return {x:n.x+n.w, y:n.y+n.h/2};
+        case "tl":return {x:n.x+22, y:n.y};
+        case "tr":return {x:n.x+n.w-22, y:n.y};
+        case "bl":return {x:n.x+22, y:n.y+n.h};
+        case "br":return {x:n.x+n.w-22, y:n.y+n.h};
+        default:  return {x:n.x+n.w/2, y:n.y+n.h/2};
+      }
+    }
+    spec.edges.forEach(function(e,i){
+      var a=anchor(e.from, e.fromSide||"b");
+      var b=anchor(e.to, e.toSide||"t");
+      var d;
+      if(e.d){ d=e.d; }
+      else if((e.fromSide||"b")==="b" && (e.toSide||"t")==="t" && Math.abs(a.x-b.x)<1){
+        d="M"+a.x+","+a.y+" V"+b.y;                       // straight vertical
+      } else if((e.fromSide==="r"&&e.toSide==="l")||(e.fromSide==="l"&&e.toSide==="r")){
+        var mx=(a.x+b.x)/2;
+        d="M"+a.x+","+a.y+" C"+mx+","+a.y+" "+mx+","+b.y+" "+b.x+","+b.y; // horizontal S
+      } else {
+        var my=(a.y+b.y)/2;
+        d="M"+a.x+","+a.y+" C"+a.x+","+my+" "+b.x+","+my+" "+b.x+","+b.y; // vertical S
+      }
+      var EMAP={"#232a3d":"e-grey","#2a2f45":"e-grey","#2b3350":"e-grey","#2c3450":"e-grey",
+        "#3b4570":"e-indigo","#5b4a24":"e-amber","#4d4a2a":"e-amber","#2c5148":"e-green","#4a2f4a":"e-pink"};
+      el("path",{id:svg.id+"-e"+i,d:d,fill:"none",class:(EMAP[e.stroke]||"e-grey"),
+        stroke:e.stroke||"#232a3d","stroke-width":e.sw||1.6,
+        "stroke-dasharray":e.dash||null},edgeLayer);
+      e._id=svg.id+"-e"+i;
+    });
+
+    // flow-dots layer on top
+    el("g",{class:"flow-dots"},svg);
+    return {idx:idx};
+  }
+
+  /* ---- packet animator (adapted from the site's flow.js) ---- */
+  function animate(svg, spec){
+    var layer=svg.querySelector(".flow-dots");
+    (function(){var u={};(spec.flow||[]).forEach(function(r){r.paths.forEach(function(i){u[i]=1;});});spec.flow=spec.flow||[];var m=(spec.edges||[]).length;for(var k=0;k<m;k++){if(!u[k])spec.flow.push({paths:[k],cls:"muted",weight:1,dur:2400});}})();
+    var routes=(spec.flow||[]).map(function(r){
+      var paths=[];
+      for(var j=0;j<r.paths.length;j++){
+        var idnum=r.paths[j];
+        var el2=svg.querySelector("#"+svg.id+"-e"+idnum);
+        if(!el2) return null;
+        paths.push({el:el2,len:el2.getTotalLength()});
+      }
+      return {paths:paths,cls:r.cls||"data",weight:r.weight||1,dur:r.dur||6000,splits:r.splits||[]};
+    }).filter(Boolean);
+    if(!routes.length) return {play:function(){},pause:function(){}};
+
+    var totalW=0; routes.forEach(function(r){totalW+=r.weight;});
+    function pickRoute(){var x=Math.random()*totalW;for(var k=0;k<routes.length;k++){x-=routes[k].weight;if(x<=0)return routes[k];}return routes[routes.length-1];}
+    function pickW(pairs){var tot=0,i;for(i=0;i<pairs.length;i++)tot+=pairs[i][1];var x=Math.random()*tot;for(i=0;i<pairs.length;i++){x-=pairs[i][1];if(x<=0)return pairs[i][0];}return pairs[pairs.length-1][0];}
+    function pointAt(paths,t){var total=0,i;for(i=0;i<paths.length;i++)total+=paths[i].len;var d=t*total;for(i=0;i<paths.length;i++){if(d<=paths[i].len)return {p:paths[i].el.getPointAtLength(d),idx:i};d-=paths[i].len;}var last=paths[paths.length-1];return {p:last.el.getPointAtLength(last.len),idx:paths.length-1};}
+
+    function spawn(){
+      var r=pickRoute();
+      var c=el("circle",{r:spec.r||5,class:"pkt "+r.cls},layer);
+      var splits=r.splits.map(function(s){return {at:s.at,cls:s.pick?pickW(s.pick):s.cls,done:false};});
+      var start=null;
+      function step(ts){
+        if(!start)start=ts;
+        var t=(ts-start)/r.dur;
+        if(t>=1){ if(c.parentNode)c.parentNode.removeChild(c); return; }
+        var res=pointAt(r.paths,t);
+        c.setAttribute("cx",res.p.x); c.setAttribute("cy",res.p.y);
+        for(var s=0;s<splits.length;s++){ if(!splits[s].done&&res.idx>=splits[s].at){ c.setAttribute("class","pkt "+splits[s].cls); splits[s].done=true; } }
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    var timer=null;
+    function play(){ if(timer||reduce)return; timer=setInterval(spawn,spec.every||800); for(var n=0;n<3;n++)setTimeout(spawn,n*300); }
+    function pause(){ if(!timer)return; clearInterval(timer); timer=null; while(layer.firstChild)layer.removeChild(layer.firstChild); }
+    return {play:play,pause:pause};
+  }
+
+  /* ---- hover magnifier over an SVG (rectangular lens) ---- */
+  function magnifier(wrap, svg){
+    var Z=2.4, LW=460, LH=300;      // zoom factor, lens width/height
+    var lens=document.createElement("div");
+    lens.className="lens";
+    lens.style.width=LW+"px"; lens.style.height=LH+"px";
+    var clone=svg.cloneNode(true);
+    // strip live dots from the clone; it stays static and crisp
+    var dots=clone.querySelector(".flow-dots"); if(dots) dots.parentNode.removeChild(dots);
+    lens.appendChild(clone);
+    wrap.appendChild(lens);
+    wrap.classList.add("zoomready");
+
+    function sizeClone(){
+      var rect=svg.getBoundingClientRect();
+      clone.style.width=(rect.width*Z)+"px";
+      clone.style.height=(rect.height*Z)+"px";
+    }
+    function move(ev){
+      var rect=svg.getBoundingClientRect();
+      var x=ev.clientX-rect.left, y=ev.clientY-rect.top;
+      if(x<0||y<0||x>rect.width||y>rect.height){ lens.classList.remove("on"); return; }
+      lens.classList.add("on");
+      var wrect=wrap.getBoundingClientRect();
+      var lx=ev.clientX-wrect.left+wrap.scrollLeft-LW/2;
+      var ly=ev.clientY-wrect.top+wrap.scrollTop-LH/2;
+      lens.style.left=lx+"px"; lens.style.top=ly+"px";
+      clone.style.left=(LW/2 - x*Z)+"px";
+      clone.style.top=(LH/2 - y*Z)+"px";
+    }
+    svg.addEventListener("mousemove",move);
+    svg.addEventListener("mouseenter",function(){ sizeClone(); lens.classList.add("on"); });
+    svg.addEventListener("mouseleave",function(){ lens.classList.remove("on"); });
+    window.addEventListener("resize",sizeClone);
+  }
+
+  /* ---- build the flow breadcrumb; each chip spotlights its stage on hover ---- */
+  function buildSteps(svg, spec, key){
+    var box=document.querySelector('.flowsteps[data-steps="'+key+'"]');
+    if(!box || !spec.steps) return;
+    function spot(id,on){ var r=svg.querySelector('.nk[data-id="'+id+'"]'); if(r) r.classList.toggle("hl",on); }
+    spec.steps.forEach(function(st,i){
+      if(i){ var a=document.createElement("span"); a.className="farrow"; a.textContent="→"; box.appendChild(a); }
+      var chip=document.createElement("span"); chip.className="fstep"; chip.setAttribute("tabindex","0");
+      var dot=document.createElement("span"); dot.className="fdot";
+      if(st.color){ dot.style.background=st.color; dot.style.color=st.color; }
+      chip.appendChild(dot); chip.appendChild(document.createTextNode(st.label));
+      chip.addEventListener("mouseenter",function(){ spot(st.target,true); });
+      chip.addEventListener("mouseleave",function(){ spot(st.target,false); });
+      chip.addEventListener("focus",function(){ spot(st.target,true); });
+      chip.addEventListener("blur",function(){ spot(st.target,false); });
+      box.appendChild(chip);
+    });
+  }
+
+  /* ---- wire up a diagram: render + animate + lens (both always on) ---- */
+  function mount(svgId, wrapId, spec, stepsKey){
+    var svg=document.getElementById(svgId), wrap=document.getElementById(wrapId);
+    render(svg,spec);
+    clampText(svg);
+    buildSteps(svg,spec,stepsKey);
+    var anim=animate(svg,spec);
+    magnifier(wrap,svg);
+    requestAnimationFrame(function(){ clampText(svg); });
+    if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(function(){ clampText(svg); }); }
+
+    // motion plays whenever the diagram is on screen
+    if("IntersectionObserver" in window){
+      new IntersectionObserver(function(en){ en[0].isIntersecting?anim.play():anim.pause(); },{threshold:0.05}).observe(svg);
+    } else anim.play();
+    document.addEventListener("visibilitychange",function(){ document.hidden?anim.pause():anim.play(); });
+  }
+
+  /* ---- light / dark toggle (shares the kv-theme key with the rest of the site) ---- */
+  function themeInit(){
+    var root=document.documentElement, btn=document.getElementById("themeSwitch");
+    if(btn) btn.addEventListener("click",function(){
+      var t=root.getAttribute("data-theme")==="light"?"dark":"light";
+      root.setAttribute("data-theme",t);
+      try{ localStorage.setItem("kv-theme",t); }catch(e){}
+    });
+  }
+
+  /* =====================================================================
+     SPEC 1 - SYSTEM DESIGN (stages of progression)
+     3 columns: resources (left) · pipeline spine (centre) · artifacts (right)
+     ===================================================================== */
+  var SP=280, SW=300, SX=470;                 // spine rows step / width / x
+  function srow(i){ return 96 + i*128; }       // y of spine stage i
+  var sys={
+    w:1220, h:1150, r:5, every:760,
+    steps:[
+      {label:"HH-RLHF",target:"hh",color:"#818cf8"},
+      {label:"features",target:"s2",color:"#818cf8"},
+      {label:"clustering",target:"s4",color:"#5eead4"},
+      {label:"3 models",target:"s5",color:"#818cf8"},
+      {label:"stress-test",target:"s7",color:"#fbbf24"},
+      {label:"live demo",target:"s8",color:"#4ade80"}
+    ],
+    bands:[
+      {x:20,y:60,w:300,h:1060,label:"RESOURCES",stroke:"#20283f"},
+      {x:SX-20,y:60,w:SW+40,h:1060,label:"PIPELINE",stroke:"#2a2f52"},
+      {x:900,y:60,w:300,h:1060,label:"ARTIFACTS",stroke:"#24304a"}
+    ],
+    nodes:[
+      // ---- resources (left) ----
+      {id:"hh",kind:"resource",x:20,y:96,w:300,h:104,title:"Anthropic HH-RLHF",sub:"HuggingFace · anthropic/hh-rlhf",
+        stripe:"#818cf8",lines:[
+        {t:"subsets: helpful-base + harmless-base",mono:true},
+        {t:"91,264 preference pairs"},
+        {t:"→ ~182K labeled responses (chosen=1 / rejected=0)"}]},
+      {id:"minilm",kind:"resource",x:20,y:srow(2)-30,w:300,h:66,title:"all-MiniLM-L6-v2",sub:"sentence-transformers",
+        lines:[{t:"384-d sentence embeddings"}]},
+      {id:"deberta",kind:"resource",x:20,y:srow(4)-24,w:300,h:66,title:"microsoft/deberta-v3-small",sub:"transformer base (fine-tuned)",
+        lines:[{t:"trained on Colab · T4 GPU"}]},
+      {id:"llmbar",kind:"resource",x:20,y:srow(6)+2,w:300,h:120,title:"LLM-Bar",sub:"princeton-nlp · EMNLP 2023",
+        stripe:"#fbbf24",lines:[
+        {t:"419 adversarial pairs, held out",cls:"em-warn"},
+        {t:"neighbor · gpt_inst · gpt_out",mono:true},
+        {t:"manual · natural",mono:true},
+        {t:"never seen in training → pure OOD"}]},
+
+      // ---- pipeline spine (centre) ----
+      {id:"s1",kind:"stage",x:SX,y:srow(0),w:SW,h:96,tag:"01",title:"Data loading & extraction",sub:"data/loader.py · nb 01_data_loading",
+        lines:[{t:"pull final Assistant turn, flatten pairs"},{t:"70 / 15 / 15 split · seed 42"}]},
+      {id:"s2",kind:"stage",x:SX,y:srow(1),w:SW,h:110,tag:"02",title:"Feature engineering",sub:"features/extractor.py · nb 02",
+        lines:[{t:"token length · type-token ratio · Flesch"},{t:"ROUGE-L · MiniLM embeddings"},{t:"BERTScore available (off by default)"}]},
+      {id:"s3",kind:"stage",x:SX,y:srow(2),w:SW,h:80,tag:"03",title:"EDA & visualization",sub:"nb 03_eda_visualization",
+        lines:[{t:"length dist · correlations · label corr"}]},
+      {id:"s4",kind:"stageKey",x:SX,y:srow(3),w:SW,h:118,tag:"04",title:"Unsupervised clustering",sub:"clustering/cluster.py · nb 02_clustering/*",
+        stripe:"#5eead4",lines:[{t:"K-Means (K 2–12: silhouette / DB / elbow)"},{t:"DBSCAN · Hierarchical (Ward) · UMAP 2-D"},{t:"→ chose K = 4 archetypes"}]},
+      {id:"s5",kind:"stageKey",x:SX,y:srow(4),w:SW,h:120,tag:"05",title:"Supervised training",sub:"models/train.py · nb 03_models/01–02",
+        stripe:"#818cf8",lines:[{t:"LogReg (L2, CV, balanced + scaler)"},{t:"XGBoost (grid, 5-fold, hist)"},{t:"DeBERTa-v3-small (Colab, 3 ep, lr 2e-5)"}]},
+      {id:"s6",kind:"stage",x:SX,y:srow(5),w:SW,h:96,tag:"06",title:"Standard evaluation",sub:"nb 03_model_comparison",
+        lines:[{t:"AUC-ROC · F1 · PR · calibration"},{t:"all ≈ 0.50 AUC (the finding, not a bug)"}]},
+      {id:"s7",kind:"gate",x:SX,y:srow(6),w:SW,h:122,tag:"07",title:"Adversarial stress-test",sub:"stress_test/evaluator.py · nb 04",
+        stripe:"#fbbf24",lines:[{t:"apply each model ZERO-SHOT to LLM-Bar"},{t:"per-category degradation + false-pref rate"},{t:"core analytical contribution"}]},
+      {id:"s8",kind:"stageKey",x:SX,y:srow(7),w:SW,h:110,tag:"08",title:"Live demo / deploy",sub:"app/main.py · deploy/hf-space · site JS",
+        stripe:"#4ade80",lines:[{t:"4-feature reduced set · torch-free"},{t:"DeBERTa excluded (LOAD_DEBERTA=False)"},{t:"paste 2 answers → watch the judge slip"}]},
+
+      // ---- artifacts (right) ----
+      {id:"a1",kind:"artifact",x:900,y:srow(0)+4,w:300,h:64,title:"hh_rlhf_flat.parquet",titleSize:13.5,sub:"data/processed/",lines:[{t:"1 row per preference pair"}]},
+      {id:"a2",kind:"artifact",x:900,y:srow(1)+6,w:300,h:80,title:"features.parquet + embeddings.npy",titleSize:12.5,sub:"data/processed/",lines:[{t:"scalar features + 384-d vectors,"},{t:"cached so re-runs load in seconds"}]},
+      {id:"a3",kind:"artifact",x:900,y:srow(2)-6,w:300,h:60,title:"figures 01–05",sub:"reports/figures/",lines:[{t:"EDA plots (png)"}]},
+      {id:"a4",kind:"result",x:900,y:srow(3),w:300,h:118,title:"4 archetypes",sub:"archetype_summary.csv · figs 06–13",stripe:"#5eead4",lines:[
+        {t:"conversational-engaging  51.6% ✓ high",cls:"em-good"},
+        {t:"medium-mixed 50.3% · ultra-short 50.1%"},
+        {t:"verbose-inconsistent  48.9% ✗ low",cls:"em-bad"},
+        {t:"length ≠ quality"}]},
+      {id:"a5",kind:"artifact",x:900,y:srow(4),w:300,h:84,title:"model artifacts",sub:"models/ (joblib + checkpoint)",lines:[
+        {t:"logreg · xgboost · scaler · kmeans .joblib",mono:true,size:10.3},{t:"deberta_checkpoint/",mono:true,size:11.5}]},
+      {id:"a6",kind:"result",x:900,y:srow(5)-4,w:300,h:96,title:"model_comparison_summary.csv",titleSize:12,sub:"reports/",stripe:"#818cf8",lines:[
+        {t:"LogReg 0.511 · XGB 0.518 · DeBERTa 0.500",mono:true,size:10.3},{t:"AUC-ROC: a near 3-way tie on clean data"}]},
+      {id:"a7",kind:"result",x:900,y:srow(6)+2,w:300,h:118,title:"stress_test_results.csv",titleSize:13,sub:"reports/",stripe:"#fbbf24",lines:[
+        {t:"LogReg neighbor FPR 78.4% (acc 21.6%)",cls:"em-bad"},
+        {t:"LogReg overall acc 34.8%"},
+        {t:"XGBoost overall acc 53.7% (≈ flat)",cls:"em-good"},
+        {t:"tied clean → opposite under attack"}]},
+      {id:"a8",kind:"deploy",x:900,y:srow(7)+2,w:300,h:80,title:"live scorer",sub:"HF Space · Streamlit · in-browser JS",lines:[
+        {t:"scorer.js + model.js (no server)",mono:true,size:11.5},{t:"MLflow tracks every run in mlruns/"}]}
+    ],
+    edges:[
+      // spine (straight vertical) 0..6
+      {from:"s1",to:"s2"},{from:"s2",to:"s3"},{from:"s3",to:"s4"},{from:"s4",to:"s5"},
+      {from:"s5",to:"s6"},{from:"s6",to:"s7"},{from:"s7",to:"s8"},
+      // resources feeding in (r -> l)  7..10
+      {from:"hh",to:"s1",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"minilm",to:"s2",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"deberta",to:"s5",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"llmbar",to:"s7",fromSide:"r",toSide:"l",stroke:"#5b4a24",dash:"6 5"},
+      // stage -> artifact (r -> l)  11..18
+      {from:"s1",to:"a1",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s2",to:"a2",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s3",to:"a3",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s4",to:"a4",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s5",to:"a5",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s6",to:"a6",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s7",to:"a7",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s8",to:"a8",fromSide:"r",toSide:"l",stroke:"#2a2f45"}
+    ],
+    // packets: main data path down the spine; adversarial path enters at s7; output leaves at s8
+    flow:[
+      {paths:[0,1,2,3,4,5],cls:"data",weight:6,dur:8200,splits:[{at:5,cls:"out"}]},   // full training flow, greens near the end
+      {paths:[7],cls:"data",weight:2,dur:1600},                                        // HH-RLHF -> s1
+      {paths:[9],cls:"data",weight:1,dur:1600},                                        // deberta -> s5
+      {paths:[10],cls:"adv",weight:3,dur:1700},                                        // LLM-Bar -> s7 (amber)
+      {paths:[6],cls:"out",weight:3,dur:1700},                                         // s7 -> s8 output
+      {paths:[13],cls:"data",weight:1,dur:1500},                                       // s4 -> archetypes
+      {paths:[17],cls:"adv",weight:2,dur:1500}                                         // s7 -> stress csv (amber)
+    ]
+  };
+
+  /* =====================================================================
+     SPEC 2 - CODE MAP (every file + data lineage)
+     centre spine = data artifacts; left = notebooks (drivers);
+     inner-left = package modules; right = config / meta / deploy
+     ===================================================================== */
+  function crow(i){ return 92 + i*120; }
+  var CX=430, CW=250;                          // module column
+  var AX=760, AW=250;                          // artifact spine column
+  var code={
+    w:1240, h:1400, r:4.5, every:720,
+    steps:[
+      {label:"notebooks",target:"nb1",color:"#d8cf9a"},
+      {label:"package",target:"loader",color:"#818cf8"},
+      {label:"data",target:"raw",color:"#818cf8"},
+      {label:"models",target:"mdls",color:"#4ade80"},
+      {label:"reports",target:"stress",color:"#fbbf24"},
+      {label:"deploy",target:"deploy",color:"#f0abfc"}
+    ],
+    bands:[
+      {x:20,y:60,w:360,h:1300,label:"NOTEBOOKS",stroke:"#3a381f"},
+      {x:CX-14,y:60,w:CW+28,h:1300,label:"src/inference_lens",stroke:"#2b3350"},
+      {x:AX-14,y:60,w:AW+28,h:1300,label:"DATA LINEAGE",stroke:"#24304a"},
+      {x:1050,y:60,w:170,h:1300,label:"META",stroke:"#262b3d"}
+    ],
+    nodes:[
+      // ----- package modules (centre-left), top: utils/config feed everything -----
+      {id:"cfg",kind:"config",x:CX,y:crow(0),w:CW,h:92,title:"utils/config.py",titleSize:14,sub:"+ configs/base.yaml",stripe:"#5eead4",lines:[
+        {t:"1 YAML source of truth"},{t:"paths · seed 42 · splits · model name"}]},
+      {id:"log",kind:"config",x:CX,y:crow(1)-8,w:CW,h:64,title:"utils/logging.py",titleSize:14,lines:[{t:"timestamped logs, quiets libs"}]},
+      {id:"loader",kind:"module",x:CX,y:crow(2)-14,w:CW,h:104,title:"data/loader.py",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"extract_assistant_response()"},{t:"flatten_hh_rlhf() · split_dataframe()"},{t:"load_llm_bar()  (held-out)"}]},
+      {id:"extr",kind:"module",x:CX,y:crow(3)+2,w:CW,h:104,title:"features/extractor.py",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"lexical · Flesch · ROUGE-L"},{t:"MiniLM embeddings · BERTScore"},{t:"extract_all_features()  (caches)"}]},
+      {id:"clus",kind:"module",x:CX,y:crow(4)+18,w:CW,h:104,title:"clustering/cluster.py",titleSize:14,stripe:"#5eead4",lines:[
+        {t:"run_kmeans / dbscan / hierarchical"},{t:"summarize_clusters()"},{t:"cluster × preference cross-tab"}]},
+      {id:"train",kind:"module",x:CX,y:crow(6)-6,w:CW,h:104,title:"models/train.py",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"train_logreg() · train_xgboost()"},{t:"load_deberta_for_inference()"},{t:"evaluate_model() → MLflow"}]},
+      {id:"eval",kind:"gate",x:CX,y:crow(8)-14,w:CW,h:96,title:"stress_test/evaluator.py",titleSize:13.5,sub:"the core contribution",stripe:"#fbbf24",lines:[
+        {t:"run_stress_test(): zero-shot on LLM-Bar,"},{t:"per-category degradation + FPR"}]},
+      {id:"app",kind:"module",x:CX,y:crow(10)-24,w:CW,h:90,title:"app/main.py",titleSize:14,stripe:"#4ade80",lines:[
+        {t:"Streamlit scorer, loads 3 joblibs"},{t:"symmetric A/B scoring + vote"}]},
+
+      // ----- notebooks (left) -----
+      {id:"nb1",kind:"notebook",x:20,y:crow(2)-14,w:360,h:60,title:"01_eda / 01_data_loading",titleSize:12.5,lines:[{t:"runs loader → flat parquet"}]},
+      {id:"nb2",kind:"notebook",x:20,y:crow(3)+2,w:360,h:60,title:"01_eda / 02_feature_extraction",titleSize:12.5,lines:[{t:"runs extractor → features + embeddings"}]},
+      {id:"nb3",kind:"notebook",x:20,y:crow(4)-40,w:360,h:56,title:"01_eda / 03_eda_visualization",titleSize:12.5,lines:[{t:"→ figures 01–05"}]},
+      {id:"nb4",kind:"notebook",x:20,y:crow(4)+18,w:360,h:78,title:"02_clustering / 01–03",titleSize:12.5,lines:[
+        {t:"01_kmeans · 02_advanced_clustering",mono:true,size:11},{t:"03_archetype_analysis → archetypes",mono:true,size:11}]},
+      {id:"nb5",kind:"notebook",x:20,y:crow(6)-6,w:360,h:78,title:"03_models / 01 & 02",titleSize:12.5,lines:[
+        {t:"01_logreg_xgboost (Colab)",mono:true,size:11},{t:"02_deberta_colab (GPU)",mono:true,size:11}]},
+      {id:"nb6",kind:"notebook",x:20,y:crow(7)+10,w:360,h:56,title:"03_models / 03_model_comparison",titleSize:12.5,lines:[{t:"→ comparison csv + ROC/PR/calibration"}]},
+      {id:"nb7",kind:"notebook",x:20,y:crow(8)-14,w:360,h:56,title:"03_models / 04_stress_test",titleSize:12.5,lines:[{t:"drives evaluator → stress csv"}]},
+      {id:"setup",kind:"config",x:20,y:crow(10)-24,w:360,h:56,title:"scripts/setup_mlflow.py",titleSize:12.5,lines:[{t:"creates the MLflow experiment"}]},
+
+      // ----- data lineage spine (right-centre) -----
+      {id:"raw",kind:"data",x:AX,y:crow(2)-14,w:AW,h:76,title:"data/raw/",titleSize:13.5,sub:"inputs on disk",lines:[
+        {t:"hh_rlhf/*.arrow (HF cache)",mono:true,size:11},{t:"llm_bar/*.json",mono:true,size:11}]},
+      {id:"flat",kind:"data",x:AX,y:crow(3)+2,w:AW,h:64,title:"hh_rlhf_flat.parquet",titleSize:12.5,sub:"data/processed/",lines:[{t:"+ hh_rlhf_long.parquet"}]},
+      {id:"feat",kind:"data",x:AX,y:crow(4)+18,w:AW,h:80,title:"features.parquet",titleSize:13,sub:"data/processed/",lines:[
+        {t:"+ embeddings.npy (384-d)",mono:true,size:11},{t:"+ features_with_labels.parquet",mono:true,size:11}]},
+      {id:"clusout",kind:"data",x:AX,y:crow(5)+34,w:AW,h:80,title:"features_with_clusters.parquet",titleSize:11.5,sub:"data/processed/",lines:[
+        {t:"+ umap_2d.npy · umap_sample_idx.npy",mono:true,size:10.5},{t:"→ reports/archetype_summary.csv",mono:true,size:10.5}]},
+      {id:"mdls",kind:"artifact",x:AX,y:crow(6)+38,w:AW,h:92,title:"models/*.joblib",titleSize:13,sub:"+ deberta_checkpoint/",stripe:"#818cf8",lines:[
+        {t:"logreg · xgboost · scaler · kmeans",mono:true,size:10.5},{t:"+ test_predictions.parquet",mono:true,size:10.5},{t:"+ deberta_test_predictions.parquet",mono:true,size:10.5}]},
+      {id:"cmp",kind:"data",x:AX,y:crow(8)-14,w:AW,h:64,title:"model_comparison_summary.csv",titleSize:11,sub:"reports/",lines:[{t:"clean-benchmark scores"}]},
+      {id:"stress",kind:"result",x:AX,y:crow(9)-8,w:AW,h:72,title:"stress_test_results.csv",titleSize:12.5,sub:"reports/",stripe:"#fbbf24",lines:[{t:"per-model × per-category degradation"}]},
+      {id:"mlruns",kind:"data",x:AX,y:crow(10)-24,w:AW,h:60,title:"mlruns/",titleSize:13.5,sub:"MLflow tracking store",lines:[{t:"params · metrics · model registry"}]},
+
+      // ----- meta / config / deploy (right) -----
+      {id:"cfgs",kind:"config",x:1050,y:crow(2)-14,w:170,h:104,title:"configs/",titleSize:13,lines:[
+        {t:"base.yaml",mono:true,size:11},{t:"models/logreg·xgboost",mono:true,size:10.5},{t:"·deberta.yaml",mono:true,size:10.5},{t:"clustering/kmeans.yaml",mono:true,size:10.5}]},
+      {id:"deploy",kind:"deploy",x:1050,y:crow(4)+2,w:170,h:104,title:"deploy/hf-space/",titleSize:12.5,lines:[
+        {t:"app.py",mono:true,size:11},{t:"3 joblib models",mono:true,size:11},{t:"requirements.txt",mono:true,size:10.5},{t:"(torch-free)",size:11}]},
+      {id:"docs",kind:"deploy",x:1050,y:crow(6)+6,w:170,h:76,title:"docs/ + site",titleSize:13,lines:[
+        {t:"index.html",mono:true,size:11},{t:"portfolio deep-dive",size:11}]},
+      {id:"meta",kind:"meta",x:1050,y:crow(8)-8,w:170,h:120,title:"project meta",titleSize:13,lines:[
+        {t:"pyproject.toml",mono:true,size:10.5},{t:"requirements.txt",mono:true,size:10.5},{t:"Makefile",mono:true,size:10.5},{t:"README.md",mono:true,size:10.5},{t:"LICENSE",mono:true,size:10.5}]}
+    ],
+    edges:[
+      // lineage spine (vertical) 0..7
+      {from:"raw",to:"flat",stroke:"#3b4570"},{from:"flat",to:"feat",stroke:"#3b4570"},
+      {from:"feat",to:"clusout",stroke:"#3b4570"},{from:"clusout",to:"mdls",stroke:"#3b4570"},
+      {from:"mdls",to:"cmp",stroke:"#3b4570"},{from:"cmp",to:"stress",stroke:"#3b4570"},
+      {from:"stress",to:"mlruns",stroke:"#2a2f45"},
+      // modules -> the artifact they produce (r -> l) 7..13
+      {from:"loader",to:"flat",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"extr",to:"feat",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"clus",to:"clusout",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"train",to:"mdls",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"eval",to:"stress",fromSide:"r",toSide:"l",stroke:"#5b4a24",dash:"6 5"},
+      {from:"raw",to:"loader",fromSide:"l",toSide:"r",stroke:"#3b4570",d:"M760,"+(crow(2)-14+38)+" H"+(CX+CW)},
+      // notebooks -> modules (r -> l) 13..19
+      {from:"nb1",to:"loader",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"nb2",to:"extr",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"nb4",to:"clus",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"nb5",to:"train",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"nb7",to:"eval",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      // config feeds package (down) 18
+      {from:"cfg",to:"loader",stroke:"#2c5148",dash:"5 5"},
+      // deploy consumes models 19
+      {from:"mdls",to:"deploy",fromSide:"r",toSide:"l",stroke:"#4a2f4a",dash:"5 5"},
+    ],
+    flow:[
+      {paths:[0,1,2,3,4,5],cls:"data",weight:6,dur:9000,splits:[{at:3,cls:"out"}]}, // lineage spine, turns green at models
+      {paths:[7],cls:"data",weight:2,dur:1500},   // loader->flat
+      {paths:[8],cls:"data",weight:2,dur:1500},   // extr->feat
+      {paths:[9],cls:"data",weight:2,dur:1500},   // clus->clusout
+      {paths:[10],cls:"out",weight:2,dur:1500},   // train->models
+      {paths:[11],cls:"adv",weight:2,dur:1500},   // eval->stress
+      {paths:[13],cls:"data",weight:1,dur:1400},  // nb1->loader
+      {paths:[14],cls:"data",weight:1,dur:1400},  // nb2->extr
+      {paths:[16],cls:"out",weight:1,dur:1400}    // nb5->train
+    ]
+  };
+
+  function boot(){
+    themeInit();
+    mount("svg-system","wrap-system",sys,"system");
+    mount("svg-code","wrap-code",code,"code");
+  }
+  if(document.readyState!=="loading") boot();
+  else document.addEventListener("DOMContentLoaded",boot);
+})();
+</script>
+</body>
+</html>

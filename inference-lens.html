@@ -7,7 +7,7 @@
 <title>Inference-Lens - Kalyan Venkatesh</title>
 <meta name="description" content="Can the LLM-as-judge be fooled? I trained scoring models on human preference data and put them under adversarial pressure. Try the live scorer.">
 <meta property="og:title" content="Inference-Lens - can the AI judge be fooled?">
-<meta property="og:description" content="I trained scoring models on human preference data, then attacked them. Two models tied on a clean benchmark came apart by over 75 points under pressure.">
+<meta property="og:description" content="I trained scoring models on human preference data, then attacked them. 2 models tied on a clean benchmark came apart by over 75 points under pressure.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalyanvenk.com/inference-lens">
 <meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
@@ -15,13 +15,13 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Inference-Lens - can the AI judge be fooled?">
-<meta name="twitter:description" content="Two models tied on a clean benchmark came apart by over 75 points under adversarial pressure.">
+<meta name="twitter:description" content="2 models tied on a clean benchmark came apart by over 75 points under adversarial pressure.">
 <meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className = 'js';</script>
-<link rel="stylesheet" href="assets/style.css">
+<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 <div class="progress"></div>
@@ -33,12 +33,15 @@
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="inference-lens" class="active">Inference-Lens</a>
-      <a href="agentic-llmops">Agentic LLMOps</a>
+      <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
       <a href="predictops">PredictOps</a>
       <a href="job-scanner">Job Scanner</a>
       <a href="about">About</a>
       <a href="#demo" class="nav-cta">Live demo</a>
-    </div>
+          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
+        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
+      </button>
+</div>
   </div>
 </nav>
 
@@ -46,7 +49,7 @@
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>Can the judge be fooled</span>
     <h1 class="reveal">Inference-Lens</h1>
-    <p class="lead reveal d1">LLM as judge is the default evaluation paradigm now. Almost nobody is asking how easily that judge can be deceived. So I built an NLP evaluation pipeline to find out. At its core it is a natural language text classification problem: I trained scoring models on 170K+ real human preference annotations, then put them under systematic adversarial NLP pressure to see where they break and by how much.</p>
+    <p class="lead reveal d1">LLM as judge is the default evaluation paradigm now. Almost nobody is asking how easily that judge can be deceived. So I built an NLP evaluation pipeline to find out. It is a natural language text classification problem: I trained scoring models on 170K+ real human preference annotations, then put them under systematic adversarial NLP pressure to see where they break and by how much.</p>
     <div class="meta reveal d2">
       <span class="chip">Natural Language Processing</span>
       <span class="chip">Text Classification</span>
@@ -68,8 +71,8 @@
 <section id="demo">
   <div class="wrap">
     <p class="kicker reveal">Live demo</p>
-    <h2 class="section-title reveal">Score two responses and watch a judge get fooled</h2>
-    <p class="section-sub reveal">Paste two responses, or load the built in sample. Two trained models pick the one they think is better. The case I want you to see is when they confidently choose the worse, padded answer. That is not a bug. That is the whole point.</p>
+    <h2 class="section-title reveal">Score 2 responses and watch a judge get fooled</h2>
+    <p class="section-sub reveal">Paste 2 responses, or load the built in sample. 2 trained models pick the one they think is better. The case I want you to see is when they confidently choose the worse, padded answer. That is the behavior I want you to see, not a glitch.</p>
     <div class="il-app reveal">
       <div class="il-inputs">
         <div class="il-field"><label>Response A</label><textarea id="il-a" placeholder="Paste the first answer here..."></textarea></div>
@@ -84,32 +87,96 @@
   </div>
 </section>
 
+<section id="blueprints">
+  <style>
+    .bp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+    @media(max-width:720px){.bp-grid{grid-template-columns:1fr}}
+    .bp-card{display:block;border:1px solid var(--border);border-radius:16px;background:var(--surface-2);padding:16px;transition:transform .18s,border-color .18s,box-shadow .18s}
+    .bp-card:hover{transform:translateY(-4px);border-color:var(--indigo);box-shadow:0 18px 40px -20px rgba(124,58,237,0.5)}
+    .bp-thumb{border-radius:12px;overflow:hidden;border:1px solid #232a3d;background:#0b0d15;margin-bottom:14px}
+    .bp-thumb svg{display:block;width:100%;height:auto}
+    .bp-card h4{font-size:1.06rem;margin-bottom:6px}
+    .bp-card p{color:var(--text-dim);font-size:.9rem;margin-bottom:12px}
+    .bp-open{color:var(--indigo);font-weight:600;font-size:.9rem}
+    :root[data-theme="light"] .bp-thumb{background:#eef1f8}
+    :root[data-theme="light"] .bp-thumb svg rect{fill:#ffffff;stroke:#cdd5e8}
+    :root[data-theme="light"] .bp-thumb svg path{stroke:#c2cbe0}
+  </style>
+  <div class="wrap">
+    <p class="kicker reveal">Under the hood</p>
+    <h2 class="section-title reveal">See exactly how it is built</h2>
+    <p class="section-sub reveal">2 live blueprints you can zoom into. One traces the pipeline stage by stage. The other maps every file in the repo and how the data moves between them. Hover anywhere to magnify.</p>
+    <div class="bp-grid">
+      <a class="bp-card reveal" href="inference-lens-blueprint.html#system">
+        <div class="bp-thumb">
+          <svg viewBox="0 0 320 150" role="img" aria-label="System design preview">
+            <rect x="8" y="52" width="66" height="30" rx="6" fill="#12182a" stroke="#3b4570"/>
+            <rect x="127" y="14" width="66" height="26" rx="6" fill="#161a28" stroke="#232a3d"/>
+            <rect x="127" y="60" width="66" height="26" rx="6" fill="#1b1f39" stroke="#4f5696"/>
+            <rect x="127" y="106" width="66" height="26" rx="6" fill="#16232c" stroke="#347470"/>
+            <rect x="246" y="24" width="66" height="24" rx="6" fill="#12131c" stroke="#2a2f45"/>
+            <rect x="246" y="98" width="66" height="24" rx="6" fill="#191426" stroke="#5b3f86"/>
+            <path d="M160,40 V60 M160,86 V106" stroke="#232a3d" stroke-width="1.6" fill="none"/>
+            <path d="M74,67 C100,67 105,27 127,27" stroke="#3b4570" stroke-width="1.4" fill="none"/>
+            <path d="M193,73 C220,73 224,110 246,110" stroke="#5b4a24" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
+            <circle r="4" fill="#818cf8"><animateMotion dur="2.8s" repeatCount="indefinite" path="M74,67 C100,67 105,27 127,27"/></circle>
+            <circle r="3.5" fill="#fbbf24"><animateMotion dur="2.6s" repeatCount="indefinite" path="M193,73 C220,73 224,110 246,110"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
+          </svg>
+        </div>
+        <h4>System design</h4>
+        <p>The stages in run order, from HH-RLHF through clustering and the 3 models to the adversarial stress-test, with every artifact each step writes to disk.</p>
+        <span class="bp-open">Open the system map &rarr;</span>
+      </a>
+      <a class="bp-card reveal d1" href="inference-lens-blueprint.html#code">
+        <div class="bp-thumb">
+          <svg viewBox="0 0 320 150" role="img" aria-label="Code map preview">
+            <rect x="8" y="18" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
+            <rect x="8" y="64" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
+            <rect x="8" y="110" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
+            <rect x="129" y="18" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
+            <rect x="129" y="64" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
+            <rect x="129" y="110" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
+            <rect x="250" y="41" width="62" height="22" rx="5" fill="#12182a" stroke="#3b4570"/>
+            <rect x="250" y="87" width="62" height="22" rx="5" fill="#12131c" stroke="#2a2f45"/>
+            <path d="M70,29 H129 M70,75 H129 M70,121 H129" stroke="#4d4a2a" stroke-width="1.2" fill="none"/>
+            <path d="M191,29 C220,29 222,52 250,52 M191,75 C220,75 224,98 250,98" stroke="#2b3350" stroke-width="1.2" fill="none"/>
+            <path d="M281,63 V87" stroke="#3b4570" stroke-width="1.4" fill="none"/>
+            <circle cy="75" r="3.6" fill="#818cf8"><animate attributeName="cx" values="70;129" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.2s" repeatCount="indefinite"/></circle>
+            <circle cx="281" r="3.6" fill="#4ade80"><animate attributeName="cy" values="63;87" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
+          </svg>
+        </div>
+        <h4>Code map</h4>
+        <p>Every file in the repo with its one-line job, arranged around the data lineage spine that turns raw text into trained models and the stress-test results.</p>
+        <span class="bp-open">Open the code map &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap prose">
     <p class="kicker reveal">The setup</p>
     <h2 class="reveal">Honest human judgment on natural language, then adversarial pressure</h2>
-    <p class="reveal">I started from Anthropic's HH-RLHF dataset, 170,000 plus human preference annotations. A rater sees two AI responses to the same conversation and just picks the one they prefer. No rubric, no scoring guide, only judgment. That is the honest NLP signal I trained on. The task is fundamentally one of natural language understanding: can a model learn what humans find genuinely useful or convincing in text?</p>
-    <p class="reveal">Then I went looking for trouble. LLM-Bar gives me 419 adversarially constructed NLP pairs built specifically to fool automated text evaluators. My plan was simple: train NLP scoring models on the clean preference data, then see how each architecture behaves the moment something is engineered to trip it.</p>
+    <p class="reveal">I started from Anthropic's HH-RLHF dataset, 170,000 plus human preference annotations. A rater sees 2 AI responses to the same conversation and just picks the one they prefer. No rubric, no scoring guide, only judgment. That is the honest NLP signal I trained on. The task is fundamentally one of natural language understanding: can a model learn what humans find genuinely useful or convincing in text?</p>
+    <p class="reveal">Then I tried to break them. LLM-Bar gives me 419 adversarially constructed NLP pairs built specifically to fool automated text evaluators. My plan was simple: train NLP scoring models on the clean preference data, then see how each architecture behaves the moment something is engineered to trip it.</p>
 
-    <h2 class="reveal">Three things I walked away with</h2>
+    <h2 class="reveal">3 things I walked away with</h2>
     <div class="finding reveal"><strong>Clean accuracy near 0.50 is the point, not the failure.</strong> Logistic Regression, XGBoost and a DeBERTa-v3-small fine-tune all landed around 0.50 AUC-ROC on clean evaluation. Surface features like readability and length just do not predict what a human prefers.</div>
-    <div class="finding reveal"><strong>Identical on paper, opposite under attack.</strong> Under a Neighbor attack, Logistic Regression picked the worse manipulated answer 78.4 percent of the time, almost four times in five. XGBoost, trained on the same data, degraded only 2.4 percent. No clean benchmark would ever show you that gap.</div>
-    <div class="finding reveal"><strong>Length is the opposite of quality.</strong> Three clustering algorithms over the full dataset agreed on four archetypes. The most verbose cluster had the lowest preference rate at 48.9 percent. The shorter, conversational one had the highest at 51.6 percent.</div>
+    <div class="finding reveal"><strong>Identical on paper, opposite under attack.</strong> Under a Neighbor attack, Logistic Regression picked the worse manipulated answer 78.4 percent of the time, almost 4 times in 5. XGBoost, trained on the same data, degraded only 2.4 percent. No clean benchmark would ever show you that gap.</div>
+    <div class="finding reveal"><strong>Length is the opposite of quality.</strong> 3 clustering algorithms over the full dataset agreed on 4 archetypes. The most verbose cluster had the lowest preference rate at 48.9 percent. The shorter, conversational one had the highest at 51.6 percent.</div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <p class="kicker reveal">Attack surface</p>
-    <h2 class="section-title reveal">Four ways to fool a judge</h2>
-    <p class="section-sub reveal">LLM-Bar groups its adversarial pairs into four families. Each one goes after a different weakness in how automated evaluators decide what looks good.</p>
-    <div class="feature-grid">
-      <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="8" r="2.5"/><path d="M6 8.5v7"/><path d="M18 10.5c0 4-5 3-7 5.5"/></svg></div><h4>Neighbor</h4><p>A worse answer made by small local edits to the better one, so the two look almost identical on the surface. This is the attack that broke Logistic Regression hardest.</p></div>
+    <h2 class="section-title reveal">4 ways to fool a judge</h2>
+    <p class="section-sub reveal">LLM-Bar groups its adversarial pairs into 4 families. Each one goes after a different weakness in how automated evaluators decide what looks good.</p>
+    <div class="feature-grid" style="grid-template-columns:1fr 1fr;">
+      <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="8" r="2.5"/><path d="M6 8.5v7"/><path d="M18 10.5c0 4-5 3-7 5.5"/></svg></div><h4>Neighbor</h4><p>A worse answer made by small local edits to the better one, so the 2 look almost identical on the surface. This is the attack that broke Logistic Regression hardest.</p></div>
       <div class="feature reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H10l-4.5 4v-4H4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></div><h4>GPT instruction</h4><p>A weaker answer generated by prompting a strong model with the instruction. Fluent and confident, but not actually better.</p></div>
       <div class="feature reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 16l9 5 9-5"/></svg></div><h4>GPT output</h4><p>A polished variation crafted to carry the markers of quality, length, structure, vocabulary, with none of the substance.</p></div>
-    </div>
-    <div class="feature-grid" style="margin-top:18px; grid-template-columns:1fr;">
-      <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/></svg></div><h4>Manual</h4><p>Hand written deceptive answers. The hardest and most creative cases, built by people specifically to exploit the blind spots automated generation misses.</p></div>
+      <div class="feature reveal d3"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/></svg></div><h4>Manual</h4><p>Hand written deceptive answers. The hardest and most creative cases, built by people specifically to exploit the blind spots automated generation misses.</p></div>
     </div>
   </div>
 </section>
@@ -117,8 +184,8 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">The headline</p>
-    <h2 class="section-title reveal">Two models, identical on paper, opposite under fire</h2>
-    <p class="section-sub reveal">All three models scored near 0.50 AUC-ROC on clean evaluation. The real separation only shows up once you attack them and that is the argument of the whole project.</p>
+    <h2 class="section-title reveal">2 models, identical on paper, opposite under fire</h2>
+    <p class="section-sub reveal">All 3 models scored near 0.50 AUC-ROC on clean evaluation. The real separation only shows up once you attack them and that is the argument of the whole project.</p>
     <div class="tbl-wrap reveal">
       <table>
         <thead><tr><th>Model</th><th>Clean AUC-ROC</th><th>Worst case under attack</th><th>Verdict</th></tr></thead>
@@ -129,7 +196,7 @@
         </tbody>
       </table>
     </div>
-    <div class="finding reveal" style="margin-top:20px;"><strong>Same training data. Same clean numbers. More than 75 points apart under pressure.</strong> If I had only looked at the benchmark, I would have called these two interchangeable. They are not. That is exactly why you cannot choose an evaluator without attacking it first.</div>
+    <div class="finding reveal" style="margin-top:20px;"><strong>Same training data and the same clean scores, yet more than 75 points apart under pressure.</strong> If I had only looked at the benchmark, I would have called these 2 interchangeable. They are not. That is exactly why you cannot choose an evaluator without attacking it first.</div>
   </div>
 </section>
 
@@ -137,8 +204,8 @@
   <div class="wrap">
     <p class="kicker reveal">What the data said</p>
     <h2 class="section-title reveal">Length is the opposite of quality</h2>
-    <p class="section-sub reveal">Before I touched a single label, I wanted to know what the response space naturally looks like. Three clustering algorithms over the full dataset all landed on the same four archetypes, which told me the structure was real. Then I checked which one humans actually preferred and it surprised me.</p>
-    <div class="two-col">
+    <p class="section-sub reveal">Before I touched a single label, I wanted to know what the response space naturally looks like. 3 clustering algorithms over the full dataset all landed on the same 4 archetypes, which told me the structure was real. Then I checked which one humans actually preferred and it surprised me.</p>
+    <div class="2-col">
       <div class="chart-card reveal">
         <h4>Human preference rate by archetype</h4>
         <p class="cap">Share of responses in each cluster that a human chose over its alternative.</p>
@@ -160,11 +227,11 @@
     <p class="kicker reveal">Takeaways</p>
     <h2 class="reveal">What a team should walk away with</h2>
     <ul class="reveal">
-      <li>Clean benchmark accuracy tells you almost nothing about whether an NLP evaluator can be trusted under adversarial attack. Two models tied on AUC-ROC differed by over 75 points the moment I applied NLP perturbation pressure.</li>
+      <li>Clean benchmark accuracy tells you almost nothing about whether an NLP evaluator can be trusted under adversarial attack. 2 models tied on AUC-ROC differed by over 75 points the moment I applied NLP perturbation pressure.</li>
       <li>Pick your automated NLP judge by stress-testing it against adversarial text, not by reading a leaderboard. Know which NLP attack families break which architecture and by how much.</li>
       <li>Be suspicious of any quality signal that tracks length. Across 170K+ natural language judgments, longer text meant less preferred.</li>
     </ul>
-    <p class="reveal">The full pipeline, all three model architectures, the clustering notebooks and the LLM-Bar stress-test are on GitHub.</p>
+    <p class="reveal">The full pipeline, all 3 model architectures, the clustering notebooks and the LLM-Bar stress-test are on GitHub.</p>
     <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/Inference-Lens" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
   </div>
 </section>
@@ -175,13 +242,13 @@
       <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
       <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
     </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Agentic LLMOps</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="#demo">Live demo</a></div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Multi-Agent Inference Reliability</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="#demo">Live demo</a></div>
     <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/Inference-Lens" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
   </div>
   <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
 </footer>
 
-<script src="assets/script.js"></script>
+<script src="assets/script.js?v=3"></script>
 <script src="assets/model.js"></script>
 <script src="assets/scorer.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -205,7 +272,7 @@ window.addEventListener('load', () => {
       indexAxis: 'y', maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => c.parsed.x + '% chosen' } } },
       scales: {
-        x: { min: 47, max: 53, ticks: { callback: (v) => v + '%' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        x: { min: 47, max: 53, ticks: { callback: (v) => v + '%' }, grid: { color: 'rgba(130,140,160,0.16)' } },
         y: { grid: { display: false } }
       }
     }
