@@ -100,7 +100,7 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 1px solid var(--border-soft);
 }
 .nav-inner { max-width: var(--maxw); margin: 0 auto; padding: 15px 26px; display: flex; align-items: center; justify-content: space-between; }
-.brand { font-weight: 800; letter-spacing: -0.02em; font-size: 1.08rem; display: flex; align-items: center; gap: 9px; }
+.brand { font-weight: 800; letter-spacing: -0.02em; font-size: 1.08rem; display: flex; align-items: center; gap: 9px; white-space: nowrap; }
 .brand .mark {
   width: 30px; height: 30px; border-radius: 9px; background: var(--grad);
   display: inline-flex; align-items: center; justify-content: center;
@@ -113,8 +113,8 @@ svg { display: block; }
 .ico svg { width: 24px; height: 24px; }
 .skill-cat h4 .ico { width: auto; height: auto; background: none; border: 0; margin: 0; }
 .skill-cat h4 .ico svg { width: 20px; height: 20px; }
-.nav-links { display: flex; gap: 4px; align-items: center; }
-.nav-links a { padding: 8px 15px; border-radius: 999px; font-size: 0.9rem; color: var(--text-dim); transition: all 0.18s; font-weight: 500; }
+.nav-links { display: flex; gap: 2px; align-items: center; }
+.nav-links a { padding: 7px 11px; border-radius: 999px; font-size: 0.84rem; color: var(--text-dim); transition: all 0.18s; font-weight: 500; white-space: nowrap; }
 .nav-links a:hover { color: var(--text); background: var(--surface); }
 .nav-links a.active { color: var(--text); background: var(--accent-soft); box-shadow: inset 0 0 0 1px rgba(129,140,248,0.25); }
 .nav-cta { background: var(--grad); color: white !important; font-weight: 600 !important; box-shadow: 0 6px 18px -6px rgba(124,58,237,0.7); }
@@ -377,3 +377,54 @@ tbody tr:hover { background: rgba(255,255,255,0.02); }
 /* redacted platform names — the real names are not in the DOM at all */
 .redact { filter: blur(5px); user-select: none; pointer-events: none; color: var(--text-dim); letter-spacing: 0.06em; }
 .redact-note { color: var(--text-faint); font-size: 0.86rem; margin-top: 14px; }
+
+/* ===========================================================================
+   Light theme. The page runs dark by default; the toggle in the nav flips
+   :root[data-theme] and every component follows through the tokens below.
+   =========================================================================== */
+:root[data-theme="light"] {
+  --bg: #f5f6fb;
+  --bg-soft: #eceef6;
+  --surface: #ffffff;
+  --surface-2: #f2f4fa;
+  --surface-3: #e8ebf5;
+  --border: #d5dae8;
+  --border-soft: #e3e7f1;
+  --text: #141827;
+  --text-dim: #4b5266;
+  --text-faint: #7b8399;
+  --accent-soft: rgba(99, 102, 241, 0.12);
+  --grad-text: linear-gradient(120deg, #4f46e5 0%, #9333ea 50%, #0d9488 100%);
+  --shadow: 0 20px 45px -22px rgba(30, 40, 80, 0.22);
+  --glow: 0 0 0 1px rgba(99, 102, 241, 0.20), 0 14px 40px -18px rgba(124, 58, 237, 0.18);
+}
+/* a few spots use fixed dark values; give them a light counterpart */
+:root[data-theme="light"] .nav { background: rgba(245, 246, 251, 0.82); }
+:root[data-theme="light"] body::after {
+  background-image:
+    linear-gradient(rgba(20, 24, 40, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 24, 40, 0.05) 1px, transparent 1px);
+}
+:root[data-theme="light"] .btn-ghost { background: rgba(20, 24, 40, 0.03); }
+:root[data-theme="light"] tbody tr:hover { background: rgba(20, 24, 40, 0.03); }
+:root[data-theme="light"] .il-bar { background: rgba(20, 24, 40, 0.07); }
+:root[data-theme="light"] .il-fill { background: #c2c8d4; }
+:root[data-theme="light"] .il-verdict b,
+:root[data-theme="light"] .il-sc-pick { color: #4f46e5; }
+:root[data-theme="light"] .il-sc-pick { background: rgba(99, 102, 241, 0.14); }
+:root[data-theme="light"] .fedge.branch { stroke: #b7c0d6; }
+:root[data-theme="light"] .pkt.muted { fill: #9aa2b8; }
+
+/* ---------- theme toggle (organic sliding knob, sun <-> moon) ---------- */
+.theme-switch { background: none; border: 0; padding: 6px 4px; margin-left: 6px; cursor: pointer; display: inline-flex; align-items: center; }
+.ts-track { width: 50px; height: 26px; border-radius: 999px; background: #1c2132; border: 1px solid var(--border); position: relative; transition: background 0.25s, border-color 0.25s; }
+.ts-knob { position: absolute; top: 2px; left: 25px; width: 20px; height: 20px; border-radius: 50%; background: #c7cede; display: inline-flex; align-items: center; justify-content: center; transition: left 0.28s cubic-bezier(.2,.8,.2,1), background 0.25s; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+.ts-knob svg { width: 12px; height: 12px; position: absolute; transition: opacity 0.2s; }
+.ts-sun { color: #8a6400; opacity: 0; }
+.ts-moon { color: #2a2f45; opacity: 1; }
+.theme-switch:hover .ts-track { border-color: var(--indigo); }
+:root[data-theme="light"] .ts-track { background: #dce4f2; border-color: #c3ccdb; }
+:root[data-theme="light"] .ts-knob { left: 3px; background: #fbbf24; }
+:root[data-theme="light"] .ts-sun { opacity: 1; }
+:root[data-theme="light"] .ts-moon { opacity: 0; }
+@media (max-width: 600px) { .theme-switch { margin: 8px 0 0; } }

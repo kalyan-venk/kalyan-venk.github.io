@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className = 'js';</script>
-<link rel="stylesheet" href="assets/style.css">
+<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 <div class="progress"></div>
@@ -33,20 +33,23 @@
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="inference-lens">Inference-Lens</a>
-      <a href="agentic-llmops">Agentic LLMOps</a>
+      <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
       <a href="predictops" class="active">PredictOps</a>
       <a href="job-scanner">Job Scanner</a>
       <a href="about">About</a>
       <a href="inference-lens#demo" class="nav-cta">Live demo</a>
-    </div>
+          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
+        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
+      </button>
+</div>
   </div>
 </nav>
 
 <header class="proj-hero">
   <div class="wrap">
-    <span class="eyebrow reveal"><span class="blip"></span>Production MLOps · all 7 phases shipped</span>
+    <span class="eyebrow reveal"><span class="blip"></span>Production MLOps · CI-gated &amp; drift-monitored</span>
     <h1 class="reveal">PredictOps</h1>
-    <p class="lead reveal d1">Every ML Engineer job description lists Docker, FastAPI, CI/CD, MLflow. Almost none of them list a novel model architecture. So this project deliberately uses a boring, well-understood tabular classification problem and puts all the depth into the ops loop around it: the training comparison, the serving contract, the container, a CI gate that actually blocks a bad model before it ships, registry promotion and drift detection. The model is not the point. The system around it is.</p>
+    <p class="lead reveal d1">Every ML Engineer job description lists Docker, FastAPI, CI/CD, MLflow. Almost none of them list a novel model architecture. So this project deliberately uses a boring, well-understood tabular classification problem and puts all the depth into the ops loop around it: the training comparison, the serving contract, the container, a CI gate that actually blocks a bad model before it ships, registry promotion and drift detection. The system around the model is the point.</p>
     <div class="meta reveal d2">
       <span class="chip">scikit-learn</span>
       <span class="chip">XGBoost</span>
@@ -66,7 +69,7 @@
 <section style="padding-top:30px;">
   <div class="wrap">
     <div class="stats">
-      <div class="stat reveal"><div class="num"><span data-count="7">0</span>/7</div><div class="lbl">build phases shipped</div></div>
+      <div class="stat reveal"><div class="num">&ge;<span data-count="0.80" data-dp="2">0</span></div><div class="lbl">ROC-AUC gate &mdash; a bad model fails CI</div></div>
       <div class="stat reveal d1"><div class="num"><span data-count="0.846" data-dp="3">0</span></div><div class="lbl">CV ROC-AUC, winning model</div></div>
       <div class="stat reveal d2"><div class="num"><span data-count="4">0</span></div><div class="lbl">served REST endpoints</div></div>
       <div class="stat reveal d3"><div class="num"><span data-count="2">0</span></div><div class="lbl">candidate models compared</div></div>
@@ -94,12 +97,78 @@
   </div>
 </section>
 
+<section id="blueprints">
+  <style>
+    .bp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+    @media(max-width:720px){.bp-grid{grid-template-columns:1fr}}
+    .bp-card{display:block;border:1px solid var(--border);border-radius:16px;background:var(--surface-2);padding:16px;transition:transform .18s,border-color .18s,box-shadow .18s}
+    .bp-card:hover{transform:translateY(-4px);border-color:var(--indigo);box-shadow:0 18px 40px -20px rgba(124,58,237,0.5)}
+    .bp-thumb{border-radius:12px;overflow:hidden;border:1px solid #232a3d;background:#0b0d15;margin-bottom:14px}
+    .bp-thumb svg{display:block;width:100%;height:auto}
+    .bp-card h4{font-size:1.06rem;margin-bottom:6px}
+    .bp-card p{color:var(--text-dim);font-size:.9rem;margin-bottom:12px}
+    .bp-open{color:var(--indigo);font-weight:600;font-size:.9rem}
+    :root[data-theme="light"] .bp-thumb{background:#eef1f8}
+    :root[data-theme="light"] .bp-thumb svg rect{fill:#ffffff;stroke:#cdd5e8}
+    :root[data-theme="light"] .bp-thumb svg path{stroke:#c2cbe0}
+  </style>
+  <div class="wrap">
+    <p class="kicker reveal">Under the hood</p>
+    <h2 class="section-title reveal">See exactly how it is built</h2>
+    <p class="section-sub reveal">2 live blueprints you can zoom into. One traces the ops loop stage by stage. The other maps every file in the repo and how one artifact becomes the next. Hover anywhere to magnify.</p>
+    <div class="bp-grid">
+      <a class="bp-card reveal" href="predictops-blueprint.html#system">
+        <div class="bp-thumb">
+          <svg viewBox="0 0 320 150" role="img" aria-label="System design preview">
+            <rect x="8" y="52" width="66" height="30" rx="6" fill="#12182a" stroke="#3b4570"/>
+            <rect x="127" y="14" width="66" height="26" rx="6" fill="#161a28" stroke="#232a3d"/>
+            <rect x="127" y="60" width="66" height="26" rx="6" fill="#1b1f39" stroke="#4f5696"/>
+            <rect x="127" y="106" width="66" height="26" rx="6" fill="#16232c" stroke="#347470"/>
+            <rect x="246" y="24" width="66" height="24" rx="6" fill="#12131c" stroke="#2a2f45"/>
+            <rect x="246" y="98" width="66" height="24" rx="6" fill="#191426" stroke="#5b3f86"/>
+            <path d="M160,40 V60 M160,86 V106" stroke="#232a3d" stroke-width="1.6" fill="none"/>
+            <path d="M74,67 C100,67 105,27 127,27" stroke="#3b4570" stroke-width="1.4" fill="none"/>
+            <path d="M193,73 C220,73 224,110 246,110" stroke="#5b4a24" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
+            <circle r="4" fill="#818cf8"><animateMotion dur="2.8s" repeatCount="indefinite" path="M74,67 C100,67 105,27 127,27"/></circle>
+            <circle r="3.5" fill="#fbbf24"><animateMotion dur="2.6s" repeatCount="indefinite" path="M193,73 C220,73 224,110 246,110"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
+          </svg>
+        </div>
+        <h4>System design</h4>
+        <p>The ops loop in run order, from data through the CI eval gate and registry promotion to a served, drift-monitored model.</p>
+        <span class="bp-open">Open the system map &rarr;</span>
+      </a>
+      <a class="bp-card reveal d1" href="predictops-blueprint.html#code">
+        <div class="bp-thumb">
+          <svg viewBox="0 0 320 150" role="img" aria-label="Code map preview">
+            <rect x="8" y="18" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
+            <rect x="8" y="64" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
+            <rect x="8" y="110" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
+            <rect x="129" y="18" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
+            <rect x="129" y="64" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
+            <rect x="129" y="110" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
+            <rect x="250" y="41" width="62" height="22" rx="5" fill="#12182a" stroke="#3b4570"/>
+            <rect x="250" y="87" width="62" height="22" rx="5" fill="#12131c" stroke="#2a2f45"/>
+            <path d="M70,29 H129 M70,75 H129 M70,121 H129" stroke="#4d4a2a" stroke-width="1.2" fill="none"/>
+            <path d="M191,29 C220,29 222,52 250,52 M191,75 C220,75 224,98 250,98" stroke="#2b3350" stroke-width="1.2" fill="none"/>
+            <path d="M281,63 V87" stroke="#3b4570" stroke-width="1.4" fill="none"/>
+            <circle cy="75" r="3.6" fill="#818cf8"><animate attributeName="cx" values="70;129" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.2s" repeatCount="indefinite"/></circle>
+            <circle cx="281" r="3.6" fill="#4ade80"><animate attributeName="cy" values="63;87" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
+          </svg>
+        </div>
+        <h4>Code map</h4>
+        <p>Every file with its one-line job, arranged around the data lineage: CSV to trained model to ONNX to a promoted registry version to the live API.</p>
+        <span class="bp-open">Open the code map &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <p class="kicker reveal">Where it actually stands</p>
-    <h2 class="section-title reveal">All seven phases shipped.</h2>
+    <h2 class="section-title reveal">All 7 phases shipped.</h2>
     <p class="section-sub reveal">This project was built one working phase at a time, each committed separately, each with its own "why" before moving on. Here's exactly what's real, instead of rounding up.</p>
-    <div class="two-col">
+    <div class="2-col">
       <div class="tbl-wrap reveal" style="align-self:start;">
         <table>
           <thead><tr><th>Phase</th><th>Status</th></tr></thead>
@@ -118,7 +187,7 @@
       <div class="finding reveal" style="align-self:start;"><strong>Phase 4 was the centerpiece.</strong> A GitHub Actions workflow lints, tests and then runs a model-quality assertion: ROC-AUC &ge; 0.80 or the build fails, the same way a broken unit test fails a build. Verified by shipping a deliberately degraded model, watching CI go red, then fixing it. That's the difference between "I trained a model" and "a bad model literally cannot reach production here."</div>
     </div>
 
-    <div class="two-col" style="margin-top:28px;">
+    <div class="2-col" style="margin-top:28px;">
       <div class="finding reveal" style="align-self:start;"><strong>Phase 5-6: registry promotion and real PSI, not a rounded-off drift score.</strong> The winning run gets registered in the MLflow model registry and promoted Staging &rarr; Production. Drift detection runs Evidently with PSI (Population Stability Index) as the actual per-column stattest, comparing a reference split against a synthetically shifted "current" split, tripping an alert when any feature's PSI exceeds 0.15.</div>
       <div class="finding reveal" style="align-self:start;"><strong>Phase 3 revisited: multi-stage Docker that actually earns the name.</strong> The first pass copied the entire build environment (MLflow, Evidently, pytest, ruff) into the runtime image. Splitting serving-only dependencies out cut the served image from 1.66GB to 733MB, a 56% reduction, from an actual measured build, not an estimate.</div>
     </div>
@@ -129,7 +198,7 @@
   <div class="wrap prose">
     <p class="kicker reveal">Why this project exists</p>
     <h2 class="reveal">The model is the boring part on purpose</h2>
-    <p class="reveal">My other two projects are LLM research. This one is the breadth piece that sits next to them: a plain tabular classification problem (customer churn, never the headline) so nobody mistakes the domain for the point. The point is the ops loop, the part almost every portfolio project skips because it stops at the trained model. A pipeline that prevents leakage, a served API with real input validation and a health check, a container that only ships what it needs and a CI gate that actually fails a merge. That's the same instinct behind the other two projects, applied to the plumbing instead of the research question: build the part that makes the system trustworthy, not just the part that demos well.</p>
+    <p class="reveal">My other 2 projects are LLM research. This one is the breadth piece that sits next to them: a plain tabular classification problem (customer churn, never the headline) so nobody mistakes the domain for the point. The point is the ops loop, the part almost every portfolio project skips because it stops at the trained model. A pipeline that prevents leakage, a served API with real input validation and a health check, a container that only ships what it needs and a CI gate that actually fails a merge. That's the same instinct behind the other 2 projects, applied to the plumbing instead of the research question: build the plumbing that makes the system trustworthy, beyond the part that demos well.</p>
   </div>
 </section>
 
@@ -137,7 +206,7 @@
   <div class="wrap prose">
     <p class="kicker reveal">Status</p>
     <h2 class="reveal">Where it stands</h2>
-    <p class="reveal">All seven phases are done and pushed: a compared, cross-validated training pipeline, a validated FastAPI serving layer, a multi-stage Docker build, a CI eval gate that blocks a regressed model, MLflow registry promotion and PSI-based drift detection. The full loop runs end to end with one command.</p>
+    <p class="reveal">All 7 phases are done and pushed: a compared, cross-validated training pipeline, a validated FastAPI serving layer, a multi-stage Docker build, a CI eval gate that blocks a regressed model, MLflow registry promotion and PSI-based drift detection. The full loop runs end to end with one command.</p>
     <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/PredictOps" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
   </div>
 </section>
@@ -148,12 +217,12 @@
       <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
       <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
     </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Agentic LLMOps</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="inference-lens#demo">Live demo</a></div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Multi-Agent Inference Reliability</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="inference-lens#demo">Live demo</a></div>
     <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/PredictOps" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
   </div>
   <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
 </footer>
 
-<script src="assets/script.js"></script>
+<script src="assets/script.js?v=3"></script>
 </body>
 </html>

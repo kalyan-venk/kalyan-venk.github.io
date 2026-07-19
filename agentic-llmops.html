@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <link rel="canonical" href="https://kalyanvenk.com/agentic-llmops">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agentic LLMOps - Kalyan Venkatesh</title>
-<meta name="description" content="First-author research on a three-agent runtime monitor that catches bad LLM output without retraining. The Inverse Capability Hypothesis, with confidence intervals.">
-<meta property="og:title" content="Agentic LLMOps - the Inverse Capability Hypothesis">
+<title>Multi-Agent Inference Reliability - Kalyan Venkatesh</title>
+<meta name="description" content="First-author research on a 3-agent runtime monitor that catches bad LLM output without retraining. The Inverse Capability Hypothesis, with confidence intervals.">
+<meta property="og:title" content="Multi-Agent Inference Reliability - the Inverse Capability Hypothesis">
 <meta property="og:description" content="A runtime monitor for AI agents. It lifts weak models and quietly hurts strong ones. First-author research, currently under peer review.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalyanvenk.com/agentic-llmops">
@@ -14,14 +14,14 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Agentic LLMOps - the Inverse Capability Hypothesis">
+<meta name="twitter:title" content="Multi-Agent Inference Reliability - the Inverse Capability Hypothesis">
 <meta name="twitter:description" content="A runtime monitor that lifts weak models and quietly hurts strong ones. First-author research, currently under peer review.">
 <meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className = 'js';</script>
-<link rel="stylesheet" href="assets/style.css">
+<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 <div class="progress"></div>
@@ -33,20 +33,23 @@
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="inference-lens">Inference-Lens</a>
-      <a href="agentic-llmops" class="active">Agentic LLMOps</a>
+      <a href="agentic-llmops" class="active">Multi-Agent Inference Reliability</a>
       <a href="predictops">PredictOps</a>
       <a href="job-scanner">Job Scanner</a>
       <a href="about">About</a>
       <a href="inference-lens#demo" class="nav-cta">Live demo</a>
-    </div>
+          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
+        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
+      </button>
+</div>
   </div>
 </nav>
 
 <header class="proj-hero">
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>First-author research · under peer review</span>
-    <h1 class="reveal">Agentic LLMOps</h1>
-    <p class="lead reveal d1">What happens when the model itself starts failing at runtime and there is no human in the loop to catch it? That became my research problem. I drove it as first author alongside two faculty co-authors, owning everything from the question to the architecture to the statistics. The answer was a three agent monitor that catches and corrects bad LLM output without retraining anything.</p>
+    <h1 class="reveal">Multi-Agent Inference Reliability Framework</h1>
+    <p class="lead reveal d1">What happens when the model itself starts failing at runtime and there is no human in the loop to catch it? That became my research problem. I drove it as first author alongside 2 faculty co-authors, owning everything from the question to the architecture to the statistics. The answer was a 3 agent monitor that catches and corrects bad LLM output without retraining anything.</p>
     <div class="meta reveal d2">
       <span class="chip">LangGraph</span>
       <span class="chip">Ollama</span>
@@ -65,10 +68,14 @@
 <section style="padding-top:30px;">
   <div class="wrap">
     <div class="stats">
-      <div class="stat reveal"><div class="num">+<span data-count="4.85" data-suffix="pp" data-dp="2">0</span></div><div class="lbl">pass@1 gain, p = 0.010</div></div>
-      <div class="stat reveal d1"><div class="num"><span data-count="10">0</span></div><div class="lbl">research phases over two quarters</div></div>
-      <div class="stat reveal d2"><div class="num"><span data-count="5">0</span></div><div class="lbl">model families tested</div></div>
-      <div class="stat reveal d3"><div class="num">~<span data-count="65" data-suffix="%">0</span></div><div class="lbl">baseline where monitoring flips to harmful</div></div>
+      <div class="stat reveal"><div class="num">+<span data-count="30.3" data-suffix="pp" data-dp="1">0</span></div><div class="lbl">pass@1 gain on a weak model (Code Llama 7B) &middot; p = 0.002</div></div>
+      <div class="stat reveal d1"><div class="num"><span data-count="-4" data-suffix="pp" data-dp="1">0</span></div><div class="lbl">cost on a strong model (Qwen2.5 Coder 7B) &middot; p = 0.020</div></div>
+      <div class="stat reveal d2"><div class="num"><span data-count="73.4" data-suffix="%" data-dp="1">0</span></div><div class="lbl">of fixer rewrites the reversion gate discarded</div></div>
+      <div class="stat reveal d3"><div class="num"><span data-count="5">0</span></div><div class="lbl">model families stress-tested</div></div>
+      <div class="stat reveal"><div class="num"><span data-count="10">0</span></div><div class="lbl">experimental phases, pilot to cross-benchmark</div></div>
+      <div class="stat reveal d1"><div class="num"><span data-count="3">0</span></div><div class="lbl">code benchmarks: HumanEval, HumanEval+, MBPP</div></div>
+      <div class="stat reveal d2"><div class="num"><span data-count="100">0</span></div><div class="lbl">problems per benchmark, per condition</div></div>
+      <div class="stat reveal d3"><div class="num"><span data-count="0">0</span></div><div class="lbl">API calls or fine-tuning &middot; fully local via Ollama</div></div>
     </div>
   </div>
 </section>
@@ -76,7 +83,7 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">The architecture</p>
-    <h2 class="section-title reveal">Three agents and a do-no-harm gate</h2>
+    <h2 class="section-title reveal">3 agents and a do-no-harm gate</h2>
     <p class="section-sub reveal">A Planner writes the code. A Critic scores it for hallucination risk between 0 and 1. If that score crosses a threshold the Fixer rewrites it and a Post-Critic scores the result. Then a reversion gate checks whether the rewrite actually improved things and throws it away if it did not. Everything runs locally through Ollama. No API calls, no fine-tuning, fully reproducible.</p>
     <div class="agentflow reveal">
       <svg class="wide" viewBox="0 0 960 300" role="img" aria-label="Planner to Pre-Critic. Low risk output skips the Fixer. Output at or above the threshold is rewritten by the Fixer, then a reversion gate keeps the rewrite only if it improved things."
@@ -85,39 +92,39 @@
           {"paths":["e1","e3","e4","e5"],"cls":"live","weight":4,"dur":6200,"splits":[{"at":1,"cls":"warn"},{"at":3,"pick":[["muted",0.734],["ok",0.266]]}]}
         ]}'>
 
-        <path id="e1" class="fedge" d="M160,150 H210"/>
-        <path id="e3" class="fedge" d="M350,150 C388,150 388,62 420,62"/>
-        <path id="e4" class="fedge" d="M560,62 H610"/>
-        <path id="e5" class="fedge" d="M750,62 C786,62 780,150 800,150"/>
-        <path id="e2" class="fedge branch" d="M350,150 C420,150 420,242 500,242 H660 C748,242 740,150 800,150"/>
+        <path id="e1" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M160,150 H210"/>
+        <path id="e3" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M350,150 C388,150 388,62 420,62"/>
+        <path id="e4" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M560,62 H610"/>
+        <path id="e5" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M750,62 C786,62 780,150 800,150"/>
+        <path id="e2" class="fedge branch" fill="none" stroke="#2c3450" stroke-width="1.5" stroke-dasharray="5 5" d="M350,150 C420,150 420,242 500,242 H660 C748,242 740,150 800,150"/>
 
-        <text class="flabel" x="366" y="104">&#8805; &#964;</text>
-        <text class="flabel" x="500" y="232">below &#964; &#183; ships untouched, no Fixer call</text>
+        <text class="flabel" fill="#6b7488" x="366" y="104">&#8805; &#964;</text>
+        <text class="flabel" fill="#6b7488" x="500" y="232">below &#964; &#183; ships untouched, no Fixer call</text>
 
         <g class="fnode accent">
-          <rect x="20" y="118" width="140" height="64" rx="13"/>
-          <text class="nm" x="90" y="144" text-anchor="middle">Planner</text>
-          <text class="role" x="90" y="163" text-anchor="middle">writes the code</text>
+          <rect fill="#1f2239" stroke="#4f5696" stroke-width="1" x="20" y="118" width="140" height="64" rx="13"/>
+          <text class="nm" fill="#eef1f7" x="90" y="144" text-anchor="middle">Planner</text>
+          <text class="role" fill="#6b7488" x="90" y="163" text-anchor="middle">writes the code</text>
         </g>
         <g class="fnode">
-          <rect x="210" y="118" width="140" height="64" rx="13"/>
-          <text class="nm" x="280" y="144" text-anchor="middle">Pre-Critic</text>
-          <text class="role" x="280" y="163" text-anchor="middle">scores risk 0 to 1</text>
+          <rect fill="#161a28" stroke="#232a3d" stroke-width="1" x="210" y="118" width="140" height="64" rx="13"/>
+          <text class="nm" fill="#eef1f7" x="280" y="144" text-anchor="middle">Pre-Critic</text>
+          <text class="role" fill="#6b7488" x="280" y="163" text-anchor="middle">scores risk 0 to 1</text>
         </g>
         <g class="fnode accent">
-          <rect x="420" y="30" width="140" height="64" rx="13"/>
-          <text class="nm" x="490" y="56" text-anchor="middle">Fixer</text>
-          <text class="role" x="490" y="75" text-anchor="middle">rewrites it</text>
+          <rect fill="#1f2239" stroke="#4f5696" stroke-width="1" x="420" y="30" width="140" height="64" rx="13"/>
+          <text class="nm" fill="#eef1f7" x="490" y="56" text-anchor="middle">Fixer</text>
+          <text class="role" fill="#6b7488" x="490" y="75" text-anchor="middle">rewrites it</text>
         </g>
         <g class="fnode gate">
-          <rect x="610" y="30" width="140" height="64" rx="13"/>
-          <text class="nm" x="680" y="56" text-anchor="middle">Reversion gate</text>
-          <text class="role" x="680" y="75" text-anchor="middle">keep only if better</text>
+          <rect fill="#16232c" stroke="#347470" stroke-width="1" x="610" y="30" width="140" height="64" rx="13"/>
+          <text class="nm" fill="#eef1f7" x="680" y="56" text-anchor="middle">Reversion gate</text>
+          <text class="role" fill="#6b7488" x="680" y="75" text-anchor="middle">keep only if better</text>
         </g>
         <g class="fnode">
-          <rect x="800" y="118" width="140" height="64" rx="13"/>
-          <text class="nm" x="870" y="144" text-anchor="middle">Post-Critic</text>
-          <text class="role" x="870" y="163" text-anchor="middle">final score</text>
+          <rect fill="#161a28" stroke="#232a3d" stroke-width="1" x="800" y="118" width="140" height="64" rx="13"/>
+          <text class="nm" fill="#eef1f7" x="870" y="144" text-anchor="middle">Post-Critic</text>
+          <text class="role" fill="#6b7488" x="870" y="163" text-anchor="middle">final score</text>
         </g>
 
         <g class="flow-dots"></g>
@@ -135,15 +142,81 @@
   </div>
 </section>
 
+<section id="blueprints">
+  <style>
+    .bp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+    @media(max-width:720px){.bp-grid{grid-template-columns:1fr}}
+    .bp-card{display:block;border:1px solid var(--border);border-radius:16px;background:var(--surface-2);padding:16px;transition:transform .18s,border-color .18s,box-shadow .18s}
+    .bp-card:hover{transform:translateY(-4px);border-color:var(--indigo);box-shadow:0 18px 40px -20px rgba(124,58,237,0.5)}
+    .bp-thumb{border-radius:12px;overflow:hidden;border:1px solid #232a3d;background:#0b0d15;margin-bottom:14px}
+    .bp-thumb svg{display:block;width:100%;height:auto}
+    .bp-card h4{font-size:1.06rem;margin-bottom:6px}
+    .bp-card p{color:var(--text-dim);font-size:.9rem;margin-bottom:12px}
+    .bp-open{color:var(--indigo);font-weight:600;font-size:.9rem}
+    :root[data-theme="light"] .bp-thumb{background:#eef1f8}
+    :root[data-theme="light"] .bp-thumb svg rect{fill:#ffffff;stroke:#cdd5e8}
+    :root[data-theme="light"] .bp-thumb svg path{stroke:#c2cbe0}
+  </style>
+  <div class="wrap">
+    <p class="kicker reveal">Under the hood</p>
+    <h2 class="section-title reveal">See exactly how it is built</h2>
+    <p class="section-sub reveal">2 live blueprints you can zoom into. One traces the Planner-Critic-Fixer pipeline stage by stage. The other maps every file in the repo and how one run becomes the next result. Hover anywhere to magnify.</p>
+    <div class="bp-grid">
+      <a class="bp-card reveal" href="agentic-llmops-blueprint.html#system">
+        <div class="bp-thumb">
+          <svg viewBox="0 0 320 150" role="img" aria-label="System design preview">
+            <rect x="8" y="52" width="66" height="30" rx="6" fill="#12182a" stroke="#3b4570"/>
+            <rect x="127" y="14" width="66" height="26" rx="6" fill="#161a28" stroke="#232a3d"/>
+            <rect x="127" y="60" width="66" height="26" rx="6" fill="#1b1f39" stroke="#4f5696"/>
+            <rect x="127" y="106" width="66" height="26" rx="6" fill="#16232c" stroke="#347470"/>
+            <rect x="246" y="24" width="66" height="24" rx="6" fill="#12131c" stroke="#2a2f45"/>
+            <rect x="246" y="98" width="66" height="24" rx="6" fill="#191426" stroke="#5b3f86"/>
+            <path d="M160,40 V60 M160,86 V106" stroke="#232a3d" stroke-width="1.6" fill="none"/>
+            <path d="M74,67 C100,67 105,27 127,27" stroke="#3b4570" stroke-width="1.4" fill="none"/>
+            <path d="M193,73 C220,73 224,110 246,110" stroke="#5b4a24" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
+            <circle r="4" fill="#818cf8"><animateMotion dur="2.8s" repeatCount="indefinite" path="M74,67 C100,67 105,27 127,27"/></circle>
+            <circle r="3.5" fill="#fbbf24"><animateMotion dur="2.6s" repeatCount="indefinite" path="M193,73 C220,73 224,110 246,110"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
+          </svg>
+        </div>
+        <h4>System design</h4>
+        <p>The monitoring pipeline in run order, from Planner through the reversion gate to pass@1, with the baseline control alongside and every result it writes.</p>
+        <span class="bp-open">Open the system map &rarr;</span>
+      </a>
+      <a class="bp-card reveal d1" href="agentic-llmops-blueprint.html#code">
+        <div class="bp-thumb">
+          <svg viewBox="0 0 320 150" role="img" aria-label="Code map preview">
+            <rect x="8" y="18" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
+            <rect x="8" y="64" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
+            <rect x="8" y="110" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
+            <rect x="129" y="18" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
+            <rect x="129" y="64" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
+            <rect x="129" y="110" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
+            <rect x="250" y="41" width="62" height="22" rx="5" fill="#12182a" stroke="#3b4570"/>
+            <rect x="250" y="87" width="62" height="22" rx="5" fill="#12131c" stroke="#2a2f45"/>
+            <path d="M70,29 H129 M70,75 H129 M70,121 H129" stroke="#4d4a2a" stroke-width="1.2" fill="none"/>
+            <path d="M191,29 C220,29 222,52 250,52 M191,75 C220,75 224,98 250,98" stroke="#2b3350" stroke-width="1.2" fill="none"/>
+            <path d="M281,63 V87" stroke="#3b4570" stroke-width="1.4" fill="none"/>
+            <circle cy="75" r="3.6" fill="#818cf8"><animate attributeName="cx" values="70;129" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.2s" repeatCount="indefinite"/></circle>
+            <circle cx="281" r="3.6" fill="#4ade80"><animate attributeName="cy" values="63;87" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
+          </svg>
+        </div>
+        <h4>Code map</h4>
+        <p>Every file with its one-line job, arranged around the data lineage: benchmark to planner cache to per-run CSVs to the confidence intervals.</p>
+        <span class="bp-open">Open the code map &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <p class="kicker reveal">The result and the better finding</p>
-    <h2 class="section-title reveal">The gain was real. What did not work is the interesting part.</h2>
-    <p class="section-sub reveal">Across ten phases and five model families on HumanEval, the monitor delivered a statistically significant +4.85 point pass@1 gain. But the number I care about is the failure condition. Above roughly 65 percent baseline, monitoring made models worse. I call it the Inverse Capability Hypothesis. Knowing where a reliability system turns into a liability is as valuable as the system itself.</p>
-    <div class="two-col">
+    <h2 class="section-title reveal">The gain was real, but the failure case taught me more.</h2>
+    <p class="section-sub reveal">Across 10 phases and 5 model families, the story was never a single average gain. The number I care about is the failure condition: a weak model (Code Llama 7B) gained +30.3 points pass@1 while a strong one (Qwen2.5 Coder 7B) lost 4.0, both statistically significant. I call it the Inverse Capability Hypothesis. Below roughly 60 percent baseline monitoring is worth deploying; above that the benefit fades, and the exact crossover is still an open question. Knowing when the monitor starts doing harm matters as much as the monitor itself.</p>
+    <div class="2-col">
       <div class="chart-card reveal">
         <h4>Monitoring delta by model</h4>
-        <p class="cap">Change in pass@1 from adding the monitoring pipeline. Four are single-trial checkpoints. Llama 3.1 8B is the 3-trial average, which is not statistically significant, near-zero rather than a real regression.</p>
+        <p class="cap">Change in pass@1 from adding the monitoring pipeline. 4 are single-trial checkpoints. Llama 3.1 8B is the 3-trial average, which is not statistically significant, near-zero rather than a real regression.</p>
         <div class="chart-holder"><canvas id="deltaChart"></canvas></div>
       </div>
       <div class="tbl-wrap reveal" style="align-self:start;">
@@ -167,7 +240,7 @@
   <div class="wrap">
     <p class="kicker reveal">Making it defensible</p>
     <h2 class="section-title reveal">A single run has no error bars, so reviewers would not buy it</h2>
-    <p class="section-sub reveal">A deterministic run has zero variance and a number with no confidence interval will not survive peer review at a serious venue. So I reran the two endpoints as three genuinely independent trials each with a non-deterministic planner. Both intervals exclude zero. The gain and the regression are both statistically defensible, not a pair of lucky runs.</p>
+    <p class="section-sub reveal">A deterministic run has zero variance and a number with no confidence interval will not survive peer review at a serious venue. So I reran the 2 endpoints as 3 genuinely independent trials each with a non-deterministic planner. Both intervals exclude zero. The gain and the regression are both statistically defensible, not a pair of lucky runs.</p>
     <div class="tbl-wrap reveal">
       <table>
         <thead><tr><th>Model</th><th>&tau;</th><th>Trials</th><th>Mean &Delta; (pp)</th><th>95% CI</th><th>Excludes zero</th></tr></thead>
@@ -186,7 +259,7 @@
   <div class="wrap">
     <p class="kicker reveal">What actually does the work</p>
     <h2 class="section-title reveal">I turned each piece off to see which one carried the result</h2>
-    <p class="section-sub reveal">Between the net-negative early phases and the net-positive turn, three things changed at once. An 8B fixer, the problem statement handed to the fixer and the reversion gate. So I turned each one off in isolation on Code Llama to see which one actually mattered.</p>
+    <p class="section-sub reveal">Between the net-negative early phases and the net-positive turn, 3 things changed at once. An 8B fixer, the problem statement handed to the fixer and the reversion gate. So I turned each one off in isolation on Code Llama to see which one actually mattered.</p>
     <div class="tbl-wrap reveal">
       <table>
         <thead><tr><th>Configuration</th><th>pass@1</th><th>Contribution of the missing piece</th></tr></thead>
@@ -206,13 +279,13 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">Core findings</p>
-    <h2 class="section-title reveal">What ten phases taught me</h2>
+    <h2 class="section-title reveal">What 10 phases taught me</h2>
     <div class="finding-grid">
-      <div class="finding reveal"><strong>Monitoring benefit is inversely proportional to baseline capability.</strong> The central result, now backed by 95 percent intervals that exclude zero at both ends. A model that already gets nine of ten right has little to gain and real risk of harm. A model that gets two of ten right has everything to gain.</div>
-      <div class="finding reveal d1"><strong>The reversion gate is a safety device, not an accelerator.</strong> It reverts 73.4 percent of attempted fixes. On weak models that costs a point. On strong models it is what keeps the whole thing from going negative. Do no harm.</div>
+      <div class="finding reveal"><strong>Monitoring benefit is inversely proportional to baseline capability.</strong> The central result, now backed by 95 percent intervals that exclude zero at both ends. A model that already gets 9 of 10 right has little to gain and real risk of harm. A model that gets 2 of 10 right has everything to gain.</div>
+      <div class="finding reveal d1"><strong>The reversion gate is a safety device, not an accelerator.</strong> It reverts 73.4 percent of attempted fixes. On weak models that costs a point. On strong models it keeps the whole thing from going negative.</div>
       <div class="finding reveal d2"><strong>The fixer, not the critic, is the bottleneck.</strong> Scaling the critic to 8B did nothing early on. A bigger judge gives better scores but cannot rescue a fixer that introduces fresh bugs.</div>
       <div class="finding reveal d3"><strong>Context beat raw model size.</strong> The ablation says handing the fixer the problem statement mattered more than upgrading its parameter count.</div>
-      <div class="finding reveal"><strong>It generalizes beyond one benchmark.</strong> On HumanEval+ and MBPP, both harder than the original HumanEval, the weak model still gained around 30 points and the strong models still lost a little. The law is not a quirk of a single dataset.</div>
+      <div class="finding reveal"><strong>It generalizes beyond 1 benchmark.</strong> On HumanEval+ and MBPP, both harder than the original HumanEval, the weak model still gained around 30 points and the strong models still lost a little. The law is not a quirk of a single dataset.</div>
     </div>
   </div>
 </section>
@@ -220,18 +293,18 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">The full arc</p>
-    <h2 class="section-title reveal">Ten phases, from first signal to publishable</h2>
+    <h2 class="section-title reveal">10 phases, from first signal to publishable</h2>
     <div class="timeline reveal">
       <div class="tl-item"><div class="ph">Phase 1</div><h4>Baseline and a calibration trap</h4><p>3B models throughout. The critic caught risk reliably but the small fixer was net negative. Set the threshold too low and the fixer fired on 74 percent of problems, dropping accuracy by 18 points. Calibration clearly mattered.</p></div>
       <div class="tl-item"><div class="ph">Phase 2</div><h4>A bigger critic was not the answer</h4><p>I scaled the critic to 8B and kept the 3B fixer. Still net negative across all 18 conditions. That pinned the bottleneck on the fixer, not the critic.</p></div>
-      <div class="tl-item"><div class="ph">Phase 3</div><h4>The turning point</h4><p>An 8B fixer, the problem statement as context and a reversion gate together flipped the direction. Net positive at +4.85 points, 95 percent CI of +3.36 to +6.34, p of 0.010. The gate reverted 73.4 percent of fixes.</p></div>
+      <div class="tl-item"><div class="ph">Phase 3</div><h4>The turning point</h4><p>An 8B fixer, the problem statement as context and a reversion gate together flipped the direction to net-positive on the pilot model. The reversion gate reverted 73.4 percent of the fixes it saw, keeping only the ones that strictly improved.</p></div>
       <div class="tl-item"><div class="ph">Phase 4 and 4b</div><h4>Cross-model comparison</h4><p>I extended it to Code Llama 7B and ran a full sweep. Code Llama gained 32 points, the largest in the study. The inverse relationship between capability and benefit came into view.</p></div>
       <div class="tl-item"><div class="ph">Phase 5</div><h4>The pattern holds</h4><p>Added DeepSeek Coder 6.7B at -1 and Qwen2.5 Coder 7B at -3. The inverse law held across architectures.</p></div>
       <div class="tl-item"><div class="ph">Phase 6</div><h4>Threshold and retry sweep</h4><p>Swept &tau; across 0.60, 0.70, 0.75. At 0.70 the system stopped over-triggering with no loss for weak models and 0.75 was identical, marking the plateau. For Llama 3.1 8B the fixer trigger rate fell from 46 to 10 percent and latency dropped 39 percent. A single retry lifted Code Llama's pass@2 from 20 to 38 percent.</p></div>
-      <div class="tl-item"><div class="ph">Phase 7</div><h4>Confidence intervals on the endpoints</h4><p>My advisor pointed out that single-trial numbers would not survive review. So I reran the two endpoints as three independent trials each. Code Llama landed at +30 to +31 points and Qwen at -2 to -4, both excluding zero.</p></div>
+      <div class="tl-item"><div class="ph">Phase 7</div><h4>Confidence intervals on the endpoints</h4><p>My advisor pointed out that single-trial numbers would not survive review. So I reran the 2 endpoints as 3 independent trials each. Code Llama landed at +30 to +31 points and Qwen at -2 to -4, both excluding zero.</p></div>
       <div class="tl-item"><div class="ph">Phase 8</div><h4>Component ablation</h4><p>One change at a time on Code Llama. Problem context was the biggest single lever at +4 points, the fixer model upgrade added +1 and the gate slightly lowered raw accuracy on a weak model while staying the safeguard for strong ones.</p></div>
-      <div class="tl-item"><div class="ph">Phase 9</div><h4>Extending intervals and an honest catch</h4><p>I ran the interval study across the remaining models, then caught my own flaw. The planner caches were built deterministically, so the three trials were identical and carried no real variance. Worth flagging rather than reporting fake error bars.</p></div>
-      <div class="tl-item"><div class="ph">Phase 10</div><h4>Cross-benchmark generalization and it held</h4><p>Regenerated the caches with a non-deterministic planner for genuine intervals, then ran the law on two harder benchmarks. On HumanEval+ Code Llama gained about 32 points and Qwen lost about 4. On MBPP Code Llama gained 30 and Qwen lost a few. The inverse capability law held on both, so the central finding is not a quirk of HumanEval. This is the evidence that anchors the submission.</p></div>
+      <div class="tl-item"><div class="ph">Phase 9</div><h4>Extending intervals and an honest catch</h4><p>I ran the interval study across the remaining models, then caught my own flaw. The planner caches were built deterministically, so the 3 trials were identical and carried no real variance. Worth flagging rather than reporting fake error bars.</p></div>
+      <div class="tl-item"><div class="ph">Phase 10</div><h4>Cross-benchmark generalization and it held</h4><p>Regenerated the caches with a non-deterministic planner for genuine intervals, then ran the law on 2 harder benchmarks. On HumanEval+ Code Llama gained about 32 points and Qwen lost about 4. On MBPP Code Llama gained 30 and Qwen lost a few. The inverse capability law held on both, so the central finding is not a quirk of HumanEval. Those runs are the core evidence in the submission.</p></div>
     </div>
   </div>
 </section>
@@ -240,7 +313,7 @@
   <div class="wrap prose">
     <p class="kicker reveal">Status</p>
     <h2 class="reveal">Where it stands</h2>
-    <p class="reveal">All ten experiment phases are done. I am writing it up as first author with Prof. Vahid Alizadeh and Prof. Noriko Tomuro as faculty co-authors at DePaul, currently under peer review at a top-tier venue. The Phase 10 cross-benchmark runs were built to test whether the claim holds beyond HumanEval and it did. The law held on both HumanEval+ and MBPP.</p>
+    <p class="reveal">All 10 experiment phases are done. I am writing it up as first author with Prof. Vahid Alizadeh and Prof. Noriko Tomuro as faculty co-authors at DePaul, currently under peer review at a top-tier venue. The Phase 10 cross-benchmark runs were built to test whether the claim holds beyond HumanEval and it did. The law held on both HumanEval+ and MBPP.</p>
     <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
   </div>
 </section>
@@ -251,14 +324,14 @@
       <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
       <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
     </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Agentic LLMOps</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="inference-lens#demo">Live demo</a></div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Multi-Agent Inference Reliability</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="inference-lens#demo">Live demo</a></div>
     <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
   </div>
   <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
 </footer>
 
-<script src="assets/script.js"></script>
-<script src="assets/flow.js"></script>
+<script src="assets/script.js?v=3"></script>
+<script src="assets/flow.js?v=2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 window.addEventListener('load', () => {
@@ -280,7 +353,7 @@ window.addEventListener('load', () => {
       maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => (c.parsed.y>0?'+':'') + c.parsed.y + ' pp' } } },
       scales: {
-        y: { title: { display: true, text: 'pass@1 delta (pp)', color: '#6b7488' }, grid: { color: 'rgba(255,255,255,0.06)' } },
+        y: { title: { display: true, text: 'pass@1 delta (pp)', color: '#6b7488' }, grid: { color: 'rgba(130,140,160,0.16)' } },
         x: { grid: { display: false }, ticks: { font: { size: 10 } } }
       }
     }

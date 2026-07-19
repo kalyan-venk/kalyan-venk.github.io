@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className = 'js';</script>
-<link rel="stylesheet" href="assets/style.css">
+<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 <div class="progress"></div>
@@ -33,12 +33,15 @@
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="inference-lens">Inference-Lens</a>
-      <a href="agentic-llmops">Agentic LLMOps</a>
+      <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
       <a href="predictops">PredictOps</a>
       <a href="job-scanner">Job Scanner</a>
       <a href="about" class="active">About</a>
       <a href="inference-lens#demo" class="nav-cta">Live demo</a>
-    </div>
+          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
+        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
+      </button>
+</div>
   </div>
 </nav>
 
@@ -46,9 +49,9 @@
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>About</span>
     <h1 class="reveal">Kalyan <span class="grad">Venkatesh</span></h1>
-    <p class="lead reveal d1">I have spent 3 plus years on one problem. ML systems that hold up when it actually matters, not just on a benchmark. I am finishing my MS in Computer Science at DePaul, graduating June 2026 and I am looking for Data Scientist, ML Engineer, AI Engineer and Software Engineer roles.</p>
+    <p class="lead reveal d1">I have spent 3 plus years on 1 problem: ML systems that hold up when it actually matters, not just on a benchmark. I just finished my MS in Computer Science at DePaul this June, and I am looking for roles in AI and ML, whether that is Research Engineer, Data Scientist, ML Engineer, AI Engineer or Software Engineer.</p>
     <div class="cta-row reveal d2" style="margin-top:26px;">
-      <a href="mailto:adavivenkatesh@gmail.com" class="btn btn-primary">Email me</a>
+      <a href="mailto:adavivenkatesh@gmail.com" class="btn btn-primary">Email</a>
       <a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
     </div>
   </div>
@@ -58,17 +61,17 @@
   <div class="wrap prose">
     <p class="kicker reveal">The throughline</p>
     <h2 class="reveal">Every system I built had a human on the other end</h2>
-    <p class="reveal">That is the honest center of how I work. At sensen.ai my models produced court admissible enforcement tickets sent to real people. A model confusing a B for an 8 in bad lighting was not a wrong number on a dashboard, it was someone's problem. We had cases where that went wrong and that is what I was building against. It taught me to stop trusting clean metrics and start asking the harder question. Does this still work six months after I shipped it and can I prove it.</p>
-    <p class="reveal">My two research projects are two angles on that same instinct. <a href="agentic-llmops" style="color:var(--indigo)">Agentic LLMOps</a> asks whether a runtime monitor inside an agent loop actually helps and finds the exact point where it starts to hurt. <a href="inference-lens" style="color:var(--indigo)">Inference-Lens</a> asks whether the automated judge we all rely on can be fooled and shows how badly. The thread across all of it is simple. I want ML pipelines that work the way they are supposed to, with measurable and trustworthy output at every layer.</p>
+    <p class="reveal">That shaped how I work. At sensen.ai my models produced court admissible enforcement tickets sent to real people. A model confusing a B for an 8 in bad lighting was not a wrong number on a dashboard, it was someone's problem. We had cases where that went wrong and that is what I was building against. It taught me to stop trusting clean metrics and start asking the harder question. Does this still work 6 months after I shipped it and can I prove it.</p>
+    <p class="reveal">My 2 research projects are 2 angles on that same instinct. <a href="agentic-llmops" style="color:var(--indigo)">Multi-Agent Inference Reliability</a> asks whether a runtime monitor inside an agent loop actually helps and finds the exact point where it starts to hurt. <a href="inference-lens" style="color:var(--indigo)">Inference-Lens</a> asks whether the automated judge we all rely on can be fooled and shows how badly. The thread across all of it is simple. I want ML pipelines that work the way they are supposed to, with measurable and trustworthy output at every layer.</p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <p class="kicker reveal">Where I have done it</p>
+    <p class="kicker reveal">Work</p>
     <h2 class="section-title reveal">Experience</h2>
     <div class="timeline reveal">
-      <div class="tl-item"><div class="ph">Sep 2025 to Jun 2026 · DePaul University</div><h4>Graduate Research Engineer</h4><p>First author on the multi-agent inference reliability work, alongside two faculty co-authors, currently under peer review. I own it end to end, from the problem to the architecture to the statistics. Ten phases, five model families, a statistically significant +4.85 point gain and the Inverse Capability Hypothesis that says where monitoring stops helping.</p></div>
+      <div class="tl-item"><div class="ph">Sep 2025 to Jun 2026 · DePaul University</div><h4>Graduate Research Engineer</h4><p>First author on the multi-agent inference reliability work, alongside 2 faculty co-authors, currently under peer review. I own it end to end, from the problem to the architecture to the statistics. 10 phases, 5 model families, and the Inverse Capability Hypothesis: monitoring lifted a weak model +30.3 points pass@1 and cost a strong one 4.0, both significant, so the benefit falls as baseline capability rises.</p></div>
       <div class="tl-item"><div class="ph">2022 to 2024 · sensen.ai</div><h4>Data Scientist</h4><p>Built the model validation framework that became the standard validation workflow across 26 global deployments, mapping every vehicle event to track accuracy continuously with reports a non-technical council member could read. Rebuilt the ETL behind weekly invoicing from 3 plus hours down to under 2 and the ticket generation pipeline from roughly 800ms to 480ms per instance.</p></div>
       <div class="tl-item"><div class="ph">2021 to 2022 · AECOM and Siri</div><h4>Data Engineer</h4><p>Built Python and Pandas pipelines for cleaning and monthly cost consolidation, cutting dashboard turnaround from 3 hours to under 1 and tuned SQL across cost databases from roughly 20 seconds to 8. Early career, but the instinct was already there. Take messy and manual, make it clean, fast and repeatable.</p></div>
     </div>
@@ -77,7 +80,7 @@
 
 <section>
   <div class="wrap">
-    <p class="kicker reveal">Toolkit</p>
+    <p class="kicker reveal">Day to day</p>
     <h2 class="section-title reveal">What I work with</h2>
     <div class="feature-grid">
       <div class="skill-cat reveal">
@@ -94,7 +97,7 @@
       </div>
       <div class="skill-cat reveal">
         <h4><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="9" width="3" height="8"/></svg></span>Evaluation</h4>
-        <div class="tags"><span>HumanEval</span><span>HH-RLHF</span><span>LLM-Bar</span><span>adversarial testing</span></div>
+        <div class="tags"><span>HumanEval</span><span>HumanEval+</span><span>MBPP</span><span>HH-RLHF</span><span>LLM-Bar</span><span>adversarial testing</span></div>
       </div>
       <div class="skill-cat reveal d1">
         <h4><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6l-5 9a1.5 1.5 0 0 0 1.4 2.2h11.2A1.5 1.5 0 0 0 19 18l-5-9V3"/><path d="M7.5 14h9"/></svg></span>Methods</h4>
@@ -120,22 +123,29 @@
       <a href="agentic-llmops" class="card reveal">
         <span class="glow" style="background:#a855f7;"></span>
         <span class="tag">First-author · under peer review</span>
-        <h3>Agentic LLMOps</h3>
-        <p>A three agent runtime monitor for code generation. A real +4.85 point gain and the failure condition that matters. Above roughly 65 percent baseline, monitoring hurts.</p>
+        <h3>Multi-Agent Inference Reliability</h3>
+        <p>A 3 agent runtime monitor for code generation. The finding that matters is the failure condition: it lifts weak models about +30 points pass@1 but costs strong ones, so above roughly 60 percent baseline the benefit fades.</p>
         <span class="arrow">Read more &rarr;</span>
       </a>
       <a href="inference-lens" class="card reveal d1">
         <span class="glow" style="background:#6366f1;"></span>
         <span class="tag">Can the judge be fooled</span>
         <h3>Inference-Lens</h3>
-        <p>An adversarial stress-test of automated NLP evaluators. Two models tied on clean accuracy diverged by over 75 points under attack.</p>
+        <p>An adversarial stress-test of automated NLP evaluators. 2 models tied on clean accuracy diverged by over 75 points under attack.</p>
         <span class="arrow">Read more &rarr;</span>
       </a>
       <a href="predictops" class="card reveal d2">
         <span class="glow" style="background:#22c55e;"></span>
-        <span class="tag">Production MLOps · in progress</span>
+        <span class="tag">Production MLOps · shipped</span>
         <h3>PredictOps</h3>
-        <p>A cross-validated training pipeline, a validated FastAPI serving layer and a multi-stage Docker build, with a CI eval gate and drift detection next.</p>
+        <p>A cross-validated training pipeline, a validated FastAPI serving layer and a multi-stage Docker build, plus a CI eval gate that blocks a bad model and PSI drift detection.</p>
+        <span class="arrow">Read more &rarr;</span>
+      </a>
+      <a href="job-scanner" class="card reveal d3">
+        <span class="glow" style="background:#f0abfc;"></span>
+        <span class="tag">Applied agents · runs live</span>
+        <h3>Job Scanner</h3>
+        <p>A compound AI system for my own job search. It scans 8 ATS platforms every 10 minutes, runs a cheap-then-strong model funnel to triage and tailor, and checks its own output before anything reaches me.</p>
         <span class="arrow">Read more &rarr;</span>
       </a>
     </div>
@@ -145,8 +155,8 @@
 
 <section>
   <div class="wrap">
-    <p class="kicker reveal">Get in touch</p>
-    <h2 class="section-title reveal">Let us talk</h2>
+    <p class="kicker reveal">Contact details</p>
+    <h2 class="section-title reveal">Feel free to hit me up at</h2>
     <div class="contact-grid">
       <a href="mailto:adavivenkatesh@gmail.com" class="contact-card reveal"><div class="lbl">Email</div><div class="val">adavivenkatesh@gmail.com</div></a>
       <a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener" class="contact-card reveal d1"><div class="lbl">LinkedIn</div><div class="val">in/kalyan-venk</div></a>
@@ -161,12 +171,12 @@
       <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
       <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
     </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Agentic LLMOps</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="inference-lens#demo">Live demo</a></div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Multi-Agent Inference Reliability</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="inference-lens#demo">Live demo</a></div>
     <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
   </div>
   <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
 </footer>
 
-<script src="assets/script.js"></script>
+<script src="assets/script.js?v=3"></script>
 </body>
 </html>

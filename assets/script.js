@@ -1,11 +1,30 @@
 // mark JS active so reveal/anim styles apply (no-JS still shows content)
 document.documentElement.className = 'js';
 
+// theme: default dark, remember the visitor's choice. The <head> inline script
+// usually sets this before paint; this is a fallback if that ever changes.
+(function () {
+  var root = document.documentElement;
+  if (!root.getAttribute('data-theme')) {
+    var t = 'dark';
+    try { t = localStorage.getItem('kv-theme') || 'dark'; } catch (e) {}
+    root.setAttribute('data-theme', t);
+  }
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   // mobile nav
   const toggle = document.querySelector('.nav-toggle');
   const links = document.querySelector('.nav-links');
   if (toggle) toggle.addEventListener('click', () => links.classList.toggle('open'));
+
+  // light / dark toggle
+  const themeSwitch = document.getElementById('themeSwitch');
+  if (themeSwitch) themeSwitch.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('kv-theme', next); } catch (e) {}
+  });
 
   // scroll progress
   const bar = document.querySelector('.progress');
@@ -50,10 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
   counters.forEach(el => cio.observe(el));
 });
 
-// shared Chart.js theme defaults (called by pages after Chart loads)
+// shared Chart.js theme defaults (called by pages after Chart loads).
+// Colours are theme-neutral so charts stay legible in both light and dark
+// without needing a redraw when the visitor flips the toggle.
 function applyChartTheme() {
   if (!window.Chart) return;
-  Chart.defaults.color = '#aeb6c7';
+  Chart.defaults.color = '#8b93a7';
   Chart.defaults.font.family = "'Inter', sans-serif";
-  Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+  Chart.defaults.borderColor = 'rgba(130,140,160,0.16)';
 }

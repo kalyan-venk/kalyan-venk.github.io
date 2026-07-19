@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className = 'js';</script>
-<link rel="stylesheet" href="assets/style.css">
+<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 <div class="progress"></div>
@@ -33,20 +33,23 @@
     <div class="nav-links">
       <a href="/" class="active">Home</a>
       <a href="inference-lens">Inference-Lens</a>
-      <a href="agentic-llmops">Agentic LLMOps</a>
+      <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
       <a href="predictops">PredictOps</a>
       <a href="job-scanner">Job Scanner</a>
       <a href="about">About</a>
       <a href="inference-lens#demo" class="nav-cta">Live demo</a>
-    </div>
+          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
+        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
+      </button>
+</div>
   </div>
 </nav>
 
 <header class="hero">
   <div class="wrap">
-    <span class="eyebrow reveal"><span class="blip"></span>ML Engineer &middot; AI systems that hold up</span>
-    <h1 class="reveal">Making AI and ML systems you can <span class="grad">actually trust.</span></h1>
-    <p class="lead reveal d1">I have spent 3 plus years on one problem. ML systems that hold up when it actually matters, not just on a benchmark. Every LLM pipeline leans on an automated judge that grades its output and a monitor meant to catch its failures and most teams simply assume both work. My research measures when you can trust them and builds the ones that do. The same instinct now runs into a production MLOps pipeline built the same way, phase by phase, proof over claims.</p>
+    <span class="eyebrow reveal"><span class="blip"></span>Research Engineer</span>
+    <h1 class="reveal">Multi-Agent Systems <span class="grad">&amp; Reliability</span></h1>
+    <p class="lead reveal d1">I have spent 3 plus years on 1 problem. ML systems that hold up when it actually matters, not just on a benchmark. Every LLM pipeline leans on an automated judge that grades its output and a monitor meant to catch its failures and most teams simply assume both work. My research measures when you can trust them and builds the ones that do. The same instinct now runs into a production MLOps pipeline built the same way, phase by phase, with proof instead of claims.</p>
     <div class="cta-row reveal d2">
       <a href="inference-lens#demo" class="btn btn-primary">Try the live scorer &rarr;</a>
       <a href="about" class="btn btn-ghost">About me</a>
@@ -73,14 +76,14 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">The thesis</p>
-    <h2 class="section-title reveal">Two questions about trust and the range to back them up</h2>
-    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work and standing over them is a quality inspector deciding what ships. Everyone studies the workers. I went and audited the inspector. One project asks whether it can be fooled. The other asks whether hiring it even helped. A third is the range piece: the same "prove it, don't claim it" rigor applied to the unglamorous MLOps loop most portfolios skip. The fourth is what happened when I pointed the same agent work at my own job search: a compound AI system that has been running every 10 minutes since.</p>
+    <h2 class="section-title reveal">2 questions about trust and the range to back them up</h2>
+    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work and standing over them is a quality inspector deciding what ships. Most work studies the models, so I went after the inspector instead. One project asks whether it can be fooled. The other asks whether hiring it even helped. A third is the range piece: the same "prove it, don't claim it" rigor applied to the unglamorous MLOps loop most portfolios skip. The fourth is what happened when I pointed the same agent work at my own job search: a compound AI system that has been running every 10 minutes since.</p>
     <div class="proj-grid">
       <a href="inference-lens" class="card reveal">
         <span class="glow" style="background:#6366f1;"></span>
         <span class="tag">Can the judge be fooled · Live demo</span>
         <h3>Inference-Lens</h3>
-        <p>Built an NLP text classification pipeline, trained scoring models on real human preference data, then put them under systematic adversarial pressure. Two models that looked identical on a clean benchmark came apart by more than 75 points the moment something tried to deceive them. The judge can be fooled and how badly depends on the NLP architecture.</p>
+        <p>Built an NLP text classification pipeline, trained scoring models on real human preference data, then put them under systematic adversarial pressure. 2 models that looked identical on a clean benchmark came apart by more than 75 points the moment something tried to deceive them. The judge can be fooled and how badly depends on the NLP architecture.</p>
         <div class="metrics">
           <div><div class="m-num">170K+</div><div class="m-lbl">preference labels</div></div>
           <div><div class="m-num">419</div><div class="m-lbl">adversarial pairs</div></div>
@@ -91,10 +94,10 @@
       <a href="agentic-llmops" class="card reveal d1">
         <span class="glow" style="background:#a855f7;"></span>
         <span class="tag">First-author research · under peer review</span>
-        <h3>Agentic LLMOps</h3>
-        <p>A three agent monitor, Planner, Critic, Fixer, that catches and corrects bad LLM output at runtime without retraining. It delivered a statistically significant gain. But the finding I care about is the failure condition. Above roughly 65 percent baseline, monitoring made models worse.</p>
+        <h3>Multi-Agent Inference Reliability</h3>
+        <p>A 3 agent monitor, Planner, Critic, Fixer, that catches and corrects bad LLM output at runtime without retraining. The finding I care about is the failure condition: it lifts weak models about +30 points pass@1 but quietly costs strong ones, so above roughly 60 percent baseline the benefit fades.</p>
         <div class="metrics">
-          <div><div class="m-num">+4.85pp</div><div class="m-lbl">pass@1, p=0.010</div></div>
+          <div><div class="m-num">+30.3pp</div><div class="m-lbl">weak-model gain, p=0.002</div></div>
           <div><div class="m-num">10</div><div class="m-lbl">research phases</div></div>
           <div><div class="m-num">5</div><div class="m-lbl">model families</div></div>
         </div>
@@ -106,7 +109,7 @@
         <h3>PredictOps</h3>
         <p>A deliberately boring tabular model with all the depth put into the ops loop around it: cross-validated training comparison, a validated FastAPI serving layer, a multi-stage Docker build, a CI gate that blocks a bad model from shipping, MLflow registry promotion and PSI-based drift detection. Most portfolio projects stop at the trained model. This one is about everything after.</p>
         <div class="metrics">
-          <div><div class="m-num">7/7</div><div class="m-lbl">build phases shipped</div></div>
+          <div><div class="m-num">&ge;0.80</div><div class="m-lbl">ROC-AUC CI gate</div></div>
           <div><div class="m-num">0.846</div><div class="m-lbl">CV ROC-AUC</div></div>
           <div><div class="m-num">4</div><div class="m-lbl">served endpoints</div></div>
         </div>
@@ -132,7 +135,7 @@
   <div class="wrap">
     <p class="kicker reveal">The finding I keep coming back to</p>
     <h2 class="section-title reveal">More monitoring is not always better</h2>
-    <p class="section-sub reveal">Add a critic and fixer to a weak coding agent and it jumps 32 points. Add the exact same layer to a strong one and it quietly loses ground. Every model I tested landed on the same downward line, with the crossover around 65 percent baseline. Knowing which side of that line your model sits on, before you ship, is the actual job.</p>
+    <p class="section-sub reveal">Add a critic and fixer to a weak coding agent and it jumps 32 points. Add the exact same layer to a strong one and it quietly loses ground. Every model I tested landed on the same downward line, with the crossover around 65 percent baseline. You need to know which side of that line your model sits on before you ship.</p>
     <div class="chart-card reveal">
       <h4>Monitoring benefit versus baseline capability</h4>
       <p class="cap">Each point is a model. X axis is how good it is on its own, Y axis is what the monitoring pipeline added or removed.</p>
@@ -148,7 +151,7 @@
     <div class="finding-grid">
       <div class="finding reveal"><strong>The leaderboard hides the gap.</strong> Logistic Regression and XGBoost scored almost the same on clean data. Under attack one collapsed to a 78.4 percent false preference rate and the other barely flinched. Nothing on the benchmark told you which to trust.</div>
       <div class="finding reveal d1"><strong>Length is not quality.</strong> Across 170,000 plus human judgments the most verbose answers had the lowest preference rate at 48.9 percent. Shorter, warmer ones won. Any model leaning on length gets played.</div>
-      <div class="finding reveal d2"><strong>Knowing where it breaks is half the value.</strong> A reliability system that helps weak models and hurts strong ones is only safe if you know the crossover. That failure condition is a finding, not a footnote.</div>
+      <div class="finding reveal d2"><strong>Knowing where it breaks is half the value.</strong> A reliability system that helps weak models and hurts strong ones is only safe if you know the crossover. I treat that failure condition as a core result.</div>
     </div>
   </div>
 </section>
@@ -159,8 +162,8 @@
     <h2 class="section-title reveal">Reliability is the whole point, not a nice to have</h2>
     <div class="feature-grid">
       <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3.2v5.3c0 4.6-3.2 7.8-7.5 9.5-4.3-1.7-7.5-4.9-7.5-9.5V5.7L12 2.5z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg></div><h4>Assume someone will break it</h4><p>Clean accuracy is table stakes. I build expecting an adversary, then measure exactly how far the system bends before it gives.</p></div>
-      <div class="feature reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5a8.5 8.5 0 0 1 14.3-3.2l2.2 2.2"/><path d="M20.5 4v4.5H16"/><path d="M20.5 14.5a8.5 8.5 0 0 1-14.3 3.2L4 15.5"/><path d="M3.5 20v-4.5H8"/></svg></div><h4>Prove it, do not claim it</h4><p>Local inference, MLflow tracking, pinned dependencies, confidence intervals. Every result can be rerun, not just believed.</p></div>
-      <div class="feature reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></div><h4>Ship it live</h4><p>The scoring pipeline runs as a public app you can poke right now. A working demo beats a paragraph claiming it works.</p></div>
+      <div class="feature reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5a8.5 8.5 0 0 1 14.3-3.2l2.2 2.2"/><path d="M20.5 4v4.5H16"/><path d="M20.5 14.5a8.5 8.5 0 0 1-14.3 3.2L4 15.5"/><path d="M3.5 20v-4.5H8"/></svg></div><h4>Prove it, do not claim it</h4><p>Local inference, MLflow tracking, pinned dependencies, confidence intervals. Every result can be rerun.</p></div>
+      <div class="feature reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></div><h4>Ship it live</h4><p>The scoring pipeline runs as a public app you can poke right now. I would rather show a running demo than describe one.</p></div>
     </div>
   </div>
 </section>
@@ -178,10 +181,10 @@
 <section>
   <div class="wrap">
     <div class="cta-band reveal">
-      <h2>Hiring for ML or AI Engineering?</h2>
-      <p>I graduate June 2026 and I am looking for teams that care whether their AI actually holds up in production. That is the only thing I have ever worked on. Let us talk.</p>
+      <h2>Hiring a research engineer?</h2>
+      <p>I just finished my Masters in Computer Science this June, and I want a team that cares whether its AI actually holds up in production. That is the only thing I have ever worked on.</p>
       <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
-        <a href="mailto:adavivenkatesh@gmail.com" class="btn btn-primary">Email me</a>
+        <a href="mailto:adavivenkatesh@gmail.com" class="btn btn-primary">Email</a>
         <a href="about" class="btn btn-ghost">See the full background</a>
       </div>
     </div>
@@ -197,7 +200,7 @@
     <div class="col">
       <h5>Projects</h5>
       <a href="inference-lens">Inference-Lens</a>
-      <a href="agentic-llmops">Agentic LLMOps</a>
+      <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
       <a href="predictops">PredictOps</a>
       <a href="job-scanner">Job Scanner</a>
       <a href="inference-lens#demo">Live demo</a>
@@ -212,7 +215,7 @@
   <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh. Built with care, hosted on GitHub Pages.</p></div>
 </footer>
 
-<script src="assets/script.js"></script>
+<script src="assets/script.js?v=3"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 window.addEventListener('load', () => {
@@ -233,7 +236,7 @@ window.addEventListener('load', () => {
       data: data,
       pointRadius: 9, pointHoverRadius: 12,
       backgroundColor: ['#5eead4','#fbbf24','#818cf8','#fb7185'],
-      borderColor: 'rgba(255,255,255,0.4)', borderWidth: 1.5,
+      borderColor: 'rgba(120,130,150,0.55)', borderWidth: 1.5,
     },
     {
       label: 'Trend', type: 'line',
@@ -248,8 +251,8 @@ window.addEventListener('load', () => {
         tooltip: { callbacks: { label: (c) => c.raw.m ? `${c.raw.m}: ${c.raw.y>0?'+':''}${c.raw.y}pp at ${c.raw.x}% baseline` : '' } }
       },
       scales: {
-        x: { title: { display: true, text: 'Baseline pass@1 (%)', color: '#6b7488' }, min: 10, max: 95, grid: { color: 'rgba(255,255,255,0.05)' } },
-        y: { title: { display: true, text: 'Monitoring delta (pp)', color: '#6b7488' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        x: { title: { display: true, text: 'Baseline pass@1 (%)', color: '#6b7488' }, min: 10, max: 95, grid: { color: 'rgba(130,140,160,0.16)' } },
+        y: { title: { display: true, text: 'Monitoring delta (pp)', color: '#6b7488' }, grid: { color: 'rgba(130,140,160,0.16)' } }
       }
     }
   });

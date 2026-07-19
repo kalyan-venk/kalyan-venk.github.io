@@ -16,8 +16,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className = 'js';</script>
-<link rel="stylesheet" href="assets/style.css">
+<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 <div class="progress"></div>
@@ -29,12 +29,15 @@
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="inference-lens">Inference-Lens</a>
-      <a href="agentic-llmops">Agentic LLMOps</a>
+      <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
       <a href="predictops">PredictOps</a>
       <a href="job-scanner" class="active">Job Scanner</a>
       <a href="about">About</a>
       <a href="inference-lens#demo" class="nav-cta">Live demo</a>
-    </div>
+          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
+        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
+      </button>
+</div>
   </div>
 </nav>
 
@@ -42,7 +45,7 @@
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>Agent engineering &#183; in production, every 10 minutes</span>
     <h1 class="reveal">Job Scanner</h1>
-    <p class="lead reveal d1">I am a research engineer who works on agents. So when I looked properly at my own job search, what I saw was not a chore. It was an agent problem with a live dataset attached: heterogeneous sources, unstructured text, a judgment call at every step and real money on every decision. So I built the system and scaled it up. It polls 630 companies every 10 minutes across 8 applicant tracking platforms, judges which roles are worth my time, writes a tailored resume for each one, checks its own output and then stops and waits for me. It has never sent an application on its own and it never will. That is a design decision, not a missing feature.</p>
+    <p class="lead reveal d1">I am a research engineer who works on agents. So when I looked properly at my own job search, what I saw was not a chore. It was an agent problem with a live dataset attached: heterogeneous sources, unstructured text, a judgment call at every step and real money on every decision. So I built the system and scaled it up. It polls 630 companies every 10 minutes across 8 applicant tracking platforms, judges which roles are worth my time, writes a tailored resume for each one, checks its own output and then stops and waits for me. It has never sent an application on its own and it never will. I designed it that way on purpose.</p>
     <div class="meta reveal d2">
       <span class="chip">Python</span>
       <span class="chip">Compound AI system</span>
@@ -82,62 +85,62 @@
           {"paths":["e1","e2","e3","e4","e5","e6","e7"],"cls":"live","weight":2,"dur":7200,"splits":[{"at":6,"cls":"ok"}]}
         ]}'>
 
-        <path id="e1" class="fedge" d="M120,149 H165"/>
-        <path id="e2" class="fedge" d="M275,149 H320"/>
-        <path id="e3" class="fedge" d="M430,149 H475"/>
-        <path id="e4" class="fedge" d="M585,149 H630"/>
-        <path id="e5" class="fedge" d="M740,149 H785"/>
-        <path id="e6" class="fedge" d="M895,149 H940"/>
-        <path id="e7" class="fedge" d="M1050,149 H1095"/>
+        <path id="e1" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M120,149 H165"/>
+        <path id="e2" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M275,149 H320"/>
+        <path id="e3" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M430,149 H475"/>
+        <path id="e4" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M585,149 H630"/>
+        <path id="e5" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M740,149 H785"/>
+        <path id="e6" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M895,149 H940"/>
+        <path id="e7" class="fedge" fill="none" stroke="#232a3d" stroke-width="1.5" d="M1050,149 H1095"/>
 
-        <path id="d2" class="fedge branch" d="M220,178 C220,232 220,240 220,268"/>
-        <path id="d3" class="fedge branch" d="M375,178 C375,232 375,240 375,268"/>
-        <path id="d4" class="fedge branch" d="M530,178 C530,232 530,240 530,268"/>
-        <path id="L6" class="fedge branch" d="M840,178 C840,222 685,222 685,178"/>
+        <path id="d2" class="fedge branch" fill="none" stroke="#2c3450" stroke-width="1.5" stroke-dasharray="5 5" d="M220,178 C220,232 220,240 220,268"/>
+        <path id="d3" class="fedge branch" fill="none" stroke="#2c3450" stroke-width="1.5" stroke-dasharray="5 5" d="M375,178 C375,232 375,240 375,268"/>
+        <path id="d4" class="fedge branch" fill="none" stroke="#2c3450" stroke-width="1.5" stroke-dasharray="5 5" d="M530,178 C530,232 530,240 530,268"/>
+        <path id="L6" class="fedge branch" fill="none" stroke="#2c3450" stroke-width="1.5" stroke-dasharray="5 5" d="M840,178 C840,222 685,222 685,178"/>
 
-        <text class="flabel" x="852" y="214">QA fail, requeued</text>
+        <text class="flabel" fill="#6b7488" x="852" y="214">QA fail, requeued</text>
         <rect x="150" y="268" width="450" height="46" rx="10" fill="none" stroke="#1a2030" stroke-dasharray="4 4"/>
-        <text class="fcap" x="375" y="296" text-anchor="middle">filtered out &#183; never reaches a resume</text>
+        <text class="fcap" fill="#6b7488" x="375" y="296" text-anchor="middle">filtered out &#183; never reaches a resume</text>
 
         <g class="fnode">
-          <rect x="10" y="120" width="110" height="58" rx="12"/>
-          <text class="nm" x="65" y="144" text-anchor="middle">Ingest</text>
-          <text class="role" x="65" y="162" text-anchor="middle">8 platforms</text>
+          <rect fill="#161a28" stroke="#232a3d" stroke-width="1" x="10" y="120" width="110" height="58" rx="12"/>
+          <text class="nm" fill="#eef1f7" x="65" y="144" text-anchor="middle">Ingest</text>
+          <text class="role" fill="#6b7488" x="65" y="162" text-anchor="middle">8 platforms</text>
         </g>
         <g class="fnode">
-          <rect x="165" y="120" width="110" height="58" rx="12"/>
-          <text class="nm" x="220" y="144" text-anchor="middle">Geo filter</text>
-          <text class="role" x="220" y="162" text-anchor="middle">free, local</text>
+          <rect fill="#161a28" stroke="#232a3d" stroke-width="1" x="165" y="120" width="110" height="58" rx="12"/>
+          <text class="nm" fill="#eef1f7" x="220" y="144" text-anchor="middle">Geo filter</text>
+          <text class="role" fill="#6b7488" x="220" y="162" text-anchor="middle">free, local</text>
         </g>
         <g class="fnode">
-          <rect x="320" y="120" width="110" height="58" rx="12"/>
-          <text class="nm" x="375" y="144" text-anchor="middle">Triage</text>
-          <text class="role" x="375" y="162" text-anchor="middle">cheap model</text>
+          <rect fill="#161a28" stroke="#232a3d" stroke-width="1" x="320" y="120" width="110" height="58" rx="12"/>
+          <text class="nm" fill="#eef1f7" x="375" y="144" text-anchor="middle">Triage</text>
+          <text class="role" fill="#6b7488" x="375" y="162" text-anchor="middle">cheap model</text>
         </g>
         <g class="fnode accent">
-          <rect x="475" y="120" width="110" height="58" rx="12"/>
-          <text class="nm" x="530" y="144" text-anchor="middle">Verdict</text>
-          <text class="role" x="530" y="162" text-anchor="middle">strong model</text>
+          <rect fill="#1f2239" stroke="#4f5696" stroke-width="1" x="475" y="120" width="110" height="58" rx="12"/>
+          <text class="nm" fill="#eef1f7" x="530" y="144" text-anchor="middle">Verdict</text>
+          <text class="role" fill="#6b7488" x="530" y="162" text-anchor="middle">strong model</text>
         </g>
         <g class="fnode accent">
-          <rect x="630" y="120" width="110" height="58" rx="12"/>
-          <text class="nm" x="685" y="144" text-anchor="middle">Tailor</text>
-          <text class="role" x="685" y="162" text-anchor="middle">strong model</text>
+          <rect fill="#1f2239" stroke="#4f5696" stroke-width="1" x="630" y="120" width="110" height="58" rx="12"/>
+          <text class="nm" fill="#eef1f7" x="685" y="144" text-anchor="middle">Tailor</text>
+          <text class="role" fill="#6b7488" x="685" y="162" text-anchor="middle">strong model</text>
         </g>
         <g class="fnode gate">
-          <rect x="785" y="120" width="110" height="58" rx="12"/>
-          <text class="nm" x="840" y="144" text-anchor="middle">QA gate</text>
-          <text class="role" x="840" y="162" text-anchor="middle">cheap model</text>
+          <rect fill="#16232c" stroke="#347470" stroke-width="1" x="785" y="120" width="110" height="58" rx="12"/>
+          <text class="nm" fill="#eef1f7" x="840" y="144" text-anchor="middle">QA gate</text>
+          <text class="role" fill="#6b7488" x="840" y="162" text-anchor="middle">cheap model</text>
         </g>
         <g class="fnode human">
-          <rect x="940" y="120" width="110" height="58" rx="12"/>
-          <text class="nm" x="995" y="144" text-anchor="middle">Human</text>
-          <text class="role" x="995" y="162" text-anchor="middle">in the loop</text>
+          <rect fill="#211f2e" stroke="#755882" stroke-width="1" x="940" y="120" width="110" height="58" rx="12"/>
+          <text class="nm" fill="#eef1f7" x="995" y="144" text-anchor="middle">Human</text>
+          <text class="role" fill="#6b7488" x="995" y="162" text-anchor="middle">in the loop</text>
         </g>
         <g class="fnode term">
-          <rect x="1095" y="120" width="110" height="58" rx="12"/>
-          <text class="nm" x="1150" y="144" text-anchor="middle">PDF</text>
-          <text class="role" x="1150" y="162" text-anchor="middle">no model at all</text>
+          <rect fill="#152226" stroke="#286546" stroke-width="1" x="1095" y="120" width="110" height="58" rx="12"/>
+          <text class="nm" fill="#eef1f7" x="1150" y="144" text-anchor="middle">PDF</text>
+          <text class="role" fill="#6b7488" x="1150" y="162" text-anchor="middle">no model at all</text>
         </g>
 
         <g class="flow-dots"></g>
@@ -174,7 +177,7 @@
       </div>
       <div class="feature reveal">
         <h4>The model checks the model</h4>
-        <p>Nothing reaches me unreviewed. A QA stage inspects every generated resume for house style violations, filler phrases, unsupported skill claims and invented entries, then requeues anything that fails. Generation without an evaluator is a demo.</p>
+        <p>Nothing reaches me unreviewed. A QA stage inspects every generated resume for house style violations, filler phrases, unsupported skill claims and invented entries, then requeues anything that fails. Anything the system generates gets checked before it reaches me.</p>
       </div>
       <div class="feature reveal d1">
         <h4>Cross document consistency</h4>
@@ -186,7 +189,7 @@
       </div>
       <div class="feature reveal">
         <h4>Determinism where it beats a model</h4>
-        <p>The PDF compile uses no model at all. Neither does the staleness check. Every platform has a JSON API, so an HTTP status check is strictly more reliable than asking a model to read a page. Reaching for a model when a deterministic check exists is a bug.</p>
+        <p>The PDF compile uses no model at all. Neither does the staleness check. Every platform has a JSON API, so an HTTP status check is strictly more reliable than asking a model to read a page. When a deterministic check works, I use it instead of a model.</p>
       </div>
       <div class="feature reveal d1">
         <h4>Independent stages, atomic state</h4>
@@ -205,7 +208,7 @@
     <p class="kicker reveal">The finding I did not expect</p>
     <h2 class="section-title reveal">A naive check called 61% of live jobs dead</h2>
     <p class="section-sub reveal">The pool of tailored, not yet applied postings kept growing and some of those jobs had quietly closed. So I built a daily check to ask each board whether a posting was still live. The obvious version of that check was badly wrong and working out why was the most useful thing I did on this project.</p>
-    <div class="two-col">
+    <div class="2-col">
       <div class="finding reveal">
         <h4>The bug</h4>
         <p>The first version asked "is this job still in the company's current listing?" That looked right and was catastrophic. The listing call only ever fetched the first 20 results, which is correct for the scanner's own job, since new postings sort to the top, but is a silent truncation for anything else. One company had 1,657 open roles. On the first full run the check flagged <strong>363 of 594 live jobs as stale, a 61% false positive rate.</strong></p>
@@ -225,7 +228,7 @@
         </tbody>
       </table>
     </div>
-    <p class="section-sub reveal" style="margin-top:16px;">Of the 522 confirmed live, 139 were rescued by the second pass from being wrongly flagged by the first. The 41 inconclusive ones matter more than they look. A bot protection block is not evidence that a job is closed, so the system records it as unknown and surfaces it for me to look at rather than quietly guessing in either direction. A system that reports what it does not know beats one that is confidently wrong.</p>
+    <p class="section-sub reveal" style="margin-top:16px;">Of the 522 confirmed live, 139 were rescued by the second pass from being wrongly flagged by the first. The 41 inconclusive ones matter more than they look. A bot protection block is not evidence that a job is closed, so the system records it as unknown and surfaces it for me to look at rather than quietly guessing in either direction. I would rather the system flag what it cannot determine than guess wrong.</p>
   </div>
 </section>
 
@@ -257,10 +260,10 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">Why it exists</p>
-    <h2 class="section-title reveal">A job search is an agent problem wearing a disguise</h2>
-    <p class="section-sub reveal">Strip the subject matter away and look at the shape of it. Heterogeneous sources with inconsistent APIs. Unstructured text that needs judgment rather than rules. A decision worth real money at every step. Generated output that has to be checked before anyone can trust it. A human who stays accountable for whatever goes out. That is the same shape as any serious agentic deployment, which is why I found it worth building properly instead of grinding through by hand.</p>
+    <h2 class="section-title reveal">My job search was really an agent problem</h2>
+    <p class="section-sub reveal">The underlying shape is familiar. Heterogeneous sources with inconsistent APIs. Unstructured text that needs judgment rather than rules. A decision worth real money at every step. Generated output that has to be checked before anyone can trust it. A human who stays accountable for whatever goes out. That is the same shape as any serious agentic deployment, which is why I found it worth building properly instead of grinding through by hand.</p>
     <div class="callout reveal">
-      <p>What came out is a compound AI system in the strict sense: multiple models with different capabilities and costs, routed by task, chained through orchestration, with retrieval, structured generation, an evaluation gate, observability, failure handling and a human decision point that cannot be bypassed. The interesting problems were never about prompting. They were about cost, ordering, trust and what to do when a model is confidently wrong. That turns out to be what the discipline is actually about.</p>
+      <p>What came out is a compound AI system in the strict sense: multiple models with different capabilities and costs, routed by task, chained through orchestration, with retrieval, structured generation, an evaluation gate, observability, failure handling and a human decision point that cannot be bypassed. The interesting problems were about cost, ordering, trust and handling a model that is confidently wrong. Those turned out to be the real problems.</p>
     </div>
     <p class="section-sub reveal" style="margin-top:22px;">The repository is private while I am still using it. I am happy to walk through the architecture, the dashboard or any of the decisions above in a conversation.</p>
   </div>
@@ -272,13 +275,13 @@
       <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
       <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
     </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Agentic LLMOps</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="inference-lens#demo">Live demo</a></div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Multi-Agent Inference Reliability</a><a href="predictops">PredictOps</a><a href="job-scanner">Job Scanner</a><a href="inference-lens#demo">Live demo</a></div>
     <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
   </div>
   <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
 </footer>
 
-<script src="assets/script.js"></script>
-<script src="assets/flow.js"></script>
+<script src="assets/script.js?v=3"></script>
+<script src="assets/flow.js?v=2"></script>
 </body>
 </html>
