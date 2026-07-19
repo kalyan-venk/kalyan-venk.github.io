@@ -44,6 +44,22 @@ longer needed for this particular demo.
 
 ## Current state
 
+- **2026-07-19 (later): clean URLs restored + redirect stubs DELETED.**
+  - The 6 redirect-stub directories (`about/`, `agentic-llmops/`, `inference-lens/`,
+    `predictops/`, `play/`, `job-scanner/`) are now **deleted**. They were the cause of
+    `/about` -> `/about.html` redirects. With them gone, GitHub Pages serves `about.html` at
+    `/about` natively (clean URL, no redirect). **Do not recreate them.**
+  - **All internal links reverted to extensionless** (this supersedes the earlier ".html
+    links" note below): nav/footer/CTA use `/`, `about`, `inference-lens`, ...; blueprint
+    preview cards use `inference-lens-blueprint#system` etc. `.html` no longer appears in any
+    href. NOTE: a plain local `python3 -m http.server` 404s on extensionless paths (Pages-only
+    resolution) — test locally via the `.html` file directly; production is clean.
+  - **Sed gotcha fixed:** the bulk `.html` -> extensionless sed also stripped `.html` from
+    visible filenames in the blueprint diagrams (`drift_report.html`, `index.html`); both
+    restored. If you ever bulk-strip `.html`, scope it to `href="..."` only.
+  - **Favicon** href is now absolute with a cache-bust: `/assets/favicon.svg?v=1` (favicons
+    cache hard in browsers; the `?v=` forces a re-fetch so the old globe clears). File serves
+    200 as image/svg+xml.
 - **2026-07-19: favicon, tab titles, default theme.**
   - **Favicon:** added `assets/favicon.svg` (the KV gradient rounded-square mark) and linked
     `<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">` in every page head,
