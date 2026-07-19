@@ -44,6 +44,17 @@ longer needed for this particular demo.
 
 ## Current state
 
+- **2026-07-19: favicon, tab titles, default theme.**
+  - **Favicon:** added `assets/favicon.svg` (the KV gradient rounded-square mark) and linked
+    `<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">` in every page head,
+    replacing the browser's default globe.
+  - **Tab titles:** `index.html` and `about.html` `<title>` are now just "Kalyan Venkatesh";
+    every other page (projects, play, all 3 blueprints) is "Kalyan's work". (Note: og/twitter
+    titles were NOT changed and still carry the descriptive strings.)
+  - **Default theme is now LIGHT** (was dark). Changed the pre-paint `<head>` script on all
+    pages, `script.js` fallback, and the blueprints' inline pre-paint from `||'dark'`/
+    `var t="dark"` to `light`. Returning visitors still keep their `localStorage['kv-theme']`
+    choice; only first-time/no-preference visitors default to light. `script.js` bumped to `?v=4`.
 - **2026-07-19: site-wide copy + naming + humanization pass.**
   - **Rename:** "Multi-Agent Reliability" -> "Multi-Agent Inference Reliability" everywhere
     (nav, cards, footer, blueprints); the agentic page h1 stays the longer "Multi-Agent

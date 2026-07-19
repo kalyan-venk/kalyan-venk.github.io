@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="KV">
+  <defs>
+    <linearGradient id="kv" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="0.55" stop-color="#a855f7"/>
+      <stop offset="1" stop-color="#ec4899"/>
+    </linearGradient>
+  </defs>
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="url(#kv)"/>
+  <text x="50" y="54" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, -apple-system, 'Segoe UI', sans-serif" font-weight="800"
+        font-size="44" letter-spacing="1" fill="#ffffff">KV</text>
+</svg>
