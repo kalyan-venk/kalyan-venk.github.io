@@ -19,3 +19,23 @@ A Python `.replace()` meant to insert a new dated section into `CLAUDE.md` retur
 After a push, diagram nodes rendered as solid black boxes. First instinct blamed the deploy; the real cause was fresh HTML served with a stale cached `style.css` (`max-age=600`), and an SVG `<rect>` with no `fill` defaults to black.
 - **Root cause:** HTML and CSS are separately cached and can desync.
 - **Guard:** bump `assets/*.css?v=N` / `*.js?v=N` on every CSS/JS edit, and give SVG shapes real `fill`/`stroke` presentation-attribute fallbacks so they never render black without CSS. (Both now done.)
+
+**Asserted a dataset-design justification without measuring it.** Told Kalyan
+the 3 helpful HH-RLHF subsets were "the same axis collected 3 ways," so
+scoping to 2 subsets avoided triple-weighting helpfulness. Plausible from the
+subset names, and wrong: `helpful-online` averages 110 tokens per response
+against `helpful-base`'s 39. The subsets differ substantially in distribution.
+The real justification, once measured, is that adding all 4 moves held-out AUC
+by 0.003. Lesson: a justification that sounds principled is still a guess until
+it is run. This one was offered as interview-ready material, which is worse
+than offering it as a hypothesis.
+
+**Called the pooled near-chance result "no signal" for most of a session.**
+Reported LogReg/XGBoost at ~0.51 AUC as evidence that surface features carry
+no information about human preference, and wrote that into the README and the
+portfolio site. The per-subset run shows they reach ~0.57 within a subset and
+that `token_length` flips sign between the helpful (+0.220) and harmless
+(-0.252) axes. The pooled number was two opposing signals cancelling, not an
+absence of signal. Lesson: before concluding a feature set is uninformative,
+check whether the training pool mixes populations where the relationship runs
+in different directions.

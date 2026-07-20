@@ -8,7 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
 <meta name="description" content="Can the LLM-as-judge be fooled? I trained scoring models on human preference data and put them under adversarial pressure. Try the live scorer.">
 <meta property="og:title" content="Inference-Lens - can the AI judge be fooled?">
-<meta property="og:description" content="I trained scoring models on human preference data, then attacked them. 2 models tied on a clean benchmark came apart by over 75 points under pressure.">
+<meta property="og:description" content="I trained scoring models on human preference data, then attacked them. The best model on the clean benchmark degraded the most under adversarial pressure.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalyanvenk.com/inference-lens">
 <meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Inference-Lens - can the AI judge be fooled?">
-<meta name="twitter:description" content="2 models tied on a clean benchmark came apart by over 75 points under adversarial pressure.">
+<meta name="twitter:description" content="The best model on the clean benchmark degraded the most under adversarial pressure.">
 <meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,7 +50,7 @@
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>Can the judge be fooled</span>
     <h1 class="reveal">Inference-Lens</h1>
-    <p class="lead reveal d1">LLM as judge is the default evaluation paradigm now. Almost nobody is asking how easily that judge can be deceived. So I built an NLP evaluation pipeline to find out. It is a natural language text classification problem: I trained scoring models on 170K+ real human preference annotations, then put them under systematic adversarial NLP pressure to see where they break and by how much.</p>
+    <p class="lead reveal d1">LLM as judge is the default evaluation paradigm now. Almost nobody is asking how easily that judge can be deceived. So I built an NLP evaluation pipeline to find out. It is a natural language text classification problem: I trained scoring models on 182K real human-labeled responses, then put them under systematic adversarial NLP pressure to see where they break and by how much.</p>
     <div class="meta reveal d2">
       <span class="chip">Natural Language Processing</span>
       <span class="chip">Text Classification</span>
@@ -162,9 +162,9 @@
     <p class="reveal">Then I tried to break them. LLM-Bar gives me 419 adversarially constructed NLP pairs built specifically to fool automated text evaluators. My plan was simple: train NLP scoring models on the clean preference data, then see how each architecture behaves the moment something is engineered to trip it.</p>
 
     <h2 class="reveal">3 things I walked away with</h2>
-    <div class="finding reveal"><strong>Clean accuracy near 0.50 is the point, not the failure.</strong> Logistic Regression, XGBoost and a DeBERTa-v3-small fine-tune all landed around 0.50 AUC-ROC on clean evaluation. Surface features like readability and length just do not predict what a human prefers.</div>
-    <div class="finding reveal"><strong>Identical on paper, opposite under attack.</strong> Under a Neighbor attack, Logistic Regression picked the worse manipulated answer 78.4 percent of the time, almost 4 times in 5. XGBoost, trained on the same data, degraded only 2.4 percent. No clean benchmark would ever show you that gap.</div>
-    <div class="finding reveal"><strong>Length is the opposite of quality.</strong> 3 clustering algorithms over the full dataset agreed on 4 archetypes. The most verbose cluster had the lowest preference rate at 48.9 percent. The shorter, conversational one had the highest at 51.6 percent.</div>
+    <div class="finding reveal"><strong>The signal was there. It cancelled itself out.</strong> Pooled across the dataset, 4 surface features sit at chance: 0.512 and 0.517 AUC-ROC. Inside a single subset they reach 0.57. On helpfulness data, length is the strongest predictor and longer answers win, coefficient +0.220. On harmlessness data it is still the strongest predictor and longer answers lose, coefficient −0.252. Pool the 2 and length predicts nothing, because it predicts opposite things in each half.</div>
+    <div class="finding reveal"><strong>Competence is not robustness.</strong> DeBERTa was the only model that learned the task, and it degraded the most: 19.3 points, against 18.3 for Logistic Regression and 8.4 for XGBoost. The weak models could not fall far because they were already at chance. Being good at the job is what gives an adversary something to take.</div>
+    <div class="finding reveal"><strong>Every model was inverted, not just confused.</strong> All 3 architectures scored below 50 percent on adversarial pairs. On a forced binary choice that is systematic inversion: the attacks do not make a judge uncertain, they reliably flip it. Neighbor, the smallest edit of the 4, beat every architecture.</div>
   </div>
 </section>
 
@@ -191,13 +191,13 @@
       <table>
         <thead><tr><th>Model</th><th>Clean AUC-ROC</th><th>Worst case under attack</th><th>Verdict</th></tr></thead>
         <tbody>
-          <tr><td>Logistic Regression</td><td>~0.50</td><td>78.4% false preference (Neighbor)</td><td><span class="pill bad">fragile</span></td></tr>
-          <tr><td>XGBoost</td><td>~0.50</td><td>~2.4% overall degradation</td><td><span class="pill good">robust</span></td></tr>
-          <tr><td>DeBERTa-v3-small</td><td>0.500</td><td>GPU only, see notebooks</td><td><span class="pill warn">excluded live</span></td></tr>
+          <tr><td>Logistic Regression</td><td>0.512</td><td>82.1% false preference (Neighbor), 18.3pp overall</td><td><span class="pill bad">fragile</span></td></tr>
+          <tr><td>XGBoost</td><td>0.517</td><td>65.7% false preference (Neighbor), 8.4pp overall</td><td><span class="pill warn">degrades least, learned least</span></td></tr>
+          <tr><td>DeBERTa-v3-small</td><td>0.622</td><td>70.2% false preference (Neighbor), 19.3pp overall</td><td><span class="pill bad">most capable, most fragile</span></td></tr>
         </tbody>
       </table>
     </div>
-    <div class="finding reveal" style="margin-top:20px;"><strong>Same training data and the same clean scores, yet more than 75 points apart under pressure.</strong> If I had only looked at the benchmark, I would have called these 2 interchangeable. They are not. That is exactly why you cannot choose an evaluator without attacking it first.</div>
+    <div class="finding reveal" style="margin-top:20px;"><strong>The model you would pick from the leaderboard is the one that fails hardest.</strong> DeBERTa wins on clean data by 11 AUC points and loses the most under attack. Rank these 3 by benchmark score and you rank them almost exactly wrong for adversarial robustness. That is why you cannot choose an evaluator without attacking it first.</div>
   </div>
 </section>
 
@@ -205,7 +205,7 @@
   <div class="wrap">
     <p class="kicker reveal">What the data said</p>
     <h2 class="section-title reveal">Length is the opposite of quality</h2>
-    <p class="section-sub reveal">Before I touched a single label, I wanted to know what the response space naturally looks like. 3 clustering algorithms over the full dataset all landed on the same 4 archetypes, which told me the structure was real. Then I checked which one humans actually preferred and it surprised me.</p>
+    <p class="section-sub reveal">Before I touched a single label, I wanted to know what the response space naturally looks like, so I clustered 182K sentence embeddings with K-Means, DBSCAN and Ward. K-Means selected 4 groups by silhouette and those became the archetypes below. Worth being honest about how strong that structure is: the silhouette score is 0.020, close to zero, and allowed to choose for themselves Ward and DBSCAN both prefer 2 groups rather than 4. These are useful descriptive labels, not cleanly separated clusters.</p>
     <div class="2-col">
       <div class="chart-card reveal">
         <h4>Human preference rate by archetype</h4>
@@ -228,9 +228,9 @@
     <p class="kicker reveal">Takeaways</p>
     <h2 class="reveal">What a team should walk away with</h2>
     <ul class="reveal">
-      <li>Clean benchmark accuracy tells you almost nothing about whether an NLP evaluator can be trusted under adversarial attack. 2 models tied on AUC-ROC differed by over 75 points the moment I applied NLP perturbation pressure.</li>
+      <li>Clean benchmark accuracy tells you almost nothing about whether an NLP evaluator can be trusted under adversarial attack. The best model on the benchmark degraded the most under it.</li>
       <li>Pick your automated NLP judge by stress-testing it against adversarial text, not by reading a leaderboard. Know which NLP attack families break which architecture and by how much.</li>
-      <li>Be suspicious of any quality signal that tracks length. Across 170K+ natural language judgments, longer text meant less preferred.</li>
+      <li>Be suspicious of any quality signal that tracks length. It is not that length means nothing, it is that length means opposite things depending on whether the user wanted help or wanted something they should not get. An evaluator leaning on it is silently assuming which situation it is in.</li>
     </ul>
     <p class="reveal">The full pipeline, all 3 model architectures, the clustering notebooks and the LLM-Bar stress-test are on GitHub.</p>
     <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/Inference-Lens" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>

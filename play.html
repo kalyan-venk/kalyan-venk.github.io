@@ -51,10 +51,22 @@
 <section style="padding-top:14px;">
   <div class="wrap">
     <div class="il-app">
+      <div class="il-field il-field-q" style="margin-bottom:14px;">
+        <label>The question both answers are responding to</label>
+        <textarea id="il-q" rows="2" placeholder="What was asked? The models score how much each answer echoes the prompt, so this changes the result."></textarea>
+      </div>
       <div class="il-inputs">
         <div class="il-field"><label>Response A</label><textarea id="il-a" placeholder="Paste an answer here, or hit Load a sample pair below..."></textarea></div>
         <div class="il-field"><label>Response B</label><textarea id="il-b" placeholder="Paste a second answer to the same question..."></textarea></div>
       </div>
+      <p class="il-caveat" style="font-size:13px;opacity:.72;margin:10px 0 0;line-height:1.5;">
+        This runs the trained Logistic Regression in your browser, no server involved. Two of its four
+        features, readability and prompt overlap, rely on a syllable dictionary and a stemmer that do not
+        exist in JavaScript, so they are close approximations rather than exact. Measured against the real
+        model on all 419 LLM-Bar pairs, this port picks the same response 94.5% of the time. XGBoost is not
+        offered here on purpose: it splits on hard thresholds, the same small feature error sends inputs
+        down different branches, and its browser agreement falls to 53.9%, which is chance.
+      </p>
       <div class="il-controls">
         <button id="il-sample" class="btn btn-ghost">Load a sample pair</button>
         <button id="il-score" class="btn btn-primary">Score responses</button>
