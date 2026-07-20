@@ -295,7 +295,7 @@ footer{margin:60px 0 40px;padding-top:24px;border-top:1px solid var(--border-sof
       <div class="card"><h4><span class="dot" style="background:var(--indigo)"></span>The clean scores are the finding</h4>
         <p>All 3 models land near <b>0.50 AUC-ROC</b> on the held-out HH-RLHF test set. That is not a failure. It says surface features like length, readability and overlap do not reliably predict human preference.</p></div>
       <div class="card"><h4><span class="dot" style="background:var(--warn)"></span>Same benchmark, opposite robustness</h4>
-        <p>Under the Neighbor attack, Logistic Regression's false-preference rate hits <b>78.4%</b> (picks the worse answer 4 in 5). XGBoost, tied on the clean benchmark, barely moves. Architecture decides robustness, not the headline score.</p></div>
+        <p>Under the Neighbor attack, Logistic Regression's false-preference rate hits <b>82.1%</b> (picks the worse answer 4 in 5). DeBERTa, the only model that beat chance on the clean benchmark, degrades the most overall at <b>19.3pp</b>. Architecture decides robustness, and the headline score ranks them almost exactly wrong.</p></div>
       <div class="card"><h4><span class="dot" style="background:var(--cyan)"></span>Length ≠ quality</h4>
         <p>Unsupervised clustering found the most <code>verbose-inconsistent</code> archetype had the <b>lowest</b> chosen-rate (48.9%); the shorter <code>conversational-engaging</code> one the highest (51.6%).</p></div>
     </div>
@@ -668,11 +668,11 @@ footer{margin:60px 0 40px;padding-top:24px;border-top:1px solid var(--border-sof
       {id:"a5",kind:"artifact",x:900,y:srow(4),w:300,h:84,title:"model artifacts",sub:"models/ (joblib + checkpoint)",lines:[
         {t:"logreg · xgboost · scaler · kmeans .joblib",mono:true,size:10.3},{t:"deberta_checkpoint/",mono:true,size:11.5}]},
       {id:"a6",kind:"result",x:900,y:srow(5)-4,w:300,h:96,title:"model_comparison_summary.csv",titleSize:12,sub:"reports/",stripe:"#818cf8",lines:[
-        {t:"LogReg 0.511 · XGB 0.518 · DeBERTa 0.500",mono:true,size:10.3},{t:"AUC-ROC: a near 3-way tie on clean data"}]},
+        {t:"LogReg 0.512 · XGB 0.517 · DeBERTa 0.622",mono:true,size:10.3},{t:"AUC-ROC: surface features at chance, text model clears it"}]},
       {id:"a7",kind:"result",x:900,y:srow(6)+2,w:300,h:118,title:"stress_test_results.csv",titleSize:13,sub:"reports/",stripe:"#fbbf24",lines:[
-        {t:"LogReg neighbor FPR 78.4% (acc 21.6%)",cls:"em-bad"},
-        {t:"LogReg overall acc 34.8%"},
-        {t:"XGBoost overall acc 53.7% (≈ flat)",cls:"em-good"},
+        {t:"LogReg neighbor FPR 82.1% (acc 17.9%)",cls:"em-bad"},
+        {t:"LogReg overall acc 32.7% (−18.3pp)"},
+        {t:"XGBoost 42.7% (−8.4pp) · DeBERTa 39.4% (−19.3pp)",cls:"em-bad"},
         {t:"tied clean → opposite under attack"}]},
       {id:"a8",kind:"deploy",x:900,y:srow(7)+2,w:300,h:80,title:"live scorer",sub:"HF Space · Streamlit · in-browser JS",lines:[
         {t:"scorer.js + model.js (no server)",mono:true,size:11.5},{t:"MLflow tracks every run in mlruns/"}]}
