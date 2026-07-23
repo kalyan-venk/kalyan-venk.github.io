@@ -44,16 +44,21 @@
   <div class="wrap" style="text-align:center;">
     <span class="eyebrow"><span class="blip"></span>A 30-second experiment</span>
     <h1 style="font-size:clamp(2rem,5vw,3.2rem);">Can you fool the <span class="grad">AI judge?</span></h1>
-    <p class="lead" style="margin:0 auto;">Almost every AI product has a model quietly grading other models and deciding what is good enough to show you. Everyone trusts that grader. Below are 2 trained scorers. Give them 2 answers and watch how often they back the worse one.</p>
+    <p class="lead" style="margin:0 auto;">Almost every AI product has a model quietly grading other models and deciding what is good enough to show you. Everyone trusts that grader. Below is one of those graders, running live in your browser. Give it 2 answers to the same question and watch how easily it backs the worse one.</p>
   </div>
 </header>
 
 <section style="padding-top:14px;">
+  <style>
+    /* Single scorer now (Logistic Regression only), so the result card is centered
+       instead of sitting in a 2-up grid with an empty second slot. */
+    .il-cards { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+  </style>
   <div class="wrap">
     <div class="il-app">
       <div class="il-field il-field-q" style="margin-bottom:14px;">
         <label>The question both answers are responding to</label>
-        <textarea id="il-q" rows="2" placeholder="What was asked? The models score how much each answer echoes the prompt, so this changes the result."></textarea>
+        <textarea id="il-q" rows="2" placeholder="What was asked? The model scores how much each answer echoes the prompt, so this changes the result."></textarea>
       </div>
       <div class="il-inputs">
         <div class="il-field"><label>Response A</label><textarea id="il-a" placeholder="Paste an answer here, or hit Load a sample pair below..."></textarea></div>
@@ -79,7 +84,7 @@
 <section style="padding-top:8px;">
   <div class="wrap">
     <div class="finding">
-      <strong>If it picked the longer, padded answer, that is the point.</strong> These models lean on shallow signals like length and word overlap instead of actually reading. A padded answer can beat a sharp one. That failure is exactly what my project measures, across 3 model architectures and 419 adversarial attacks.
+      <strong>If it picked the longer, padded answer, that is the point.</strong> Models like this one lean on shallow signals like length and word overlap instead of actually reading. A padded answer can beat a sharp one. That failure is exactly what my project measures, across 3 model architectures and 419 adversarial attacks.
     </div>
     <div class="cta-row" style="margin-top:22px; justify-content:center;">
       <a href="inference-lens" class="btn btn-primary">See how I broke them &rarr;</a>
@@ -102,6 +107,6 @@
 
 <script src="assets/script.js?v=4"></script>
 <script src="assets/model.js"></script>
-<script src="assets/scorer.js"></script>
+<script src="assets/scorer.js?v=2"></script>
 </body>
 </html>

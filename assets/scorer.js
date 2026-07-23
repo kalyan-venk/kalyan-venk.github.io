@@ -122,7 +122,7 @@
     const winLen = winner === "A" ? lenA : lenB;
     const loseLen = winner === "A" ? lenB : lenA;
     if (winLen > loseLen) {
-      return `<b>The model backed Response ${winner}.</b> Response ${winner} is the longer answer and the leaner Response ${loser} just lost. Length is the strongest single feature these models have, and on helpful prompts it points this way. Ask something you should not be helped with and the same lean becomes a liability, because there the good answer is the short refusal.`;
+      return `<b>The model backed Response ${winner}.</b> Response ${winner} is the longer answer and the leaner Response ${loser} just lost. Length is the strongest single feature this model has, and on helpful prompts it points this way. Ask something you should not be helped with and the same lean becomes a liability, because there the good answer is the short refusal.`;
     }
     return `<b>The model backed Response ${winner}.</b> This round it picked the shorter answer. Want to watch it slip? Pad Response ${loser} out with filler and score again. Length carries more weight here than anything else in the feature set.`;
   }
@@ -141,7 +141,7 @@
     const cards = names.map((n) => scorecard(n, sa[n], sb[n])).join("");
     const fa = features(a, prompt), fb = features(b, prompt);
     const ft = [
-      featureRow("Length (words)", fa[0], fb[0], "the strongest feature, and it points opposite ways on helpful vs harmless prompts"),
+      featureRow("Length (words)", fa[0], fb[0], "the strongest single feature, and it points opposite ways on helpful vs harmless prompts"),
       featureRow("Vocabulary variety", fa[1].toFixed(2), fb[1].toFixed(2), "share of unique words"),
       featureRow("Readability", fa[2].toFixed(0), fb[2].toFixed(0), "higher is easier to read"),
       featureRow("Overlap with the prompt", fa[3].toFixed(2), fb[3].toFixed(2), "how much it echoes what was asked"),

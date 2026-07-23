@@ -73,7 +73,12 @@
   <div class="wrap">
     <p class="kicker reveal">Live demo</p>
     <h2 class="section-title reveal">Score 2 responses and watch a judge get fooled</h2>
-    <p class="section-sub reveal">Paste 2 responses, or load the built in sample. 2 trained models pick the one they think is better. The case I want you to see is when they confidently choose the worse, padded answer. That is the behavior I want you to see, not a glitch.</p>
+    <p class="section-sub reveal">Paste 2 responses, or load the built in sample. A trained judge picks the one it thinks is better. The case I want you to see is when it confidently chooses the worse, padded answer. That is the behavior I want you to see, not a glitch.</p>
+    <style>
+      /* Single scorer (Logistic Regression only), so the result card is centered
+         instead of leaving an empty second grid slot. */
+      #demo .il-cards { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+    </style>
     <div class="il-app reveal">
       <div class="il-inputs">
         <div class="il-field"><label>Response A</label><textarea id="il-a" placeholder="Paste the first answer here..."></textarea></div>
@@ -185,7 +190,7 @@
 
 <script src="assets/script.js?v=4"></script>
 <script src="assets/model.js"></script>
-<script src="assets/scorer.js"></script>
+<script src="assets/scorer.js?v=2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 window.addEventListener('load', () => {
