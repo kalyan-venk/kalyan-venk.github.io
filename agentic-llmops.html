@@ -69,13 +69,13 @@
 <section style="padding-top:30px;">
   <div class="wrap">
     <div class="stats">
-      <div class="stat reveal"><div class="num">+<span data-count="30.3" data-suffix="pp" data-dp="1">0</span></div><div class="lbl">pass@1 gain on a weak model (Code Llama 7B) &middot; p = 0.002</div></div>
-      <div class="stat reveal d1"><div class="num"><span data-count="-4" data-suffix="pp" data-dp="1">0</span></div><div class="lbl">cost on a strong model (Qwen2.5 Coder 7B) &middot; p = 0.020</div></div>
-      <div class="stat reveal d2"><div class="num"><span data-count="73.4" data-suffix="%" data-dp="1">0</span></div><div class="lbl">of fixer rewrites the reversion gate discarded</div></div>
-      <div class="stat reveal d3"><div class="num"><span data-count="5">0</span></div><div class="lbl">model families stress-tested</div></div>
-      <div class="stat reveal"><div class="num"><span data-count="10">0</span></div><div class="lbl">experimental phases, pilot to cross-benchmark</div></div>
-      <div class="stat reveal d1"><div class="num"><span data-count="3">0</span></div><div class="lbl">code benchmarks: HumanEval, HumanEval+, MBPP</div></div>
-      <div class="stat reveal d2"><div class="num"><span data-count="100">0</span></div><div class="lbl">problems per benchmark, per condition</div></div>
+      <div class="stat reveal"><div class="num">+<span data-count="4.85" data-suffix="pp" data-dp="2">0</span></div><div class="lbl">pass@1 gain from the full pipeline &middot; 95% CI [+3.36, +6.34], p = 0.010</div></div>
+      <div class="stat reveal d1"><div class="num">+<span data-count="30.3" data-suffix="pp" data-dp="1">0</span></div><div class="lbl">gain on a weak model (Code Llama 7B) &middot; p = 0.002</div></div>
+      <div class="stat reveal d2"><div class="num"><span data-count="-4" data-suffix="pp" data-dp="1">0</span></div><div class="lbl">cost on a strong model (Qwen2.5 Coder 7B) &middot; p = 0.020</div></div>
+      <div class="stat reveal d3"><div class="num"><span data-count="73.4" data-suffix="%" data-dp="1">0</span></div><div class="lbl">of fixer rewrites the reversion gate discarded</div></div>
+      <div class="stat reveal"><div class="num"><span data-count="5">0</span></div><div class="lbl">model families stress-tested</div></div>
+      <div class="stat reveal d1"><div class="num"><span data-count="10">0</span></div><div class="lbl">experimental phases, pilot to cross-benchmark</div></div>
+      <div class="stat reveal d2"><div class="num"><span data-count="3">0</span></div><div class="lbl">code benchmarks: HumanEval, HumanEval+, MBPP</div></div>
       <div class="stat reveal d3"><div class="num"><span data-count="0">0</span></div><div class="lbl">API calls or fine-tuning &middot; fully local via Ollama</div></div>
     </div>
   </div>
@@ -143,77 +143,11 @@
   </div>
 </section>
 
-<section id="blueprints">
-  <style>
-    .bp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
-    @media(max-width:720px){.bp-grid{grid-template-columns:1fr}}
-    .bp-card{display:block;border:1px solid var(--border);border-radius:16px;background:var(--surface-2);padding:16px;transition:transform .18s,border-color .18s,box-shadow .18s}
-    .bp-card:hover{transform:translateY(-4px);border-color:var(--indigo);box-shadow:0 18px 40px -20px rgba(124,58,237,0.5)}
-    .bp-thumb{border-radius:12px;overflow:hidden;border:1px solid #232a3d;background:#0b0d15;margin-bottom:14px}
-    .bp-thumb svg{display:block;width:100%;height:auto}
-    .bp-card h4{font-size:1.06rem;margin-bottom:6px}
-    .bp-card p{color:var(--text-dim);font-size:.9rem;margin-bottom:12px}
-    .bp-open{color:var(--indigo);font-weight:600;font-size:.9rem}
-    :root[data-theme="light"] .bp-thumb{background:#eef1f8}
-    :root[data-theme="light"] .bp-thumb svg rect{fill:#ffffff;stroke:#cdd5e8}
-    :root[data-theme="light"] .bp-thumb svg path{stroke:#c2cbe0}
-  </style>
-  <div class="wrap">
-    <p class="kicker reveal">Under the hood</p>
-    <h2 class="section-title reveal">See exactly how it is built</h2>
-    <p class="section-sub reveal">2 live blueprints you can zoom into. One traces the Planner-Critic-Fixer pipeline stage by stage. The other maps every file in the repo and how one run becomes the next result. Hover anywhere to magnify.</p>
-    <div class="bp-grid">
-      <a class="bp-card reveal" href="agentic-llmops-blueprint#system">
-        <div class="bp-thumb">
-          <svg viewBox="0 0 320 150" role="img" aria-label="System design preview">
-            <rect x="8" y="52" width="66" height="30" rx="6" fill="#12182a" stroke="#3b4570"/>
-            <rect x="127" y="14" width="66" height="26" rx="6" fill="#161a28" stroke="#232a3d"/>
-            <rect x="127" y="60" width="66" height="26" rx="6" fill="#1b1f39" stroke="#4f5696"/>
-            <rect x="127" y="106" width="66" height="26" rx="6" fill="#16232c" stroke="#347470"/>
-            <rect x="246" y="24" width="66" height="24" rx="6" fill="#12131c" stroke="#2a2f45"/>
-            <rect x="246" y="98" width="66" height="24" rx="6" fill="#191426" stroke="#5b3f86"/>
-            <path d="M160,40 V60 M160,86 V106" stroke="#232a3d" stroke-width="1.6" fill="none"/>
-            <path d="M74,67 C100,67 105,27 127,27" stroke="#3b4570" stroke-width="1.4" fill="none"/>
-            <path d="M193,73 C220,73 224,110 246,110" stroke="#5b4a24" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
-            <circle r="4" fill="#818cf8"><animateMotion dur="2.8s" repeatCount="indefinite" path="M74,67 C100,67 105,27 127,27"/></circle>
-            <circle r="3.5" fill="#fbbf24"><animateMotion dur="2.6s" repeatCount="indefinite" path="M193,73 C220,73 224,110 246,110"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
-          </svg>
-        </div>
-        <h4>System design</h4>
-        <p>The monitoring pipeline in run order, from Planner through the reversion gate to pass@1, with the baseline control alongside and every result it writes.</p>
-        <span class="bp-open">Open the system map &rarr;</span>
-      </a>
-      <a class="bp-card reveal d1" href="agentic-llmops-blueprint#code">
-        <div class="bp-thumb">
-          <svg viewBox="0 0 320 150" role="img" aria-label="Code map preview">
-            <rect x="8" y="18" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="8" y="64" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="8" y="110" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="129" y="18" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="129" y="64" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="129" y="110" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="250" y="41" width="62" height="22" rx="5" fill="#12182a" stroke="#3b4570"/>
-            <rect x="250" y="87" width="62" height="22" rx="5" fill="#12131c" stroke="#2a2f45"/>
-            <path d="M70,29 H129 M70,75 H129 M70,121 H129" stroke="#4d4a2a" stroke-width="1.2" fill="none"/>
-            <path d="M191,29 C220,29 222,52 250,52 M191,75 C220,75 224,98 250,98" stroke="#2b3350" stroke-width="1.2" fill="none"/>
-            <path d="M281,63 V87" stroke="#3b4570" stroke-width="1.4" fill="none"/>
-            <circle cy="75" r="3.6" fill="#818cf8"><animate attributeName="cx" values="70;129" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.2s" repeatCount="indefinite"/></circle>
-            <circle cx="281" r="3.6" fill="#4ade80"><animate attributeName="cy" values="63;87" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
-          </svg>
-        </div>
-        <h4>Code map</h4>
-        <p>Every file with its one-line job, arranged around the data lineage: benchmark to planner cache to per-run CSVs to the confidence intervals.</p>
-        <span class="bp-open">Open the code map &rarr;</span>
-      </a>
-    </div>
-  </div>
-</section>
-
 <section>
   <div class="wrap">
     <p class="kicker reveal">The result and the better finding</p>
     <h2 class="section-title reveal">The gain was real, but the failure case taught me more.</h2>
-    <p class="section-sub reveal">Across 10 phases and 5 model families, the story was never a single average gain. The number I care about is the failure condition: a weak model (Code Llama 7B) gained +30.3 points pass@1 while a strong one (Qwen2.5 Coder 7B) lost 4.0, both statistically significant. I call it the Inverse Capability Hypothesis. Below roughly 60 percent baseline monitoring is worth deploying; above that the benefit fades, and the exact crossover is still an open question. Knowing when the monitor starts doing harm matters as much as the monitor itself.</p>
+    <p class="section-sub reveal">Across 10 phases and 5 model families, the story was never a single average gain. The number I care about is the failure condition: a weak model (Code Llama 7B) gained +30.3 points pass@1 while a strong one (Qwen2.5 Coder 7B) lost 4.0, both statistically significant. I call it the Inverse Capability Hypothesis. Below roughly 65 percent baseline monitoring is worth deploying; above that the benefit fades, and the exact crossover is still an open question. Knowing when the monitor starts doing harm matters as much as the monitor itself.</p>
     <div class="2-col">
       <div class="chart-card reveal">
         <h4>Monitoring delta by model</h4>
@@ -274,39 +208,6 @@
       </table>
     </div>
     <div class="finding reveal" style="margin-top:20px;"><strong>The gate surprised me.</strong> On a weak model it slightly lowers raw pass@1, because almost any fix helps when you start at 20 percent. Its real value shows up on strong models, where it reverts bad rewrites and keeps the monitor from doing harm. Handing the fixer the problem statement was the single biggest lever on the weak model.</div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">Core findings</p>
-    <h2 class="section-title reveal">What 10 phases taught me</h2>
-    <div class="finding-grid">
-      <div class="finding reveal"><strong>Monitoring benefit is inversely proportional to baseline capability.</strong> The central result, now backed by 95 percent intervals that exclude zero at both ends. A model that already gets 9 of 10 right has little to gain and real risk of harm. A model that gets 2 of 10 right has everything to gain.</div>
-      <div class="finding reveal d1"><strong>The reversion gate is a safety device, not an accelerator.</strong> It reverts 73.4 percent of attempted fixes. On weak models that costs a point. On strong models it keeps the whole thing from going negative.</div>
-      <div class="finding reveal d2"><strong>The fixer, not the critic, is the bottleneck.</strong> Scaling the critic to 8B did nothing early on. A bigger judge gives better scores but cannot rescue a fixer that introduces fresh bugs.</div>
-      <div class="finding reveal d3"><strong>Context beat raw model size.</strong> The ablation says handing the fixer the problem statement mattered more than upgrading its parameter count.</div>
-      <div class="finding reveal"><strong>It generalizes beyond 1 benchmark.</strong> On HumanEval+ and MBPP, both harder than the original HumanEval, the weak model still gained around 30 points and the strong models still lost a little. The law is not a quirk of a single dataset.</div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">The full arc</p>
-    <h2 class="section-title reveal">10 phases, from first signal to publishable</h2>
-    <div class="timeline reveal">
-      <div class="tl-item"><div class="ph">Phase 1</div><h4>Baseline and a calibration trap</h4><p>3B models throughout. The critic caught risk reliably but the small fixer was net negative. Set the threshold too low and the fixer fired on 74 percent of problems, dropping accuracy by 18 points. Calibration clearly mattered.</p></div>
-      <div class="tl-item"><div class="ph">Phase 2</div><h4>A bigger critic was not the answer</h4><p>I scaled the critic to 8B and kept the 3B fixer. Still net negative across all 18 conditions. That pinned the bottleneck on the fixer, not the critic.</p></div>
-      <div class="tl-item"><div class="ph">Phase 3</div><h4>The turning point</h4><p>An 8B fixer, the problem statement as context and a reversion gate together flipped the direction to net-positive on the pilot model. The reversion gate reverted 73.4 percent of the fixes it saw, keeping only the ones that strictly improved.</p></div>
-      <div class="tl-item"><div class="ph">Phase 4 and 4b</div><h4>Cross-model comparison</h4><p>I extended it to Code Llama 7B and ran a full sweep. Code Llama gained 32 points, the largest in the study. The inverse relationship between capability and benefit came into view.</p></div>
-      <div class="tl-item"><div class="ph">Phase 5</div><h4>The pattern holds</h4><p>Added DeepSeek Coder 6.7B at -1 and Qwen2.5 Coder 7B at -3. The inverse law held across architectures.</p></div>
-      <div class="tl-item"><div class="ph">Phase 6</div><h4>Threshold and retry sweep</h4><p>Swept &tau; across 0.60, 0.70, 0.75. At 0.70 the system stopped over-triggering with no loss for weak models and 0.75 was identical, marking the plateau. For Llama 3.1 8B the fixer trigger rate fell from 46 to 10 percent and latency dropped 39 percent. A single retry lifted Code Llama's pass@2 from 20 to 38 percent.</p></div>
-      <div class="tl-item"><div class="ph">Phase 7</div><h4>Confidence intervals on the endpoints</h4><p>My advisor pointed out that single-trial numbers would not survive review. So I reran the 2 endpoints as 3 independent trials each. Code Llama landed at +30 to +31 points and Qwen at -2 to -4, both excluding zero.</p></div>
-      <div class="tl-item"><div class="ph">Phase 8</div><h4>Component ablation</h4><p>One change at a time on Code Llama. Problem context was the biggest single lever at +4 points, the fixer model upgrade added +1 and the gate slightly lowered raw accuracy on a weak model while staying the safeguard for strong ones.</p></div>
-      <div class="tl-item"><div class="ph">Phase 9</div><h4>Extending intervals and an honest catch</h4><p>I ran the interval study across the remaining models, then caught my own flaw. The planner caches were built deterministically, so the 3 trials were identical and carried no real variance. Worth flagging rather than reporting fake error bars.</p></div>
-      <div class="tl-item"><div class="ph">Phase 10</div><h4>Cross-benchmark generalization and it held</h4><p>Regenerated the caches with a non-deterministic planner for genuine intervals, then ran the law on 2 harder benchmarks. On HumanEval+ Code Llama gained about 32 points and Qwen lost about 4. On MBPP Code Llama gained 30 and Qwen lost a few. The inverse capability law held on both, so the central finding is not a quirk of HumanEval. Those runs are the core evidence in the submission.</p></div>
-    </div>
   </div>
 </section>
 
