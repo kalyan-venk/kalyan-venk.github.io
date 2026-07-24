@@ -101,7 +101,7 @@
     <p class="reveal">Then I tried to break them. LLM-Bar gives me 419 adversarially constructed NLP pairs built specifically to fool automated text evaluators. My plan was simple: train NLP scoring models on the clean preference data, then see how each architecture behaves the moment something is engineered to trip it.</p>
 
     <h2 class="reveal">3 things I walked away with</h2>
-    <div class="finding reveal"><strong>The signal was there. It cancelled itself out.</strong> Pooled across the dataset, 4 surface features sit at chance: 0.512 and 0.517 AUC-ROC. Inside a single subset they reach 0.57. On helpfulness data, length is the strongest predictor and longer answers win, coefficient +0.220. On harmlessness data it is still the strongest predictor and longer answers lose, coefficient −0.252. Pool the 2 and length predicts nothing, because it predicts opposite things in each half.</div>
+    <div class="finding reveal"><strong>The signal was there. It cancelled itself out.</strong> Pooled across the dataset, 4 surface features sit at chance: 51.0% and 51.1% accuracy. Split the data by subset and the same features come alive. On helpfulness data, length is the strongest predictor and longer answers win, coefficient +0.220. On harmlessness data it is still the strongest predictor and longer answers lose, coefficient −0.252. Pool the 2 and length predicts nothing, because it predicts opposite things in each half.</div>
     <div class="finding reveal"><strong>Competence is not robustness.</strong> DeBERTa was the only model that learned the task, and it degraded the most: 19.3 points, against 18.3 for Logistic Regression and 8.4 for XGBoost. The weak models could not fall far because they were already at chance. Being good at the job is what gives an adversary something to take.</div>
     <div class="finding reveal"><strong>Every model was inverted, not just confused.</strong> All 3 architectures scored below 50 percent on adversarial pairs. On a forced binary choice that is systematic inversion: the attacks do not make a judge uncertain, they reliably flip it. Neighbor, the smallest edit of the 4, beat every architecture.</div>
   </div>
@@ -125,18 +125,18 @@
   <div class="wrap">
     <p class="kicker reveal">The headline</p>
     <h2 class="section-title reveal">2 models, identical on paper, opposite under fire</h2>
-    <p class="section-sub reveal">All 3 models scored near 0.50 AUC-ROC on clean evaluation. The real separation only shows up once you attack them and that is the argument of the whole project.</p>
+    <p class="section-sub reveal">On the held-out split the 2 feature based judges picked the better response about half the time and DeBERTa cleared them by under 8 points. Then every one of them fell below 50% under attack. The real separation only shows up once you attack them and that is the argument of the whole project.</p>
     <div class="tbl-wrap reveal">
       <table>
-        <thead><tr><th>Model</th><th>Clean AUC-ROC</th><th>Worst case under attack</th><th>Verdict</th></tr></thead>
+        <thead><tr><th>Model</th><th>Clean accuracy</th><th>Accuracy under attack (419 LLM-Bar pairs)</th><th>Verdict</th></tr></thead>
         <tbody>
-          <tr><td>Logistic Regression</td><td>0.512</td><td>82.1% false preference (Neighbor), 18.3pp overall</td><td><span class="pill bad">fragile</span></td></tr>
-          <tr><td>XGBoost</td><td>0.517</td><td>65.7% false preference (Neighbor), 8.4pp overall</td><td><span class="pill warn">degrades least, learned least</span></td></tr>
-          <tr><td>DeBERTa-v3-small</td><td>0.622</td><td>70.2% false preference (Neighbor), 19.3pp overall</td><td><span class="pill bad">most capable, most fragile</span></td></tr>
+          <tr><td>Logistic Regression</td><td>51.0%</td><td>32.7% overall, 17.9% on Neighbor (−18.3pp)</td><td><span class="pill bad">fragile</span></td></tr>
+          <tr><td>XGBoost</td><td>51.1%</td><td>42.7% overall, 34.3% on Neighbor (−8.4pp)</td><td><span class="pill warn">degrades least, learned least</span></td></tr>
+          <tr><td>DeBERTa-v3-small</td><td>58.7%</td><td>39.4% overall, 29.9% on Neighbor (−19.3pp)</td><td><span class="pill bad">most capable, most fragile</span></td></tr>
         </tbody>
       </table>
     </div>
-    <div class="finding reveal" style="margin-top:20px;"><strong>The model you would pick from the leaderboard is the one that fails hardest.</strong> DeBERTa wins on clean data by 11 AUC points and loses the most under attack. Rank these 3 by benchmark score and you rank them almost exactly wrong for adversarial robustness. That is why you cannot choose an evaluator without attacking it first.</div>
+    <div class="finding reveal" style="margin-top:20px;"><strong>The model you would pick from the leaderboard is the one that fails hardest.</strong> DeBERTa wins on clean data by nearly 8 points of accuracy and loses the most under attack. Rank these 3 by benchmark score and you rank them almost exactly wrong for adversarial robustness. That is why you cannot choose an evaluator without attacking it first.</div>
   </div>
 </section>
 
