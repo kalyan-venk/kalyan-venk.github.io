@@ -50,7 +50,7 @@
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>First-author research · under peer review</span>
     <h1 class="reveal">Multi-Agent Inference Reliability Framework</h1>
-    <p class="lead reveal d1">What happens when the model itself starts failing at runtime and there is no human in the loop to catch it? That became my research problem. I drove it as first author alongside 2 faculty co-authors, owning everything from the question to the architecture to the statistics. The answer was a 3 agent monitor that catches and corrects bad LLM output without retraining anything.</p>
+    <p class="lead reveal d1">What happens when the model starts failing at runtime and there is no human in the loop to catch it? That's my research problem. I drove it as first author alongside 2 faculty co-authors, from question to architecture to statistics. The answer was a 3 agent monitor that catches and corrects bad LLM outputs without retraining.</p>
     <div class="meta reveal d2">
       <span class="chip">LangGraph</span>
       <span class="chip">Ollama</span>
@@ -61,7 +61,7 @@
       <span class="chip">Python 3.12</span>
     </div>
     <div class="cta-row reveal d3" style="margin-top:28px;">
-      <span class="btn btn-ghost" style="pointer-events:none;opacity:.65;cursor:default;">Code kept private during peer review</span>
+      <span class="btn btn-ghost" style="pointer-events:none;opacity:.65;cursor:default;">Code kept private during review</span>
     </div>
   </div>
 </header>
@@ -84,7 +84,7 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">The architecture</p>
-    <h2 class="section-title reveal">3 agents and a do-no-harm gate</h2>
+    <h2 class="section-title reveal">3 agents and a Reversion gate</h2>
     <p class="section-sub reveal">A Planner writes the code. A Critic scores it for hallucination risk between 0 and 1. If that score crosses a threshold the Fixer rewrites it and a Post-Critic scores the result. Then a reversion gate checks whether the rewrite actually improved things and throws it away if it did not. Everything runs locally through Ollama. No API calls, no fine-tuning, fully reproducible.</p>
     <div class="agentflow reveal">
       <svg class="wide" viewBox="0 0 960 300" role="img" aria-label="Planner to Pre-Critic. Low risk output skips the Fixer. Output at or above the threshold is rewritten by the Fixer, then a reversion gate keeps the rewrite only if it improved things."
@@ -145,8 +145,8 @@
 
 <section>
   <div class="wrap">
-    <p class="kicker reveal">The result and the better finding</p>
-    <h2 class="section-title reveal">The gain was real, but the failure case taught me more.</h2>
+    <p class="kicker reveal">Result</p>
+    <h2 class="section-title reveal">The deltas.</h2>
     <p class="section-sub reveal">Across 10 phases and 5 model families, the story was never a single average gain. The number I care about is the failure condition: a weak model (Code Llama 7B) gained +30.3 points pass@1 while a strong one (Qwen2.5 Coder 7B) lost 4.0, both statistically significant. I call it the Inverse Capability Hypothesis. Below roughly 65 percent baseline monitoring is worth deploying; above that the benefit fades, and the exact crossover is still an open question. Knowing when the monitor starts doing harm matters as much as the monitor itself.</p>
     <div class="2-col">
       <div class="chart-card reveal">
