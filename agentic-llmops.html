@@ -147,7 +147,7 @@
   <div class="wrap">
     <p class="kicker reveal">Result</p>
     <h2 class="section-title reveal">The deltas.</h2>
-    <p class="section-sub reveal">Across 10 phases and 5 model families, the story was never a single average gain. The number I care about is the failure condition: a weak model (Code Llama 7B) gained +30.3 points pass@1 while a strong one (Qwen2.5 Coder 7B) lost 4.0, both statistically significant. I call it the Inverse Capability Hypothesis. Below roughly 65 percent baseline monitoring is worth deploying; above that the benefit fades, and the exact crossover is still an open question. Knowing when the monitor starts doing harm matters as much as the monitor itself.</p>
+    <p class="section-sub reveal">Across 10 phases and 5 model families, the story was never a single average gain. The number I care about is the failure condition: a weak model (Code Llama 7B) gained +30.3 points pass@1 while a strong one (Qwen2.5 Coder 7B) lost 4.0, both statistically significant. I call it the Inverse Capability Hypothesis. The crossover sits at 60 to 65 percent baseline capability: below it monitoring is worth deploying, above it the benefit fades. Knowing when the monitor starts doing harm matters as much as the monitor itself.</p>
     <div class="2-col">
       <div class="chart-card reveal">
         <h4>Monitoring delta by model</h4>
@@ -166,6 +166,7 @@
         </table>
       </div>
     </div>
+    <div class="finding reveal" style="margin-top:20px;"><strong>On the 60 to 65 percent crossover.</strong> That number is interpolated between the 2 endpoints I confirmed with repeated trials, Code Llama at 20 percent baseline and Qwen at 90 percent, both with intervals excluding zero. Running every baseline in between was not feasible, so treat the crossover as a reasoned estimate rather than a statistically backed measurement. The direction of the effect is solid. The exact turning point is not.</div>
   </div>
 </section>
 

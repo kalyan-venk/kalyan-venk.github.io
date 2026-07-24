@@ -96,7 +96,7 @@
         <span class="glow" style="background:#a855f7;"></span>
         <span class="tag">First-author research · under peer review</span>
         <h3>Multi-Agent Inference Reliability</h3>
-        <p>A 3 agent monitor, Planner, Critic, Fixer, that catches and corrects bad LLM output at runtime without retraining. The finding I care about is the failure condition: it lifts weak models about +30 points pass@1 but quietly costs strong ones, so above roughly 60 percent baseline the benefit fades.</p>
+        <p>A 3 agent monitor, Planner, Critic, Fixer, that catches and corrects bad LLM output at runtime without retraining. The finding I care about is the failure condition: it lifts weak models about +30 points pass@1 but quietly costs strong ones, so above 60 to 65 percent baseline the benefit fades.</p>
         <div class="metrics">
           <div><div class="m-num">+30.3pp</div><div class="m-lbl">weak-model gain, p=0.002</div></div>
           <div><div class="m-num">10</div><div class="m-lbl">research phases</div></div>
@@ -136,7 +136,7 @@
   <div class="wrap">
     <p class="kicker reveal">The finding I keep coming back to</p>
     <h2 class="section-title reveal">More monitoring is not always better</h2>
-    <p class="section-sub reveal">Add a critic and fixer to a weak coding agent and it jumps 32 points. Add the exact same layer to a strong one and it quietly loses ground. Every model I tested landed on the same downward line, with the crossover around 65 percent baseline. You need to know which side of that line your model sits on before you ship.</p>
+    <p class="section-sub reveal">Add a critic and fixer to a weak coding agent and it jumps 32 points. Add the exact same layer to a strong one and it quietly loses ground. Every model I tested landed on the same downward line, with the crossover at 60 to 65 percent baseline. You need to know which side of that line your model sits on before you ship.</p>
     <div class="chart-card reveal">
       <h4>Monitoring benefit versus baseline capability</h4>
       <p class="cap">Each point is a model. X axis is how good it is on its own, Y axis is what the monitoring pipeline added or removed.</p>
