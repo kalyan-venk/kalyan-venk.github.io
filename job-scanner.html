@@ -46,7 +46,7 @@
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>Agent engineering &#183; in production, every 10 minutes</span>
     <h1 class="reveal">Job Scanner</h1>
-    <p class="lead reveal d1">I am a research engineer who works on agents. So when I looked properly at my own job search, what I saw was not a chore. It was an agent problem with a live dataset attached: heterogeneous sources, unstructured text, a judgment call at every step and real money on every decision. So I built the system and scaled it up. It polls 630 companies every 10 minutes across 8 applicant tracking platforms, judges which roles are worth my time, writes a tailored resume for each one, checks its own output and then stops and waits for me. It has never sent an application on its own and it never will. I designed it that way on purpose.</p>
+    <p class="lead reveal d1">I am a research engineer who works on agents. So when I looked properly at my own job search, what I saw was not a chore. It was an agent problem with a live dataset attached. Heterogeneous sources, unstructured text, a judgment call at every step and real money on every decision. So I built the system and scaled it up. It polls 630 companies every 10 minutes across 8 applicant tracking platforms, judges which roles are worth my time, writes a tailored resume for selected ones, checks its own output and then stops and waits for me. It has never sent an application on its own and it never will. I designed it that way on purpose.</p>
     <div class="meta reveal d2">
       <span class="chip">Python</span>
       <span class="chip">Compound AI system</span>
@@ -73,8 +73,8 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">The architecture</p>
-    <h2 class="section-title reveal">5 model stages, a cheap filter first and a human in the loop</h2>
-    <p class="section-sub reveal">The design is a funnel that spends as little as possible for as long as possible. A free local filter runs before any model is called. Then a cheap model triages. A stronger one judges and writes. A cheap one checks the work. Most postings die early and that is the point. Watch where the dots drop out.</p>
+    <h2 class="section-title reveal">A filter, 5 model stages & human-in-the-loop</h2>
+    <p class="section-sub reveal">The design is a funnel that spends as little as possible for as long as possible. A free local filter runs before any model is called. Then a cheap model triages. A stronger one judges and writes. A cheap one checks the work. Most postings die early and that's the point. Watch where the dots drop out.</p>
 
     <div class="agentflow reveal">
       <svg class="xwide" viewBox="0 0 1260 340" role="img" aria-label="Postings enter from 8 applicant tracking platforms, pass a free local geo filter, a cheap model triage pass, a stronger model verdict pass, resume tailoring, a QA gate that can requeue, a human review gate and finally a deterministic PDF compile. Most postings are filtered out along the way."
@@ -154,15 +154,15 @@
         <div><span class="k ok"></span><span>Cleared QA, cleared me and compiled to a PDF I then send by hand.</span></div>
       </div>
     </div>
-    <p class="section-sub reveal" style="margin-top:16px;">Every stage is a separately scheduled job with its own lock. A slow tailoring run, which can take 20 minutes, never blocks the scanner from finding new postings. A dashboard shows a per stage health grid and backlog so I can see exactly where things are stuck.</p>
+    <p class="section-sub reveal" style="margin-top:16px;">Every stage is a perfectly decoupled with the ones before and after it. A Textbook Queueing example. A fast verdict run, which can take <1 minute, never overwhelms the resume tailoring agent. A dashboard shows a per stage health grid and backlog so I can see exactly where things are stuck.</p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <p class="kicker reveal">The engineering</p>
-    <h2 class="section-title reveal">The hard parts were cost, ordering and trust</h2>
-    <p class="section-sub reveal">Prompting was never the difficult bit. Once a system has to run every 10 minutes forever, spend real money on every call and produce something I am willing to put my name on, the problems stop being about models and start being about architecture.</p>
+    <h2 class="section-title reveal">Cost, Architecture and Trust</h2>
+    <p class="section-sub reveal">Once a system has to run every 10 minutes forever, spend real money on every call and produce something I am willing to put my name on, the problems stop being about models and start being about architecture.</p>
     <div class="feature-grid">
       <div class="feature reveal">
         <h4>Cheapest filter first</h4>
@@ -185,7 +185,7 @@
         <p>Each tailored resume writes a terse fact sheet. Before a new resume goes out to a company I have already applied to, the QA stage compares it against those earlier fact sheets, so I cannot contradict myself across 2 applications to the same employer.</p>
       </div>
       <div class="feature reveal d2">
-        <h4>Human in the loop, by design</h4>
+        <h4>Human-in-the-loop</h4>
         <p>The pipeline stops dead at review. I read every tailored resume and I send every application myself. The automation exists to find and prepare, never to decide and send. Handing that judgment to a model would make the output worse and make me accountable for something I never read.</p>
       </div>
       <div class="feature reveal">
@@ -206,38 +206,9 @@
 
 <section>
   <div class="wrap">
-    <p class="kicker reveal">The finding I did not expect</p>
-    <h2 class="section-title reveal">A naive check called 61% of live jobs dead</h2>
-    <p class="section-sub reveal">The pool of tailored, not yet applied postings kept growing and some of those jobs had quietly closed. So I built a daily check to ask each board whether a posting was still live. The obvious version of that check was badly wrong and working out why was the most useful thing I did on this project.</p>
-    <div class="2-col">
-      <div class="finding reveal">
-        <h4>The bug</h4>
-        <p>The first version asked "is this job still in the company's current listing?" That looked right and was catastrophic. The listing call only ever fetched the first 20 results, which is correct for the scanner's own job, since new postings sort to the top, but is a silent truncation for anything else. One company had 1,657 open roles. On the first full run the check flagged <strong>363 of 594 live jobs as stale, a 61% false positive rate.</strong></p>
-      </div>
-      <div class="finding reveal d1">
-        <h4>The fix and the second bug under it</h4>
-        <p>Paginating properly, using the endpoint's own total rather than trusting page 1, fixed most of it. But a spot check found a posting the listing said was missing that still returned full data on a direct fetch by its own ID. The search index is not consistent between reads. So "missing" now triggers a second, independent confirmation before anything is trusted.</p>
-      </div>
-    </div>
-    <div class="tbl-wrap reveal" style="margin-top:22px;">
-      <table>
-        <thead><tr><th>Outcome on the first full run</th><th>Jobs</th><th>Share</th><th>Verdict</th></tr></thead>
-        <tbody>
-          <tr><td>Confirmed still live</td><td>522</td><td>88%</td><td><span class="pill good">trusted</span></td></tr>
-          <tr><td>Confirmed closed, 404 or empty</td><td>16</td><td>2.7%</td><td><span class="pill good">trusted</span></td></tr>
-          <tr><td>Blocked by bot protection, even after retry</td><td>41</td><td>7%</td><td><span class="pill warn">inconclusive</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="section-sub reveal" style="margin-top:16px;">Of the 522 confirmed live, 139 were rescued by the second pass from being wrongly flagged by the first. The 41 inconclusive ones matter more than they look. A bot protection block is not evidence that a job is closed, so the system records it as unknown and surfaces it for me to look at rather than quietly guessing in either direction. I would rather the system flag what it cannot determine than guess wrong.</p>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
     <p class="kicker reveal">Ingestion</p>
     <h2 class="section-title reveal">10 adapters and the 4 that fight back</h2>
-    <p class="section-sub reveal">6 platforms return a complete listing with full job text in a single call. 4 need a 2 stage fetch: pull the listing, then pull each posting's description separately. Every adapter was verified live against a real company before being trusted, rather than written from documentation and assumed to work.</p>
+    <p class="section-sub reveal">6 platforms return a complete listing with full job text in a single call. 4 need a 2 stage fetch - pull the listing, then pull each posting's description separately. Every adapter was verified live against a real company before being trusted, rather than written from documentation and assumed to work.</p>
     <div class="tbl-wrap reveal">
       <table>
         <thead><tr><th>Platform</th><th>Companies</th><th>Fetch shape</th></tr></thead>
@@ -254,17 +225,16 @@
       </table>
     </div>
     <p class="redact-note reveal">Platform names are withheld rather than merely blurred. They are not in this page's source either. I intend to open source this system once I am settled in a role. Publishing it while I am still using it would be cutting the branch I am sitting on.</p>
-    <p class="section-sub reveal" style="margin-top:16px;">One platform has a quirk worth describing even without naming it. Its page size and total fields are unreliable and asking for more than about 7 results silently returns an empty array despite real data existing. That adapter pages by "did this response come back empty" and never trusts the metadata. 2 further adapters are written and working but sit at 0 companies, because every live tenant I checked on those platforms was Europe only and this search is US only. Writing an adapter then admitting it has nothing to point at beats pretending the coverage is real.</p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
     <p class="kicker reveal">Why it exists</p>
-    <h2 class="section-title reveal">My job search was really an agent problem</h2>
+    <h2 class="section-title reveal">My job search WAS an agent problem</h2>
     <p class="section-sub reveal">The underlying shape is familiar. Heterogeneous sources with inconsistent APIs. Unstructured text that needs judgment rather than rules. A decision worth real money at every step. Generated output that has to be checked before anyone can trust it. A human who stays accountable for whatever goes out. That is the same shape as any serious agentic deployment, which is why I found it worth building properly instead of grinding through by hand.</p>
     <div class="callout reveal">
-      <p>What came out is a compound AI system in the strict sense: multiple models with different capabilities and costs, routed by task, chained through orchestration, with retrieval, structured generation, an evaluation gate, observability, failure handling and a human decision point that cannot be bypassed. The interesting problems were about cost, ordering, trust and handling a model that is confidently wrong. Those turned out to be the real problems.</p>
+      <p>What came out is a compound AI system in the strict sense. Multiple models with different capabilities and costs, routed by task, chained through orchestration, with retrieval, structured generation, an evaluation gate, observability, failure handling and a human decision point that cannot be bypassed. The interesting problems were about cost, architecture, trust and handling a model that is confidently wrong. Those turned out to be the real problems.</p>
     </div>
     <p class="section-sub reveal" style="margin-top:22px;">The repository is private while I am still using it. I am happy to walk through the architecture, the dashboard or any of the decisions above in a conversation.</p>
   </div>

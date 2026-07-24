@@ -517,3 +517,11 @@ chart — no local dependency to install.
   to be the one artifact both Claude Code and Cowork converge on for this
   repo. Update it at the end of any nontrivial session, regardless of which
   Claude surface you're using.
+
+## 2026-07-22 — `distyl-live` BRANCH is the interview-facing scaled-down site (main = full, preserved)
+main is UNTOUCHED (full version; annotated tag `pre-distyl-deepdive` = restore point). All the scale-down work is committed+pushed to a NEW branch **`distyl-live`** (authored solely as Kalyan, no attribution). **Plan: Kalyan flips GitHub Pages source main -> distyl-live before Fri 2026-07-24, and flips it back to main after** (revert = flip the Pages source, no git surgery). CNAME carries onto the branch. Changes on `distyl-live`:
+- **All 3 blueprint pages DELETED** (agentic-llmops-blueprint / predictops-blueprint / inference-lens-blueprint) + their `#blueprints` entry cards on all 3 project pages. Kalyan said the live system-design/code-map flowcharts are "not expected of me / can't defend."
+- **agentic-llmops.html:** +4.85pp restored as the LEAD stat (to MIRROR the submitted resume — reverses the 2026-07-19 purge on this branch only); removed the phase-by-phase timeline + the "what 10 phases taught me" recap; 60% -> 65% crossover.
+- **predictops.html:** Docker figure fixed `1.66GB->733MB/56%` -> **`~1.2GB->~340MB/72%`** (matches submitted resume); ONNX no longer surfaced (only lived in the deleted blueprint).
+- **Live demo (play.html + inference-lens.html):** copy fixed to Logistic-Regression-ONLY (was "2 trained scorers/models" — XGBoost was already pulled from the demo); single result card centered (page-scoped `.il-cards` override, shared style.css untouched); scorer.js verdict text singularized + bumped `?v=2` on both pages.
+- **Repo links:** agentic-llmops "View on GitHub"/footer-Repo -> **"Code kept private during peer review"** (double-blind; Kalyan is privatizing THAT repo only). inference-lens / predictops / play repo links were briefly hidden then RESTORED public per Kalyan — **only agentic-llmops is private.** Home/about profile GitHub links left intact.
