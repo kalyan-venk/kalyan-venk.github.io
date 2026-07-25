@@ -1,0 +1,140 @@
+/* ===========================================================================
+   Blueprint diagrams — the system-design + code-map maps that live inside each
+   project page's #blueprints section.
+
+   EVERY rule is scoped under .bpx on purpose. style.css already owns .card,
+   .pkt, .tag and .legend for other pages (see the CSS-collision note in
+   CLAUDE.md), so an unscoped rule here would silently restyle the project
+   cards and the job-scanner flow legend. Keep the .bpx prefix.
+
+   Design tokens come from style.css — this file defines none of its own.
+   =========================================================================== */
+
+.bpx{margin-top:38px;position:relative;z-index:1}
+.bpx + .bpx{margin-top:52px}
+
+/* section heading above each diagram */
+.bpx .sec-head{margin-bottom:8px}
+.bpx .sec-head h3{font-size:clamp(1.35rem,3vw,1.85rem);letter-spacing:-.02em;font-weight:800;color:var(--text)}
+.bpx .sec-head h3 .num{font-family:var(--mono);font-size:.9rem;color:var(--indigo);
+  border:1px solid var(--border);border-radius:8px;padding:3px 9px;margin-right:12px;vertical-align:middle}
+.bpx .sec-head p{color:var(--text-dim);max-width:74ch;margin-top:12px}
+
+/* diagram frame — flips with the page theme */
+.bpx .dgm-frame{margin-top:24px;border:1px solid var(--border);border-radius:var(--radius);
+  background:linear-gradient(180deg,var(--surface-2),var(--bg-soft));
+  box-shadow:var(--shadow);overflow:hidden}
+.bpx .dgm-bar{display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;
+  padding:11px 16px;border-bottom:1px solid var(--border-soft);background:var(--surface)}
+.bpx .dgm-bar .tag{font-family:var(--mono);font-size:.72rem;color:var(--text-faint);letter-spacing:.05em;
+  padding:4px 9px;border:1px solid var(--border);border-radius:7px;background:var(--surface-2);
+  white-space:nowrap;margin-bottom:0;text-transform:none}
+.bpx .dgm-controls{margin-left:auto;font-family:var(--mono);font-size:.72rem;color:var(--text-faint);
+  letter-spacing:.04em;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.bpx .dgm-controls svg{width:13px;height:13px;color:var(--indigo)}
+
+/* the flow breadcrumb — one chip per stage, hover to spotlight it in the diagram */
+.bpx .flowsteps{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.bpx .fstep{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600;color:var(--text-dim);
+  background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:4px 10px;cursor:pointer;
+  transition:transform .15s,border-color .15s,color .15s,background .15s}
+.bpx .fstep .fdot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--indigo)}
+.bpx .fstep:hover{color:var(--text);border-color:var(--indigo);transform:translateY(-1px);background:var(--accent-soft)}
+.bpx .fstep:hover .fdot{box-shadow:0 0 7px currentColor}
+.bpx .farrow{color:var(--text-faint);opacity:.55;font-size:.72rem}
+
+/* the scroll viewport that holds the SVG */
+.bpx .dgm-wrap{position:relative;overflow:auto;
+  background:radial-gradient(42rem 30rem at 30% -12%,var(--accent-soft),transparent 70%),var(--bg-soft)}
+.bpx .dgm-wrap svg.dgm{display:block;width:100%;height:auto;min-width:960px}
+/* reserve the diagram's height before it renders, so lazy-mounting cannot
+   shift the page under the reader. blueprint.js sets --dgm-ar per diagram. */
+.bpx .dgm-wrap:not(.rendered){aspect-ratio:var(--dgm-ar,1220/900)}
+
+/* node fills by kind — CSS beats the inline fills, so the diagram recolours on a
+   theme flip. Dark defaults first, light overrides after. */
+.bpx .nk-resource,.bpx .nk-data{fill:#12182a;stroke:#3b4570}
+.bpx .nk-stage,.bpx .nk-module{fill:#161a28;stroke:#2b3350}
+.bpx .nk-stageKey{fill:#1b1f39;stroke:#4f5696}
+.bpx .nk-gate{fill:#16232c;stroke:#347470}
+.bpx .nk-artifact,.bpx .nk-meta{fill:#12131c;stroke:#2a2f45}
+.bpx .nk-result{fill:#191426;stroke:#5b3f86}
+.bpx .nk-notebook{fill:#14140f;stroke:#4d4a2a}
+.bpx .nk-config{fill:#101a17;stroke:#2c5148}
+.bpx .nk-deploy{fill:#1a1220;stroke:#6b3a6b}
+.bpx .band-box{stroke:#20283f}
+.bpx .e-grey{stroke:#2a2f45}
+.bpx .e-indigo{stroke:#3b4570}
+.bpx .e-amber{stroke:#5b4a24}
+.bpx .e-green{stroke:#2c5148}
+.bpx .e-pink{stroke:#4a2f4a}
+.bpx svg .em-good{fill:#4ade80}
+.bpx svg .em-warn{fill:#fbbf24}
+.bpx svg .em-bad{fill:#fb7185}
+.bpx .nk.hl{stroke:var(--indigo)!important;stroke-width:2.4px;filter:drop-shadow(0 0 8px rgba(129,140,248,.75))}
+
+:root[data-theme="light"] .bpx .nk-resource,:root[data-theme="light"] .bpx .nk-data{fill:#eef2fb;stroke:#aab6e2}
+:root[data-theme="light"] .bpx .nk-stage,:root[data-theme="light"] .bpx .nk-module{fill:#f4f6fc;stroke:#c8d0e6}
+:root[data-theme="light"] .bpx .nk-stageKey{fill:#e9ecfc;stroke:#9aa6ec}
+:root[data-theme="light"] .bpx .nk-gate{fill:#e4f4f0;stroke:#79c3b8}
+:root[data-theme="light"] .bpx .nk-artifact,:root[data-theme="light"] .bpx .nk-meta{fill:#f2f3f9;stroke:#cbd2e5}
+:root[data-theme="light"] .bpx .nk-result{fill:#f5eefc;stroke:#c6ace7}
+:root[data-theme="light"] .bpx .nk-notebook{fill:#f7f3e4;stroke:#d4ca8f}
+:root[data-theme="light"] .bpx .nk-config{fill:#e6f4ee;stroke:#8ac6b3}
+:root[data-theme="light"] .bpx .nk-deploy{fill:#f9eef8;stroke:#d6a3d6}
+:root[data-theme="light"] .bpx .band-box{stroke:#cdd5e8}
+:root[data-theme="light"] .bpx .e-grey{stroke:#cfd6e6}
+:root[data-theme="light"] .bpx .e-indigo{stroke:#b3bde3}
+:root[data-theme="light"] .bpx .e-amber{stroke:#cdbc86}
+:root[data-theme="light"] .bpx .e-green{stroke:#8cc4b1}
+:root[data-theme="light"] .bpx .e-pink{stroke:#dbabdb}
+:root[data-theme="light"] .bpx svg .em-good{fill:#15a34a}
+:root[data-theme="light"] .bpx svg .em-warn{fill:#b07d09}
+:root[data-theme="light"] .bpx svg .em-bad{fill:#e11d48}
+
+/* node text styles (applied to <text> via class) */
+.bpx svg .n-title{font-family:var(--sans);font-weight:700;fill:var(--text)}
+.bpx svg .n-sub{font-family:var(--mono);fill:var(--text-faint)}
+.bpx svg .n-line{font-family:var(--sans);fill:var(--text-dim)}
+.bpx svg .n-mono{font-family:var(--mono);fill:var(--text-dim)}
+.bpx svg .band-label{font-family:var(--mono);fill:var(--text-faint);letter-spacing:.1em}
+.bpx svg .stage-num{font-family:var(--mono);fill:var(--indigo);font-weight:600}
+.bpx svg .result{font-family:var(--sans);fill:var(--text-dim)}
+.bpx svg .result b{fill:var(--text)}
+
+/* packets. NOTE: style.css already defines .pkt/.pkt.muted for flow.js on
+   job-scanner.html with different colours — that is why these are scoped. */
+.bpx .pkt{transition:fill .25s linear}
+.bpx .pkt.data{fill:var(--indigo);filter:drop-shadow(0 0 5px rgba(129,140,248,.85))}
+.bpx .pkt.adv{fill:var(--warn);filter:drop-shadow(0 0 5px rgba(251,191,36,.85))}
+.bpx .pkt.out{fill:var(--good);filter:drop-shadow(0 0 5px rgba(74,222,128,.85))}
+.bpx .pkt.muted{fill:#59617a;filter:none;opacity:.7}
+
+/* legend */
+.bpx .legend{display:flex;gap:22px;flex-wrap:wrap;padding:14px 18px;border-top:1px solid var(--border-soft);
+  background:var(--surface);font-size:.86rem;color:var(--text-dim)}
+.bpx .legend div{display:flex;align-items:center;gap:9px}
+.bpx .legend .k{width:12px;height:12px;border-radius:50%;flex:none}
+.bpx .legend .k.data{background:var(--indigo);box-shadow:0 0 6px rgba(129,140,248,.8)}
+.bpx .legend .k.adv{background:var(--warn);box-shadow:0 0 6px rgba(251,191,36,.8)}
+.bpx .legend .k.out{background:var(--good);box-shadow:0 0 6px rgba(74,222,128,.8)}
+/* the square "a node/stage/artifact" swatch. Named .swatch, NOT .node:
+   style.css has an unscoped .node{padding:16px 20px;min-width:120px} for the
+   old .pipeline markup, and min-width beat the 12px here — it stretched the
+   swatch into a wide empty box. */
+.bpx .legend .k.swatch{background:var(--surface-2);border:1px solid var(--border);border-radius:3px}
+
+/* read-along notes under a diagram. Named .bp-note, not .card: style.css's
+   .card is the 34px-padded project card and would swallow these. */
+.bpx .bp-notes{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.bpx .bp-note{border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-2);padding:16px 18px}
+.bpx .bp-note h4{font-size:.95rem;margin-bottom:6px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.bpx .bp-note h4 .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.bpx .bp-note p{font-size:.88rem;color:var(--text-dim);margin-bottom:0}
+.bpx .bp-note code{font-family:var(--mono);font-size:.82rem;color:var(--cyan);
+  background:rgba(94,234,212,0.08);padding:1px 5px;border-radius:5px}
+
+@media (max-width:640px){
+  .bpx .dgm-wrap{max-height:70vh}
+}
+@media (prefers-reduced-motion:reduce){.bpx .pkt{transition:none}}

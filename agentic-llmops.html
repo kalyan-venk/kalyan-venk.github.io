@@ -23,6 +23,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
 <link rel="stylesheet" href="assets/style.css?v=4">
+<link rel="stylesheet" href="assets/blueprint.css?v=1">
 </head>
 <body>
 <div class="progress"></div>
@@ -144,67 +145,77 @@
 </section>
 
 <section id="blueprints">
-  <style>
-    .bp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
-    @media(max-width:720px){.bp-grid{grid-template-columns:1fr}}
-    .bp-card{display:block;border:1px solid var(--border);border-radius:16px;background:var(--surface-2);padding:16px;transition:transform .18s,border-color .18s,box-shadow .18s}
-    .bp-card:hover{transform:translateY(-4px);border-color:var(--indigo);box-shadow:0 18px 40px -20px rgba(124,58,237,0.5)}
-    .bp-thumb{border-radius:12px;overflow:hidden;border:1px solid #232a3d;background:#0b0d15;margin-bottom:14px}
-    .bp-thumb svg{display:block;width:100%;height:auto}
-    .bp-card h4{font-size:1.06rem;margin-bottom:6px}
-    .bp-card p{color:var(--text-dim);font-size:.9rem;margin-bottom:12px}
-    .bp-open{color:var(--indigo);font-weight:600;font-size:.9rem}
-    :root[data-theme="light"] .bp-thumb{background:#eef1f8}
-    :root[data-theme="light"] .bp-thumb svg rect{fill:#ffffff;stroke:#cdd5e8}
-    :root[data-theme="light"] .bp-thumb svg path{stroke:#c2cbe0}
-  </style>
   <div class="wrap">
     <p class="kicker reveal">Under the hood</p>
     <h2 class="section-title reveal">See exactly how it is built</h2>
-    <p class="section-sub reveal">2 live blueprints you can zoom into. One traces the Planner-Critic-Fixer pipeline stage by stage. The other maps every file in the repo and how one run becomes the next result. Hover anywhere to magnify.</p>
-    <div class="bp-grid">
-      <a class="bp-card reveal" href="agentic-llmops-blueprint#system">
-        <div class="bp-thumb">
-          <svg viewBox="0 0 320 150" role="img" aria-label="System design preview">
-            <rect x="8" y="52" width="66" height="30" rx="6" fill="#12182a" stroke="#3b4570"/>
-            <rect x="127" y="14" width="66" height="26" rx="6" fill="#161a28" stroke="#232a3d"/>
-            <rect x="127" y="60" width="66" height="26" rx="6" fill="#1b1f39" stroke="#4f5696"/>
-            <rect x="127" y="106" width="66" height="26" rx="6" fill="#16232c" stroke="#347470"/>
-            <rect x="246" y="24" width="66" height="24" rx="6" fill="#12131c" stroke="#2a2f45"/>
-            <rect x="246" y="98" width="66" height="24" rx="6" fill="#191426" stroke="#5b3f86"/>
-            <path d="M160,40 V60 M160,86 V106" stroke="#232a3d" stroke-width="1.6" fill="none"/>
-            <path d="M74,67 C100,67 105,27 127,27" stroke="#3b4570" stroke-width="1.4" fill="none"/>
-            <path d="M193,73 C220,73 224,110 246,110" stroke="#5b4a24" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
-            <circle r="4" fill="#818cf8"><animateMotion dur="2.8s" repeatCount="indefinite" path="M74,67 C100,67 105,27 127,27"/></circle>
-            <circle r="3.5" fill="#fbbf24"><animateMotion dur="2.6s" repeatCount="indefinite" path="M193,73 C220,73 224,110 246,110"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
-          </svg>
+    <p class="section-sub reveal">2 live blueprints. One traces the Planner-Critic-Fixer pipeline stage by stage. The other maps every file in the repo and how one run becomes the next result. The moving dots are data in flight, coloured by what kind of data it is.</p>
+
+    <!-- ============================ DIAGRAM 1 ============================ -->
+    <div class="bpx" id="system">
+      <div class="sec-head">
+        <h3><span class="num">01</span>System design, the stages in run order</h3>
+        <p>
+          Read it top to bottom. On the left are the models and data, all served locally through Ollama with no retraining.
+          The centre spine is the <b>monitoring pipeline</b> in run order: Planner, hybrid Pre-Critic, the Fixer behind a threshold, a reversion gate, Post-Critic and the test.
+          The right shows what each run writes to disk, ending in the headline result. A baseline with no monitoring runs alongside for a clean before-and-after.
+        </p>
+      </div>
+
+      <div class="dgm-frame">
+        <div class="dgm-bar">
+          <span class="tag">system.blueprint</span>
+          <div class="flowsteps" data-steps="system"></div>
+          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
         </div>
-        <h4>System design</h4>
-        <p>The monitoring pipeline in run order, from Planner through the reversion gate to pass@1, with the baseline control alongside and every result it writes.</p>
-        <span class="bp-open">Open the system map &rarr;</span>
-      </a>
-      <a class="bp-card reveal d1" href="agentic-llmops-blueprint#code">
-        <div class="bp-thumb">
-          <svg viewBox="0 0 320 150" role="img" aria-label="Code map preview">
-            <rect x="8" y="18" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="8" y="64" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="8" y="110" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="129" y="18" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="129" y="64" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="129" y="110" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="250" y="41" width="62" height="22" rx="5" fill="#12182a" stroke="#3b4570"/>
-            <rect x="250" y="87" width="62" height="22" rx="5" fill="#12131c" stroke="#2a2f45"/>
-            <path d="M70,29 H129 M70,75 H129 M70,121 H129" stroke="#4d4a2a" stroke-width="1.2" fill="none"/>
-            <path d="M191,29 C220,29 222,52 250,52 M191,75 C220,75 224,98 250,98" stroke="#2b3350" stroke-width="1.2" fill="none"/>
-            <path d="M281,63 V87" stroke="#3b4570" stroke-width="1.4" fill="none"/>
-            <circle cy="75" r="3.6" fill="#818cf8"><animate attributeName="cx" values="70;129" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.2s" repeatCount="indefinite"/></circle>
-            <circle cx="281" r="3.6" fill="#4ade80"><animate attributeName="cy" values="63;87" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
-          </svg>
+        <div class="dgm-wrap" id="wrap-system">
+          <svg class="dgm" id="svg-system" role="img" aria-label="System design of Multi-Agent Inference Reliability as a top-to-bottom pipeline with resources feeding in from the left and artifacts produced on the right."></svg>
         </div>
-        <h4>Code map</h4>
-        <p>Every file with its one-line job, arranged around the data lineage: benchmark to planner cache to per-run CSVs to the confidence intervals.</p>
-        <span class="bp-open">Open the code map &rarr;</span>
-      </a>
+        <div class="legend">
+          <div><span class="k data"></span>Fresh planner code, in flight</div>
+          <div><span class="k adv"></span>Flagged by the critic, routed to the Fixer</div>
+          <div><span class="k out"></span>Cleared the gate, or passed the tests</div>
+          <div><span class="k swatch"></span>Stage · model · artifact</div>
+        </div>
+      </div>
+
+      <div class="bp-notes">
+        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>The finding is the failure condition</h4>
+          <p>Monitoring is not a free win. Below roughly <b>65% baseline</b> it lifts a weak agent a lot; above it, the same layer quietly costs a strong one points. Knowing which side your model sits on is the contribution.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>The gate is do-no-harm, not the hero</h4>
+          <p>The reversion gate throws away <b>73.4%</b> of the Fixer's rewrites, keeping only strict improvements. The ablation shows problem context and fixer scale drive the gains; the gate mostly protects the downside.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>The critic is a hybrid</h4>
+          <p>A static <code>AST</code> pass catches syntax errors and undefined names first and sets a floor. The LLM critic can only push the risk score higher, never talk a real defect down to clean.</p></div>
+      </div>
+    </div>
+
+    <!-- ============================ DIAGRAM 2 ============================ -->
+    <div class="bpx" id="code">
+      <div class="sec-head">
+        <h3><span class="num">02</span>Code map, every file and the data lineage</h3>
+        <p>
+          Same project, a different lens. The centre spine is the <b>data lineage</b>: a benchmark becomes a planner cache,
+          then per-run CSVs, then the summary tables, then the confidence intervals. The phase scripts that drive each run sit on the left,
+          the single-file pipeline (<b>agent.py</b>) is in the middle, and the paper, Docker and dependencies sit on the right.
+          Every file in the repo is here with its one-line job.
+        </p>
+      </div>
+
+      <div class="dgm-frame">
+        <div class="dgm-bar">
+          <span class="tag">code.blueprint</span>
+          <div class="flowsteps" data-steps="code"></div>
+          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
+        </div>
+        <div class="dgm-wrap" id="wrap-code">
+          <svg class="dgm" id="svg-code" role="img" aria-label="Code map of Multi-Agent Inference Reliability: every file with its role, arranged around the data lineage spine."></svg>
+        </div>
+        <div class="legend">
+          <div><span class="k data"></span>Data moving through the lineage</div>
+          <div><span class="k out"></span>The confirmed result (95% CIs)</div>
+          <div><span class="k swatch"></span>File · module · artifact</div>
+          <div><span style="font-family:var(--mono);font-size:.8rem;color:var(--text-faint)">italic monospace = a file on disk</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -360,6 +371,176 @@ window.addEventListener('load', () => {
     }
   });
 });
+</script>
+<script src="assets/blueprint.js?v=1"></script>
+<script>
+/* Diagram specs for this project. The engine that draws them is shared
+   (assets/blueprint.js); only this data is per-page. */
+(function(){
+  "use strict";
+  /* =====================================================================
+     SPEC 1 - SYSTEM DESIGN (stages of progression)
+     3 columns: resources (left) · pipeline spine (centre) · artifacts (right)
+     ===================================================================== */
+  function srow(i){ return 96 + i*128; }
+  var sys={
+    w:1220, h:900, r:5, every:760,
+    steps:[
+      {label:"Planner",target:"s1",color:"#818cf8"},
+      {label:"Pre-Critic",target:"s2",color:"#5eead4"},
+      {label:"Fixer",target:"s3",color:"#fbbf24"},
+      {label:"reversion gate",target:"s4",color:"#fbbf24"},
+      {label:"Post-Critic",target:"s5",color:"#818cf8"},
+      {label:"pass@1",target:"s6",color:"#4ade80"}
+    ],
+    bands:[
+      {x:20,y:60,w:300,h:800,label:"MODELS + DATA",stroke:"#20283f"},
+      {x:450,y:60,w:340,h:800,label:"MONITORING PIPELINE",stroke:"#2a2f52"},
+      {x:900,y:60,w:300,h:800,label:"RESULTS",stroke:"#24304a"}
+    ],
+    nodes:[
+      {id:"ds",kind:"resource",x:20,y:srow(0),w:300,h:84,title:"Benchmarks",sub:"HuggingFace",stripe:"#818cf8",lines:[
+        {t:"HumanEval \u00b7 HumanEval+ \u00b7 MBPP"},{t:"100 problems each (N = 100)"}]},
+      {id:"planners",kind:"resource",x:20,y:srow(1),w:300,h:102,title:"Planner models",sub:"swept per phase",stripe:"#818cf8",lines:[
+        {t:"Code Llama 7B \u00b7 Llama 3.1 8B"},{t:"DeepSeek 6.7B \u00b7 Qwen2.5 Coder 7B"},{t:"StarCoder2 7B \u00b7 Llama 3.2 3B"}]},
+      {id:"ollama",kind:"resource",x:20,y:srow(2)+6,w:300,h:78,title:"Ollama",sub:"local \u00b7 no external API",lines:[
+        {t:"serves every model over HTTP"},{t:"no retraining, fully reproducible"}]},
+      {id:"cf",kind:"resource",x:20,y:srow(3)+8,w:300,h:82,title:"Critic + Fixer model",sub:"held fixed",stripe:"#5eead4",lines:[
+        {t:"Llama 3.1 8B \u00b7 T = 0.0"},{t:"fixer scale is the real bottleneck"}]},
+      {id:"base",kind:"resource",x:20,y:srow(5),w:300,h:82,title:"Baseline (control)",sub:"runs alongside",lines:[
+        {t:"Planner \u2192 Post-Critic \u2192 Eval"},{t:"no critic, no fixer \u2014 a clean A/B"}]},
+
+      {id:"s1",kind:"stageKey",x:470,y:srow(0),w:300,h:84,tag:"01",title:"Planner",sub:"planner() \u00b7 agent.py",stripe:"#818cf8",lines:[
+        {t:"writes the Python function"},{t:"planner T \u2208 {0.0, 0.3, 0.7}"}]},
+      {id:"s2",kind:"gate",x:470,y:srow(1),w:300,h:102,tag:"02",title:"Pre-Critic \u00b7 hybrid",sub:"run_hybrid_critic()",stripe:"#5eead4",lines:[
+        {t:"static AST floor + LLM critic"},{t:"hallucination risk, scored 0 \u2192 1"},{t:"the static score can only push it up"}]},
+      {id:"s3",kind:"stageKey",x:470,y:srow(2),w:300,h:102,tag:"03",title:"Fixer \u00b7 \u03c4 gate",sub:"fixer() \u00b7 agent.py",stripe:"#fbbf24",lines:[
+        {t:"runs only if score > \u03c4 (default 0.60)"},{t:"rewrites, given the problem context"},{t:"below \u03c4 \u2192 ships untouched"}]},
+      {id:"s4",kind:"gate",x:470,y:srow(3),w:300,h:102,tag:"04",title:"Reversion gate",sub:"inside fixer()",stripe:"#fbbf24",lines:[
+        {t:"keep the fix only if it strictly improves"},{t:"otherwise revert to the original"},{t:"reverts 73.4% of fixer attempts",cls:"em-warn"}]},
+      {id:"s5",kind:"stage",x:470,y:srow(4),w:300,h:84,tag:"05",title:"Post-Critic",sub:"post_critic()",lines:[
+        {t:"re-scores the final code"},{t:"same model + prompt as the pre-critic"}]},
+      {id:"s6",kind:"stageKey",x:470,y:srow(5),w:300,h:90,tag:"06",title:"Evaluation",sub:"run_tests()",stripe:"#4ade80",lines:[
+        {t:"pass@1 on hidden unit tests"},{t:"10 s SIGALRM timeout \u00b7 pass@2 on retry"}]},
+
+      {id:"a1",kind:"artifact",x:900,y:srow(0),w:300,h:84,title:"planner cache",sub:"results/cache/*.json",lines:[
+        {t:"1 JSON per model + trial"},{t:"baseline + monitoring score the same code"}]},
+      {id:"a2",kind:"artifact",x:900,y:srow(2)+6,w:300,h:84,title:"per-run raw CSV",sub:"results/raw/ (193 files)",lines:[
+        {t:"pass@1 \u00b7 pre / post score"},{t:"fixer_triggered \u00b7 gate_reverted"}]},
+      {id:"a3",kind:"artifact",x:900,y:srow(3)+8,w:300,h:82,title:"summary + CI CSVs",sub:"results/summary/",lines:[
+        {t:"master_results_phase*.csv",mono:true,size:11},{t:"phase7_ci_summary.csv \u2192 95% CIs",mono:true,size:11}]},
+      {id:"a4",kind:"result",x:900,y:srow(4)+6,w:300,h:120,title:"Inverse Capability Hypothesis",titleSize:13.5,stripe:"#5eead4",lines:[
+        {t:"Code Llama 7B (20%)  +30.3pp \u2713",cls:"em-good"},
+        {t:"Qwen2.5 Coder 7B (90%)  \u22124.0pp \u2717",cls:"em-bad"},
+        {t:"crossover \u2248 65% baseline pass@1"},
+        {t:"help the weak, hurt the strong"}]},
+      {id:"aml",kind:"data",x:900,y:srow(5),w:300,h:64,title:"MLflow tracking",sub:"results/tracking.db",lines:[
+        {t:"params \u00b7 metrics \u00b7 every run (SQLite)"}]}
+    ],
+    edges:[
+      {from:"s1",to:"s2",stroke:"#3b4570"},{from:"s2",to:"s3",stroke:"#3b4570"},{from:"s3",to:"s4",stroke:"#3b4570"},
+      {from:"s4",to:"s5",stroke:"#3b4570"},{from:"s5",to:"s6",stroke:"#3b4570"},
+      {from:"ds",to:"s1",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"planners",to:"s1",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"ollama",to:"s2",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"cf",to:"s3",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"base",to:"s6",fromSide:"r",toSide:"l",stroke:"#2a2f45",dash:"6 5"},
+      {from:"s1",to:"a1",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s6",to:"a2",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"a2",to:"a3",stroke:"#3b4570"},{from:"a3",to:"a4",stroke:"#3b4570"},
+      {from:"s6",to:"aml",fromSide:"r",toSide:"l",stroke:"#2c3450",dash:"5 5"}
+    ],
+    flow:[
+      {paths:[0,1,2,3,4],cls:"data",weight:6,dur:8200,splits:[{at:2,cls:"adv"},{at:4,cls:"out"}]},
+      {paths:[5],cls:"data",weight:2,dur:1600},
+      {paths:[6],cls:"data",weight:2,dur:1600},
+      {paths:[8],cls:"out",weight:1,dur:1500},
+      {paths:[10],cls:"data",weight:1,dur:1500},
+      {paths:[11],cls:"out",weight:2,dur:1500},
+      {paths:[12,13],cls:"out",weight:2,dur:2600}
+    ]
+  };
+
+  function crow(i){ return 92 + i*120; }
+  var CX=430, CW=250, AX=760, AW=250;
+  var code={
+    w:1240, h:960, r:4.5, every:720,
+    steps:[
+      {label:"benchmark",target:"bench",color:"#818cf8"},
+      {label:"agent.py",target:"agentpy",color:"#818cf8"},
+      {label:"cache",target:"cache",color:"#818cf8"},
+      {label:"raw CSVs",target:"raw",color:"#818cf8"},
+      {label:"summary",target:"summary",color:"#fbbf24"},
+      {label:"CIs",target:"ci",color:"#4ade80"}
+    ],
+    bands:[
+      {x:20,y:60,w:360,h:880,label:"SCRIPTS \u00b7 phases 1\u201310",stroke:"#3a381f"},
+      {x:CX-14,y:60,w:CW+28,h:880,label:"src/",stroke:"#2b3350"},
+      {x:AX-14,y:60,w:AW+28,h:880,label:"DATA LINEAGE",stroke:"#24304a"},
+      {x:1050,y:60,w:170,h:880,label:"META",stroke:"#262b3d"}
+    ],
+    nodes:[
+      {id:"agentpy",kind:"module",x:CX,y:crow(2)-10,w:CW,h:150,title:"src/agent.py",titleSize:14,sub:"the whole pipeline (901 lines)",stripe:"#818cf8",lines:[
+        {t:"planner \u00b7 pre_critic \u00b7 fixer \u00b7 post_critic",size:10},
+        {t:"run_hybrid_critic() + static_analysis()",size:10},
+        {t:"baseline_graph() \u00b7 monitoring_graph()",size:10},
+        {t:"run_tests() \u2014 pass@1, SIGALRM 10s",size:10},
+        {t:"MLflow logging + CSV writers",size:10}]},
+      {id:"cipy",kind:"module",x:CX,y:crow(6),w:CW,h:80,title:"src/compute_phase7_ci.py",titleSize:12.5,stripe:"#4ade80",lines:[
+        {t:"pairs baseline / monitoring trials"},{t:"mean \u0394pp + 95% CI (t, df = 2)"}]},
+
+      {id:"sc3",kind:"notebook",x:20,y:crow(0),w:360,h:54,title:"run_experiments.sh  \u00b7  Phase 3",titleSize:12.5,lines:[{t:"full 8B critic + fixer + gate matrix"}]},
+      {id:"sc4",kind:"notebook",x:20,y:crow(1),w:360,h:54,title:"run_phase4 / 4b.sh  \u00b7  Phase 4",titleSize:12.5,lines:[{t:"few-shot + iterative, then 2\u00d72 at N=100"}]},
+      {id:"sc5",kind:"notebook",x:20,y:crow(2),w:360,h:54,title:"run_phase5.sh  \u00b7  Phase 5",titleSize:12.5,lines:[{t:"code-pretrained planners added"}]},
+      {id:"sc6",kind:"notebook",x:20,y:crow(3),w:360,h:54,title:"run_phase6.sh  \u00b7  Phase 6",titleSize:12.5,lines:[{t:"\u03c4 sweep {0.60, 0.70, 0.75} + retry"}]},
+      {id:"sc7",kind:"notebook",x:20,y:crow(4),w:360,h:54,title:"run_phase7.sh  \u00b7  Phase 7",titleSize:12.5,lines:[{t:"CI endpoints (Code Llama, Qwen)"}]},
+      {id:"sc8",kind:"notebook",x:20,y:crow(5),w:360,h:54,title:"run_phase8_ablation.sh  \u00b7  Phase 8",titleSize:12.5,lines:[{t:"ablate fixer scale / context / gate"}]},
+      {id:"sc9",kind:"notebook",x:20,y:crow(6),w:360,h:64,title:"run_phase9 / 10.sh  \u00b7  Phase 9\u201310",titleSize:12.5,lines:[{t:"mid-model CIs + HumanEval+ / MBPP"}]},
+
+      {id:"bench",kind:"data",x:AX,y:crow(0),w:AW,h:72,title:"benchmark",titleSize:13.5,sub:"HuggingFace datasets",lines:[
+        {t:"HumanEval / HumanEval+ / MBPP",mono:true,size:11},{t:"N = 100 problems",mono:true,size:11}]},
+      {id:"cache",kind:"data",x:AX,y:crow(1)+6,w:AW,h:78,title:"results/cache/*.json",titleSize:12,sub:"planner outputs",lines:[
+        {t:"1 per model + trial",mono:true,size:11},{t:"__metadata__ few-shot guard",mono:true,size:10.5}]},
+      {id:"raw",kind:"data",x:AX,y:crow(2)+16,w:AW,h:78,title:"results/raw/  (193 CSVs)",titleSize:11.5,sub:"per problem",lines:[
+        {t:"pass@1 \u00b7 pre / post score",mono:true,size:11},{t:"fixer_triggered \u00b7 gate_reverted",mono:true,size:10}]},
+      {id:"summary",kind:"data",x:AX,y:crow(3)+26,w:AW,h:70,title:"master_results_phase*.csv",titleSize:11,sub:"results/summary/",lines:[
+        {t:"1 aggregate row per run"}]},
+      {id:"ci",kind:"result",x:AX,y:crow(4)+32,w:AW,h:82,title:"phase7_ci_summary.csv",titleSize:12,sub:"the headline CIs",stripe:"#4ade80",lines:[
+        {t:"+30.3pp [24.1, 36.6]",mono:true,size:10.5,cls:"em-good"},{t:"\u22124.0pp [\u22126.5, \u22121.5]",mono:true,size:10.5,cls:"em-bad"}]},
+      {id:"track",kind:"data",x:AX,y:crow(6),w:AW,h:64,title:"results/tracking.db",titleSize:12.5,sub:"MLflow (SQLite)",lines:[
+        {t:"params \u00b7 metrics per run"}]},
+
+      {id:"paper",kind:"meta",x:1050,y:crow(0),w:170,h:88,title:"paper/",titleSize:13,lines:[
+        {t:"main.tex \u00b7 sections/",mono:true,size:10.5},{t:"figures/ \u00b7 main.pdf",mono:true,size:10.5},{t:"(frozen, anonymized)",size:10.5}]},
+      {id:"docker",kind:"deploy",x:1050,y:crow(2)-6,w:170,h:88,title:"Docker",titleSize:13,lines:[
+        {t:"Dockerfile",mono:true,size:11},{t:"compose (+ .cpu)",mono:true,size:10.5},{t:"py3.12-slim runner",size:10.5}]},
+      {id:"deps",kind:"config",x:1050,y:crow(4)-2,w:170,h:96,title:"requirements.txt",titleSize:12,lines:[
+        {t:"LangGraph \u00b7 LangChain",mono:true,size:10.5},{t:"langchain-ollama",mono:true,size:10.5},{t:"MLflow \u00b7 evalplus",mono:true,size:10.5}]},
+      {id:"cmeta",kind:"meta",x:1050,y:crow(6)-2,w:170,h:76,title:"docs",titleSize:13,lines:[
+        {t:"README.md",mono:true,size:10.5},{t:"notebooks/ (Colab)",mono:true,size:10}]}
+    ],
+    edges:[
+      {from:"bench",to:"cache",stroke:"#3b4570"},{from:"cache",to:"raw",stroke:"#3b4570"},
+      {from:"raw",to:"summary",stroke:"#3b4570"},{from:"summary",to:"ci",stroke:"#3b4570"},
+      {from:"agentpy",to:"cache",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"agentpy",to:"raw",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"cipy",to:"ci",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"bench",to:"agentpy",fromSide:"l",toSide:"r",stroke:"#3b4570"},
+      {from:"sc7",to:"agentpy",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"sc9",to:"cipy",fromSide:"r",toSide:"l",stroke:"#4d4a2a"}
+    ],
+    flow:[
+      {paths:[0,1,2,3],cls:"data",weight:6,dur:9000,splits:[{at:3,cls:"out"}]},
+      {paths:[4],cls:"data",weight:2,dur:1500},
+      {paths:[5],cls:"data",weight:2,dur:1500},
+      {paths:[6],cls:"out",weight:2,dur:1500},
+      {paths:[8],cls:"data",weight:1,dur:1500}
+    ]
+  };
+
+  KVBlueprint.mount("svg-system","wrap-system",sys,"system");
+  KVBlueprint.mount("svg-code","wrap-code",code,"code");
+})();
 </script>
 </body>
 </html>

@@ -39,3 +39,10 @@ that `token_length` flips sign between the helpful (+0.220) and harmless
 absence of signal. Lesson: before concluding a feature set is uninformative,
 check whether the training pool mixes populations where the relationship runs
 in different directions.
+
+## 2026-07-24 — Repeated the `.node` CSS collision the top entry of this file already warns about
+Moved the blueprint diagrams onto the project pages. Carried the legend markup over verbatim, including `<span class="k node">`. Those pages load `style.css`, which has an **unscoped** `.node { padding: 16px 20px; min-width: 120px }` for `predictops.html`'s old `.pipeline` markup, so the 12px swatch stretched into a wide empty box — the same visual failure as the 2026-07-16 `.pkt.flow` entry above, from the same cause.
+- **What I did right:** scoped every *new* rule in `assets/blueprint.css` under `.bpx`, precisely to stop this.
+- **What I missed:** scoping my own rules does nothing for markup that carries a class an existing unscoped rule already claims. The audit has to cover the class names in the **markup**, not just the ones in the new stylesheet.
+- **Guard:** when moving markup between pages with different stylesheets, extract every class name in the moved HTML and grep the destination's CSS for each one. Renamed to `.k.swatch`. The other carried-over names (`.num`, `.tag`, `.k`, `.dot`, `.pkt`) were checked and are safe — `style.css` scopes them (`.stat .num`, `.card .tag`, `.flow-legend .k`, `.embed-bar .dot`) or loses on specificity.
+- **Also:** read `MISTAKES.md` before building, not after. This entry existed and would have caught it.

@@ -23,6 +23,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
 <link rel="stylesheet" href="assets/style.css?v=4">
+<link rel="stylesheet" href="assets/blueprint.css?v=1">
 </head>
 <body>
 <div class="progress"></div>
@@ -99,67 +100,77 @@
 </section>
 
 <section id="blueprints">
-  <style>
-    .bp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
-    @media(max-width:720px){.bp-grid{grid-template-columns:1fr}}
-    .bp-card{display:block;border:1px solid var(--border);border-radius:16px;background:var(--surface-2);padding:16px;transition:transform .18s,border-color .18s,box-shadow .18s}
-    .bp-card:hover{transform:translateY(-4px);border-color:var(--indigo);box-shadow:0 18px 40px -20px rgba(124,58,237,0.5)}
-    .bp-thumb{border-radius:12px;overflow:hidden;border:1px solid #232a3d;background:#0b0d15;margin-bottom:14px}
-    .bp-thumb svg{display:block;width:100%;height:auto}
-    .bp-card h4{font-size:1.06rem;margin-bottom:6px}
-    .bp-card p{color:var(--text-dim);font-size:.9rem;margin-bottom:12px}
-    .bp-open{color:var(--indigo);font-weight:600;font-size:.9rem}
-    :root[data-theme="light"] .bp-thumb{background:#eef1f8}
-    :root[data-theme="light"] .bp-thumb svg rect{fill:#ffffff;stroke:#cdd5e8}
-    :root[data-theme="light"] .bp-thumb svg path{stroke:#c2cbe0}
-  </style>
   <div class="wrap">
     <p class="kicker reveal">Under the hood</p>
     <h2 class="section-title reveal">See exactly how it is built</h2>
-    <p class="section-sub reveal">2 live blueprints you can zoom into. One traces the ops loop stage by stage. The other maps every file in the repo and how one artifact becomes the next. Hover anywhere to magnify.</p>
-    <div class="bp-grid">
-      <a class="bp-card reveal" href="predictops-blueprint#system">
-        <div class="bp-thumb">
-          <svg viewBox="0 0 320 150" role="img" aria-label="System design preview">
-            <rect x="8" y="52" width="66" height="30" rx="6" fill="#12182a" stroke="#3b4570"/>
-            <rect x="127" y="14" width="66" height="26" rx="6" fill="#161a28" stroke="#232a3d"/>
-            <rect x="127" y="60" width="66" height="26" rx="6" fill="#1b1f39" stroke="#4f5696"/>
-            <rect x="127" y="106" width="66" height="26" rx="6" fill="#16232c" stroke="#347470"/>
-            <rect x="246" y="24" width="66" height="24" rx="6" fill="#12131c" stroke="#2a2f45"/>
-            <rect x="246" y="98" width="66" height="24" rx="6" fill="#191426" stroke="#5b3f86"/>
-            <path d="M160,40 V60 M160,86 V106" stroke="#232a3d" stroke-width="1.6" fill="none"/>
-            <path d="M74,67 C100,67 105,27 127,27" stroke="#3b4570" stroke-width="1.4" fill="none"/>
-            <path d="M193,73 C220,73 224,110 246,110" stroke="#5b4a24" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
-            <circle r="4" fill="#818cf8"><animateMotion dur="2.8s" repeatCount="indefinite" path="M74,67 C100,67 105,27 127,27"/></circle>
-            <circle r="3.5" fill="#fbbf24"><animateMotion dur="2.6s" repeatCount="indefinite" path="M193,73 C220,73 224,110 246,110"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
-          </svg>
+    <p class="section-sub reveal">2 live blueprints. One traces the ops loop stage by stage. The other maps every file in the repo and how one artifact becomes the next. The moving dots are data in flight, coloured by what kind of data it is.</p>
+
+    <!-- ============================ DIAGRAM 1 ============================ -->
+    <div class="bpx" id="system">
+      <div class="sec-head">
+        <h3><span class="num">01</span>System design, the stages in run order</h3>
+        <p>
+          Read it top to bottom. The model is deliberately boring, a tabular churn classifier; the point is everything after it. On the left are the inputs and config.
+          The centre spine is the <b>ops loop</b> in run order: load, train and compare, export to ONNX, the CI eval gate, registry promotion, serving, and drift.
+          The right shows what each stage writes to disk. The amber path is the drift monitor watching production for feature shift.
+        </p>
+      </div>
+
+      <div class="dgm-frame">
+        <div class="dgm-bar">
+          <span class="tag">system.blueprint</span>
+          <div class="flowsteps" data-steps="system"></div>
+          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
         </div>
-        <h4>System design</h4>
-        <p>The ops loop in run order, from data through the CI eval gate and registry promotion to a served, drift-monitored model.</p>
-        <span class="bp-open">Open the system map &rarr;</span>
-      </a>
-      <a class="bp-card reveal d1" href="predictops-blueprint#code">
-        <div class="bp-thumb">
-          <svg viewBox="0 0 320 150" role="img" aria-label="Code map preview">
-            <rect x="8" y="18" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="8" y="64" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="8" y="110" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="129" y="18" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="129" y="64" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="129" y="110" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="250" y="41" width="62" height="22" rx="5" fill="#12182a" stroke="#3b4570"/>
-            <rect x="250" y="87" width="62" height="22" rx="5" fill="#12131c" stroke="#2a2f45"/>
-            <path d="M70,29 H129 M70,75 H129 M70,121 H129" stroke="#4d4a2a" stroke-width="1.2" fill="none"/>
-            <path d="M191,29 C220,29 222,52 250,52 M191,75 C220,75 224,98 250,98" stroke="#2b3350" stroke-width="1.2" fill="none"/>
-            <path d="M281,63 V87" stroke="#3b4570" stroke-width="1.4" fill="none"/>
-            <circle cy="75" r="3.6" fill="#818cf8"><animate attributeName="cx" values="70;129" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.2s" repeatCount="indefinite"/></circle>
-            <circle cx="281" r="3.6" fill="#4ade80"><animate attributeName="cy" values="63;87" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
-          </svg>
+        <div class="dgm-wrap" id="wrap-system">
+          <svg class="dgm" id="svg-system" role="img" aria-label="System design of PredictOps as a top-to-bottom pipeline with resources feeding in from the left and artifacts produced on the right."></svg>
         </div>
-        <h4>Code map</h4>
-        <p>Every file with its one-line job, arranged around the data lineage: CSV to trained model to ONNX to a promoted registry version to the live API.</p>
-        <span class="bp-open">Open the code map &rarr;</span>
-      </a>
+        <div class="legend">
+          <div><span class="k data"></span>Data & features, in flight</div>
+          <div><span class="k adv"></span>Drift alert (PSI > 0.15)</div>
+          <div><span class="k out"></span>Cleared the gate → promoted & served</div>
+          <div><span class="k swatch"></span>Stage · artifact · model</div>
+        </div>
+      </div>
+
+      <div class="bp-notes">
+        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>The ops loop is the project</h4>
+          <p>The churn model is plumbing. The contribution is everything after it: a CI gate that fails the build below <b>0.80</b> ROC-AUC, registry promotion, and drift detection wired into one make pipeline.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>The simpler model won, and shipped</h4>
+          <p>Logistic Regression beat XGBoost on cross-validated ROC-AUC, <b>0.846 to 0.842</b>, so the simpler model is the one that got promoted. Not a foregone conclusion picked to look tidy.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>A tiny serving image, on purpose</h4>
+          <p>A multi-stage build trains and exports to <code>ONNX</code>, then serves with onnxruntime alone, no sklearn at runtime. That takes the image from about <b>1.17 GB to 343 MB</b>.</p></div>
+      </div>
+    </div>
+
+    <!-- ============================ DIAGRAM 2 ============================ -->
+    <div class="bpx" id="code">
+      <div class="sec-head">
+        <h3><span class="num">02</span>Code map, every file and the data lineage</h3>
+        <p>
+          Same project, a different lens. The centre spine is the <b>data lineage</b>: a CSV becomes a cleaned frame, a trained model,
+          an ONNX artifact, a promoted registry version, then a served prediction. The tests, CI and build files sit on the left,
+          the package modules (<b>src/predictops</b>) are in the middle, and Docker, dependencies and docs sit on the right.
+          Every file in the repo is here with its one-line job.
+        </p>
+      </div>
+
+      <div class="dgm-frame">
+        <div class="dgm-bar">
+          <span class="tag">code.blueprint</span>
+          <div class="flowsteps" data-steps="code"></div>
+          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
+        </div>
+        <div class="dgm-wrap" id="wrap-code">
+          <svg class="dgm" id="svg-code" role="img" aria-label="Code map of PredictOps: every file with its role, arranged around the data lineage spine."></svg>
+        </div>
+        <div class="legend">
+          <div><span class="k data"></span>Data moving through the lineage</div>
+          <div><span class="k out"></span>Gated, promoted, served</div>
+          <div><span class="k swatch"></span>File · module · artifact</div>
+          <div><span style="font-family:var(--mono);font-size:.8rem;color:var(--text-faint)">italic monospace = a file on disk</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -225,5 +236,174 @@
 </footer>
 
 <script src="assets/script.js?v=4"></script>
+<script src="assets/blueprint.js?v=1"></script>
+<script>
+/* Diagram specs for this project. The engine that draws them is shared
+   (assets/blueprint.js); only this data is per-page. */
+(function(){
+  "use strict";
+  /* =====================================================================
+     SPEC 1 - SYSTEM DESIGN (stages of progression)
+     3 columns: resources (left) · pipeline spine (centre) · artifacts (right)
+     ===================================================================== */
+  function srow(i){ return 96 + i*128; }
+  var sys={
+    w:1220, h:1020, r:5, every:760,
+    steps:[
+      {label:"Data",target:"s1",color:"#818cf8"},
+      {label:"Train + CV",target:"s2",color:"#818cf8"},
+      {label:"ONNX export",target:"s3",color:"#818cf8"},
+      {label:"CI eval gate",target:"s4",color:"#4ade80"},
+      {label:"Registry",target:"s5",color:"#4ade80"},
+      {label:"Serve",target:"s6",color:"#4ade80"},
+      {label:"Drift",target:"s7",color:"#fbbf24"}
+    ],
+    bands:[
+      {x:20,y:60,w:300,h:900,label:"INPUTS + CONFIG",stroke:"#20283f"},
+      {x:450,y:60,w:340,h:900,label:"THE OPS LOOP",stroke:"#2a2f52"},
+      {x:900,y:60,w:300,h:900,label:"ARTIFACTS",stroke:"#24304a"}
+    ],
+    nodes:[
+      {id:"data",kind:"resource",x:20,y:srow(0),w:300,h:84,title:"Telco churn CSV",sub:"data/raw/",stripe:"#818cf8",lines:[
+        {t:"~7k customers, tabular"},{t:"a deliberately boring classifier"}]},
+      {id:"cfg",kind:"config",x:20,y:srow(1),w:300,h:96,title:"config.py",sub:"1 import-light source",stripe:"#5eead4",lines:[
+        {t:"seed 42 \u00b7 80/20 split \u00b7 5-fold"},{t:"gate \u2265 0.80 \u00b7 PSI 0.15"},{t:"paths + experiment name"}]},
+      {id:"mlf",kind:"data",x:20,y:srow(4),w:300,h:80,title:"MLflow (file store)",sub:"mlruns/",lines:[
+        {t:"nested runs: parent + per model"},{t:"tracks CV + test metrics"}]},
+
+      {id:"s1",kind:"stage",x:470,y:srow(0),w:300,h:84,tag:"01",title:"Data load + normalize",sub:"data.py load_dataset()",lines:[
+        {t:"drop customerID, coerce TotalCharges"},{t:"derive binary target (Churn = Yes)"}]},
+      {id:"s2",kind:"stageKey",x:470,y:srow(1),w:300,h:104,tag:"02",title:"Train + CV compare",sub:"train.py",stripe:"#818cf8",lines:[
+        {t:"preprocess: scale + one-hot (ONNX-safe)"},{t:"LogReg vs XGBoost \u00b7 5-fold ROC-AUC"},{t:"LogReg wins 0.846 vs 0.842",cls:"em-good"}]},
+      {id:"s3",kind:"stage",x:470,y:srow(2),w:300,h:96,tag:"03",title:"Select + ONNX export",sub:"export_onnx()",lines:[
+        {t:"save winner to model.joblib"},{t:"export model.onnx (opset 17) + meta"}]},
+      {id:"s4",kind:"gate",x:470,y:srow(3),w:300,h:96,tag:"04",title:"CI eval gate",sub:".github/workflows + pytest",stripe:"#4ade80",lines:[
+        {t:"fails the build if ROC-AUC < 0.80",cls:"em-good"},{t:"the centerpiece \u2014 no bad model ships"}]},
+      {id:"s5",kind:"stage",x:470,y:srow(4),w:300,h:96,tag:"05",title:"Registry promote",sub:"registry.py",lines:[
+        {t:"register predictops-classifier"},{t:"Staging \u2192 Production (archive old)"}]},
+      {id:"s6",kind:"stageKey",x:470,y:srow(5),w:300,h:104,tag:"06",title:"Serve",sub:"app.py \u00b7 FastAPI",stripe:"#4ade80",lines:[
+        {t:"onnxruntime only \u2014 no sklearn at runtime"},{t:"/health \u00b7 /predict \u00b7 /info \u00b7 /reload"},{t:"Pydantic-validated requests"}]},
+      {id:"s7",kind:"gate",x:470,y:srow(6),w:300,h:96,tag:"07",title:"Drift monitor",sub:"drift.py \u00b7 Evidently",stripe:"#fbbf24",lines:[
+        {t:"PSI per feature, alert at > 0.15",cls:"em-warn"},{t:"writes an HTML drift report"}]},
+
+      {id:"a1",kind:"artifact",x:900,y:srow(2),w:300,h:88,title:"model artifacts",sub:"models/",lines:[
+        {t:"model.joblib \u2014 gate + MLflow",mono:true,size:11},{t:"model.onnx + model_meta.json",mono:true,size:11}]},
+      {id:"aR",kind:"result",x:900,y:srow(3),w:300,h:110,title:"the proof",titleSize:14,stripe:"#4ade80",lines:[
+        {t:"LogReg 0.846 > XGBoost 0.842 CV",cls:"em-good"},
+        {t:"gate holds at ROC-AUC \u2265 0.80"},
+        {t:"Docker 1.17 GB \u2192 343 MB (~71%)"}]},
+      {id:"a2",kind:"data",x:900,y:srow(4),w:300,h:80,title:"model registry",sub:"mlruns/",lines:[
+        {t:"predictops-classifier v2"},{t:"stage = Production (v1 archived)"}]},
+      {id:"a3",kind:"deploy",x:900,y:srow(5),w:300,h:80,title:"live API",sub:"onnxruntime",lines:[
+        {t:"POST /predict \u2192"},{t:"{ prediction, probability }",mono:true,size:11}]},
+      {id:"a4",kind:"result",x:900,y:srow(6),w:300,h:80,title:"drift_report.html",titleSize:13,sub:"reports/",stripe:"#fbbf24",lines:[
+        {t:"per-feature PSI, logged to MLflow"}]}
+    ],
+    edges:[
+      {from:"s1",to:"s2",stroke:"#3b4570"},{from:"s2",to:"s3",stroke:"#3b4570"},{from:"s3",to:"s4",stroke:"#3b4570"},
+      {from:"s4",to:"s5",stroke:"#2c5148"},{from:"s5",to:"s6",stroke:"#2c5148"},{from:"s6",to:"s7",stroke:"#2c5148"},
+      {from:"data",to:"s1",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"cfg",to:"s2",fromSide:"r",toSide:"l",stroke:"#2c5148",dash:"5 5"},
+      {from:"mlf",to:"s5",fromSide:"r",toSide:"l",stroke:"#2c3450",dash:"5 5"},
+      {from:"s3",to:"a1",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s4",to:"aR",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"s5",to:"a2",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s6",to:"a3",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"s7",to:"a4",fromSide:"r",toSide:"l",stroke:"#5b4a24"}
+    ],
+    flow:[
+      {paths:[0,1,2,3,4,5],cls:"data",weight:6,dur:8600,splits:[{at:3,cls:"out"}]},
+      {paths:[6],cls:"data",weight:2,dur:1600},
+      {paths:[9],cls:"out",weight:1,dur:1500},
+      {paths:[10],cls:"out",weight:1,dur:1500},
+      {paths:[11],cls:"out",weight:2,dur:1500},
+      {paths:[12],cls:"out",weight:2,dur:1500},
+      {paths:[13],cls:"adv",weight:1,dur:1500}
+    ]
+  };
+
+  function crow(i){ return 92 + i*120; }
+  var CX=430, CW=250, AX=760, AW=250;
+  var code={
+    w:1240, h:1000, r:4.5, every:720,
+    steps:[
+      {label:"CSV",target:"csv",color:"#818cf8"},
+      {label:"data.py",target:"data",color:"#818cf8"},
+      {label:"train.py",target:"train",color:"#818cf8"},
+      {label:"model.onnx",target:"onnx",color:"#4ade80"},
+      {label:"registry",target:"registry",color:"#4ade80"},
+      {label:"app.py",target:"api",color:"#4ade80"}
+    ],
+    bands:[
+      {x:20,y:60,w:360,h:900,label:"TESTS \u00b7 CI \u00b7 BUILD",stroke:"#3a381f"},
+      {x:CX-14,y:60,w:CW+28,h:900,label:"src/predictops",stroke:"#2b3350"},
+      {x:AX-14,y:60,w:AW+28,h:900,label:"DATA LINEAGE",stroke:"#24304a"},
+      {x:1050,y:60,w:170,h:900,label:"META",stroke:"#262b3d"}
+    ],
+    nodes:[
+      {id:"cfg",kind:"config",x:CX,y:crow(0),w:CW,h:70,title:"config.py",titleSize:14,stripe:"#5eead4",lines:[
+        {t:"seed 42 \u00b7 splits \u00b7 thresholds \u00b7 paths"}]},
+      {id:"data",kind:"module",x:CX,y:crow(1),w:CW,h:70,title:"data.py",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"load_dataset() \u2014 clean + derive target"}]},
+      {id:"train",kind:"module",x:CX,y:crow(2),w:CW,h:120,title:"train.py",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"build_preprocessor() + candidates"},{t:"5-fold CV \u00b7 MLflow nested runs"},{t:"save joblib \u00b7 export_onnx()"}]},
+      {id:"registry",kind:"module",x:CX,y:crow(4)-2,w:CW,h:72,title:"registry.py",titleSize:14,stripe:"#4ade80",lines:[
+        {t:"register + Staging \u2192 Production"}]},
+      {id:"drift",kind:"module",x:CX,y:crow(5)-4,w:CW,h:72,title:"drift.py",titleSize:14,stripe:"#fbbf24",lines:[
+        {t:"Evidently PSI drift report"}]},
+      {id:"api",kind:"module",x:CX,y:crow(6)-6,w:CW,h:88,title:"app.py + schemas.py",titleSize:13.5,stripe:"#4ade80",lines:[
+        {t:"FastAPI on onnxruntime only"},{t:"Pydantic PredictRequest / Response"}]},
+
+      {id:"gate",kind:"notebook",x:20,y:crow(2),w:360,h:64,title:"tests/test_model_quality.py",titleSize:12.5,lines:[
+        {t:"the eval gate: assert ROC-AUC \u2265 0.80"}]},
+      {id:"ci",kind:"notebook",x:20,y:crow(3)+2,w:360,h:64,title:".github/workflows/ci.yml",titleSize:12.5,lines:[
+        {t:"ruff + pytest \u2192 docker-build on pass"}]},
+      {id:"mk",kind:"notebook",x:20,y:crow(4)+4,w:360,h:64,title:"Makefile",titleSize:12.5,lines:[
+        {t:"pipeline: train test drift register serve"}]},
+      {id:"pp",kind:"notebook",x:20,y:crow(5)+6,w:360,h:56,title:"pyproject.toml",titleSize:12.5,lines:[
+        {t:"src-layout package (predictops)"}]},
+
+      {id:"csv",kind:"data",x:AX,y:crow(0),w:AW,h:62,title:"telco_customer_churn.csv",titleSize:10.5,sub:"data/raw/",lines:[]},
+      {id:"feat",kind:"data",x:AX,y:crow(1),w:AW,h:64,title:"feature frame",titleSize:13,sub:"in memory",lines:[{t:"clean + target"}]},
+      {id:"joblib",kind:"data",x:AX,y:crow(2),w:AW,h:70,title:"models/model.joblib",titleSize:11.5,sub:"eval gate + MLflow",lines:[]},
+      {id:"onnx",kind:"data",x:AX,y:crow(3),w:AW,h:74,title:"models/model.onnx",titleSize:11.5,sub:"the served artifact",lines:[{t:"+ model_meta.json",mono:true,size:10.5}]},
+      {id:"registryA",kind:"result",x:AX,y:crow(4),w:AW,h:80,title:"model registry",titleSize:13,sub:"mlruns/",stripe:"#4ade80",lines:[
+        {t:"predictops-classifier v2",mono:true,size:10.5},{t:"stage = Production",mono:true,size:10.5}]},
+      {id:"apiA",kind:"deploy",x:AX,y:crow(5),w:AW,h:64,title:"live API",titleSize:13,sub:"onnxruntime",lines:[{t:"POST /predict",mono:true,size:11}]},
+      {id:"driftA",kind:"result",x:AX,y:crow(6),w:AW,h:62,title:"drift_report.html",titleSize:12,sub:"reports/",stripe:"#fbbf24",lines:[]},
+
+      {id:"docker",kind:"deploy",x:1050,y:crow(0),w:170,h:96,title:"Docker",titleSize:13,lines:[
+        {t:"Dockerfile (multi-stage)",mono:true,size:9.5},{t:"+ .singlestage",mono:true,size:10.5},{t:"compose \u00b7 dockerignore",mono:true,size:9.5}]},
+      {id:"reqs",kind:"config",x:1050,y:crow(2),w:170,h:96,title:"requirements",titleSize:12.5,lines:[
+        {t:".txt (dev / CI)",mono:true,size:10.5},{t:"-train.txt",mono:true,size:10.5},{t:"-serve.txt (onnxrt)",mono:true,size:10}]},
+      {id:"docs",kind:"meta",x:1050,y:crow(4),w:170,h:64,title:"docs",titleSize:13,lines:[
+        {t:"README.md",mono:true,size:10.5}]}
+    ],
+    edges:[
+      {from:"csv",to:"feat",stroke:"#3b4570"},{from:"feat",to:"joblib",stroke:"#3b4570"},
+      {from:"joblib",to:"onnx",stroke:"#3b4570"},{from:"onnx",to:"registryA",stroke:"#2c5148"},
+      {from:"registryA",to:"apiA",stroke:"#2c5148"},
+      {from:"data",to:"feat",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"train",to:"joblib",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"train",to:"onnx",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"registry",to:"registryA",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"api",to:"apiA",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"drift",to:"driftA",fromSide:"r",toSide:"l",stroke:"#5b4a24"},
+      {from:"csv",to:"data",fromSide:"l",toSide:"r",stroke:"#3b4570"},
+      {from:"gate",to:"train",fromSide:"r",toSide:"l",stroke:"#4d4a2a"}
+    ],
+    flow:[
+      {paths:[0,1,2,3,4],cls:"data",weight:6,dur:9000,splits:[{at:3,cls:"out"}]},
+      {paths:[5],cls:"data",weight:2,dur:1500},
+      {paths:[6],cls:"data",weight:2,dur:1500},
+      {paths:[7],cls:"out",weight:2,dur:1500},
+      {paths:[9],cls:"out",weight:2,dur:1500}
+    ]
+  };
+
+  KVBlueprint.mount("svg-system","wrap-system",sys,"system");
+  KVBlueprint.mount("svg-code","wrap-code",code,"code");
+})();
+</script>
 </body>
 </html>
