@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
-<link rel="stylesheet" href="assets/style.css?v=4">
+<link rel="stylesheet" href="assets/style.css?v=5">
 </head>
 <body>
 <div class="progress"></div>
@@ -36,7 +36,6 @@
       <a href="inference-lens">Inference-Lens</a>
       <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
       <a href="predictops">PredictOps</a>
-      <a href="job-scanner">Job Scanner</a>
       <a href="about">About</a>
       <a href="inference-lens#demo" class="nav-cta">Live demo</a>
           <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
@@ -78,7 +77,7 @@
   <div class="wrap">
     <p class="kicker reveal">The thesis</p>
     <h2 class="section-title reveal">2 questions about trust and the range to back them up</h2>
-    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work and standing over them is a quality inspector deciding what ships. Most work studies the models, so I went after the inspector instead. One project asks whether it can be fooled. The other asks whether hiring it even helped. A third is the range piece: the same "prove it, don't claim it" rigor applied to the unglamorous MLOps loop most portfolios skip. The fourth is what happened when I pointed the same agent work at my own job search: a compound AI system that has been running every 10 minutes since.</p>
+    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work and standing over them is a quality inspector deciding what ships. Most work studies the models, so I went after the inspector instead. One project asks whether it can be fooled. The other asks whether hiring it even helped. The third is the range piece: the same "prove it, don't claim it" rigor applied to the unglamorous MLOps loop most portfolios skip.</p>
     <div class="proj-grid">
       <a href="inference-lens" class="card reveal">
         <span class="glow" style="background:#6366f1;"></span>
@@ -115,18 +114,6 @@
           <div><div class="m-num">4</div><div class="m-lbl">served endpoints</div></div>
         </div>
         <span class="arrow">See what's built &rarr;</span>
-      </a>
-      <a href="job-scanner" class="card reveal d3">
-        <span class="glow" style="background:#5eead4;"></span>
-        <span class="tag">Agent engineering &#183; in production</span>
-        <h3>Job Scanner</h3>
-        <p>I work on agents, so I pointed one at my own job search and scaled it up. 630 companies polled every 10 minutes across 8 applicant tracking platforms, a cost tiered pipeline that triages, judges, writes and checks its own output and a human in the loop it cannot bypass. A naive staleness check inside it once called 61% of live jobs dead. Working out why was the best thing I learned building it.</p>
-        <div class="metrics">
-          <div><div class="m-num">630</div><div class="m-lbl">companies polled</div></div>
-          <div><div class="m-num">8</div><div class="m-lbl">platforms, 10 adapters</div></div>
-          <div><div class="m-num">0</div><div class="m-lbl">sent without me</div></div>
-        </div>
-        <span class="arrow">See how it works &rarr;</span>
       </a>
     </div>
   </div>
@@ -203,7 +190,6 @@
       <a href="inference-lens">Inference-Lens</a>
       <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
       <a href="predictops">PredictOps</a>
-      <a href="job-scanner">Job Scanner</a>
       <a href="inference-lens#demo">Live demo</a>
     </div>
     <div class="col">

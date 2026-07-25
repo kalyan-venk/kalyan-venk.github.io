@@ -160,6 +160,10 @@ section { padding: 64px 0; position: relative; }
 
 /* ---------- cards ---------- */
 .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+/* With an odd number of cards the last one would sit half-width in an empty row,
+   which reads as a missing card. Span it instead. Self-correcting: add a 4th card
+   back and the 2x2 returns on its own. */
+.proj-grid > .card:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .card { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 34px; transition: all 0.22s; position: relative; overflow: hidden; }
 .card .glow { position: absolute; width: 280px; height: 280px; border-radius: 50%; filter: blur(60px); opacity: 0; transition: opacity 0.3s; top: -80px; right: -80px; }
 .card:hover { transform: translateY(-5px); border-color: var(--border); box-shadow: var(--shadow); }

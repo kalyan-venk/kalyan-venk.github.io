@@ -5,7 +5,7 @@
    EVERY rule is scoped under .bpx on purpose. style.css already owns .card,
    .pkt, .tag and .legend for other pages (see the CSS-collision note in
    CLAUDE.md), so an unscoped rule here would silently restyle the project
-   cards and the job-scanner flow legend. Keep the .bpx prefix.
+   cards and any flow legend on a project page. Keep the .bpx prefix.
 
    Design tokens come from style.css — this file defines none of its own.
    =========================================================================== */
@@ -103,7 +103,7 @@
 .bpx svg .result b{fill:var(--text)}
 
 /* packets. NOTE: style.css already defines .pkt/.pkt.muted for flow.js on
-   job-scanner.html with different colours — that is why these are scoped. */
+   agentic-llmops.html with different colours — that is why these are scoped. */
 .bpx .pkt{transition:fill .25s linear}
 .bpx .pkt.data{fill:var(--indigo);filter:drop-shadow(0 0 5px rgba(129,140,248,.85))}
 .bpx .pkt.adv{fill:var(--warn);filter:drop-shadow(0 0 5px rgba(251,191,36,.85))}
