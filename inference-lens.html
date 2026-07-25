@@ -23,6 +23,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
 <link rel="stylesheet" href="assets/style.css?v=4">
+<link rel="stylesheet" href="assets/blueprint.css?v=1">
 </head>
 <body>
 <div class="progress"></div>
@@ -89,67 +90,77 @@
 </section>
 
 <section id="blueprints">
-  <style>
-    .bp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
-    @media(max-width:720px){.bp-grid{grid-template-columns:1fr}}
-    .bp-card{display:block;border:1px solid var(--border);border-radius:16px;background:var(--surface-2);padding:16px;transition:transform .18s,border-color .18s,box-shadow .18s}
-    .bp-card:hover{transform:translateY(-4px);border-color:var(--indigo);box-shadow:0 18px 40px -20px rgba(124,58,237,0.5)}
-    .bp-thumb{border-radius:12px;overflow:hidden;border:1px solid #232a3d;background:#0b0d15;margin-bottom:14px}
-    .bp-thumb svg{display:block;width:100%;height:auto}
-    .bp-card h4{font-size:1.06rem;margin-bottom:6px}
-    .bp-card p{color:var(--text-dim);font-size:.9rem;margin-bottom:12px}
-    .bp-open{color:var(--indigo);font-weight:600;font-size:.9rem}
-    :root[data-theme="light"] .bp-thumb{background:#eef1f8}
-    :root[data-theme="light"] .bp-thumb svg rect{fill:#ffffff;stroke:#cdd5e8}
-    :root[data-theme="light"] .bp-thumb svg path{stroke:#c2cbe0}
-  </style>
   <div class="wrap">
     <p class="kicker reveal">Under the hood</p>
     <h2 class="section-title reveal">See exactly how it is built</h2>
-    <p class="section-sub reveal">2 live blueprints you can zoom into. One traces the pipeline stage by stage. The other maps every file in the repo and how the data moves between them. Hover anywhere to magnify.</p>
-    <div class="bp-grid">
-      <a class="bp-card reveal" href="inference-lens-blueprint#system">
-        <div class="bp-thumb">
-          <svg viewBox="0 0 320 150" role="img" aria-label="System design preview">
-            <rect x="8" y="52" width="66" height="30" rx="6" fill="#12182a" stroke="#3b4570"/>
-            <rect x="127" y="14" width="66" height="26" rx="6" fill="#161a28" stroke="#232a3d"/>
-            <rect x="127" y="60" width="66" height="26" rx="6" fill="#1b1f39" stroke="#4f5696"/>
-            <rect x="127" y="106" width="66" height="26" rx="6" fill="#16232c" stroke="#347470"/>
-            <rect x="246" y="24" width="66" height="24" rx="6" fill="#12131c" stroke="#2a2f45"/>
-            <rect x="246" y="98" width="66" height="24" rx="6" fill="#191426" stroke="#5b3f86"/>
-            <path d="M160,40 V60 M160,86 V106" stroke="#232a3d" stroke-width="1.6" fill="none"/>
-            <path d="M74,67 C100,67 105,27 127,27" stroke="#3b4570" stroke-width="1.4" fill="none"/>
-            <path d="M193,73 C220,73 224,110 246,110" stroke="#5b4a24" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
-            <circle r="4" fill="#818cf8"><animateMotion dur="2.8s" repeatCount="indefinite" path="M74,67 C100,67 105,27 127,27"/></circle>
-            <circle r="3.5" fill="#fbbf24"><animateMotion dur="2.6s" repeatCount="indefinite" path="M193,73 C220,73 224,110 246,110"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
-          </svg>
+    <p class="section-sub reveal">2 live blueprints. One traces the pipeline stage by stage. The other maps every file in the repo and how the data moves between them. The moving dots are data in flight, coloured by what kind of data it is.</p>
+
+    <!-- ============================ DIAGRAM 1 ============================ -->
+    <div class="bpx" id="system">
+      <div class="sec-head">
+        <h3><span class="num">01</span>System design, the stages in run order</h3>
+        <p>
+          Read it top to bottom. On the left are the <b>resources</b> that feed in, the datasets and pretrained models.
+          The centre spine is the <b>pipeline</b> in run order. The right shows the <b>artifacts</b> each stage writes to disk.
+          The amber path is LLM-Bar. It stays out of training entirely and only enters at the stress-test, which is the whole point of the project.
+        </p>
+      </div>
+
+      <div class="dgm-frame">
+        <div class="dgm-bar">
+          <span class="tag">system.blueprint</span>
+          <div class="flowsteps" data-steps="system"></div>
+          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
         </div>
-        <h4>System design</h4>
-        <p>The stages in run order, from HH-RLHF through clustering and the 3 models to the adversarial stress-test, with every artifact each step writes to disk.</p>
-        <span class="bp-open">Open the system map &rarr;</span>
-      </a>
-      <a class="bp-card reveal d1" href="inference-lens-blueprint#code">
-        <div class="bp-thumb">
-          <svg viewBox="0 0 320 150" role="img" aria-label="Code map preview">
-            <rect x="8" y="18" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="8" y="64" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="8" y="110" width="62" height="22" rx="5" fill="#14140f" stroke="#4d4a2a"/>
-            <rect x="129" y="18" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="129" y="64" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="129" y="110" width="62" height="22" rx="5" fill="#161a28" stroke="#2b3350"/>
-            <rect x="250" y="41" width="62" height="22" rx="5" fill="#12182a" stroke="#3b4570"/>
-            <rect x="250" y="87" width="62" height="22" rx="5" fill="#12131c" stroke="#2a2f45"/>
-            <path d="M70,29 H129 M70,75 H129 M70,121 H129" stroke="#4d4a2a" stroke-width="1.2" fill="none"/>
-            <path d="M191,29 C220,29 222,52 250,52 M191,75 C220,75 224,98 250,98" stroke="#2b3350" stroke-width="1.2" fill="none"/>
-            <path d="M281,63 V87" stroke="#3b4570" stroke-width="1.4" fill="none"/>
-            <circle cy="75" r="3.6" fill="#818cf8"><animate attributeName="cx" values="70;129" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.2s" repeatCount="indefinite"/></circle>
-            <circle cx="281" r="3.6" fill="#4ade80"><animate attributeName="cy" values="63;87" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></circle>
-          </svg>
+        <div class="dgm-wrap" id="wrap-system">
+          <svg class="dgm" id="svg-system" role="img" aria-label="System design of Inference-Lens as a top-to-bottom pipeline with resources feeding in from the left and artifacts produced on the right."></svg>
         </div>
-        <h4>Code map</h4>
-        <p>Every file in the repo with its one-line job, arranged around the data lineage spine that turns raw text into trained models and the stress-test results.</p>
-        <span class="bp-open">Open the code map &rarr;</span>
-      </a>
+        <div class="legend">
+          <div><span class="k data"></span>HH-RLHF data in flight (training path)</div>
+          <div><span class="k adv"></span>LLM-Bar adversarial pairs (held out, stress-test only)</div>
+          <div><span class="k out"></span>Trained / served output</div>
+          <div><span class="k swatch"></span>Stage · resource · artifact</div>
+        </div>
+      </div>
+
+      <div class="bp-notes">
+        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>The clean scores are the finding</h4>
+          <p>All 3 models land near <b>0.50 AUC-ROC</b> on the held-out HH-RLHF test set. That is not a failure. It says surface features like length, readability and overlap do not reliably predict human preference.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>Same benchmark, opposite robustness</h4>
+          <p>Under the Neighbor attack, Logistic Regression's false-preference rate hits <b>82.1%</b> (picks the worse answer 4 in 5). DeBERTa, the only model that beat chance on the clean benchmark, degrades the most overall at <b>19.3pp</b>. Architecture decides robustness, and the headline score ranks them almost exactly wrong.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>Length ≠ quality</h4>
+          <p>Unsupervised clustering found the most <code>verbose-inconsistent</code> archetype had the <b>lowest</b> chosen-rate (48.9%); the shorter <code>conversational-engaging</code> one the highest (51.6%).</p></div>
+      </div>
+    </div>
+
+    <!-- ============================ DIAGRAM 2 ============================ -->
+    <div class="bpx" id="code">
+      <div class="sec-head">
+        <h3><span class="num">02</span>Code map, every file and the data lineage</h3>
+        <p>
+          Same project, a different lens. The centre spine is the <b>data lineage</b>: how one artifact on disk becomes the next,
+          from raw arrow to parquet to embeddings to clusters to models to the stress-test CSV to the live demo. Around it sit the actual
+          <b>files</b>. The notebooks that drive each step are on the left, the Python package modules that do the work attach to the spine,
+          and the config, meta and deploy files sit on the right. Every file in the repo is here with its one-line job.
+        </p>
+      </div>
+
+      <div class="dgm-frame">
+        <div class="dgm-bar">
+          <span class="tag">code.blueprint</span>
+          <div class="flowsteps" data-steps="code"></div>
+          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
+        </div>
+        <div class="dgm-wrap" id="wrap-code">
+          <svg class="dgm" id="svg-code" role="img" aria-label="Code map of Inference-Lens: every file with its role, arranged around the data lineage spine."></svg>
+        </div>
+        <div class="legend">
+          <div><span class="k data"></span>Data flowing through the lineage spine</div>
+          <div><span class="k out"></span>Trained model artifact produced</div>
+          <div><span class="k swatch"></span>File · module · artifact</div>
+          <div><span style="font-family:var(--mono);font-size:.8rem;color:var(--text-faint)">italic monospace = a file on disk</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -279,6 +290,240 @@ window.addEventListener('load', () => {
     }
   });
 });
+</script>
+<script src="assets/blueprint.js?v=1"></script>
+<script>
+/* Diagram specs for this project. The engine that draws them is shared
+   (assets/blueprint.js); only this data is per-page. */
+(function(){
+  "use strict";
+  /* =====================================================================
+     SPEC 1 - SYSTEM DESIGN (stages of progression)
+     3 columns: resources (left) · pipeline spine (centre) · artifacts (right)
+     ===================================================================== */
+  var SP=280, SW=300, SX=470;                 // spine rows step / width / x
+  function srow(i){ return 96 + i*128; }       // y of spine stage i
+  var sys={
+    w:1220, h:1150, r:5, every:760,
+    steps:[
+      {label:"HH-RLHF",target:"hh",color:"#818cf8"},
+      {label:"features",target:"s2",color:"#818cf8"},
+      {label:"clustering",target:"s4",color:"#5eead4"},
+      {label:"3 models",target:"s5",color:"#818cf8"},
+      {label:"stress-test",target:"s7",color:"#fbbf24"},
+      {label:"live demo",target:"s8",color:"#4ade80"}
+    ],
+    bands:[
+      {x:20,y:60,w:300,h:1060,label:"RESOURCES",stroke:"#20283f"},
+      {x:SX-20,y:60,w:SW+40,h:1060,label:"PIPELINE",stroke:"#2a2f52"},
+      {x:900,y:60,w:300,h:1060,label:"ARTIFACTS",stroke:"#24304a"}
+    ],
+    nodes:[
+      // ---- resources (left) ----
+      {id:"hh",kind:"resource",x:20,y:96,w:300,h:104,title:"Anthropic HH-RLHF",sub:"HuggingFace · anthropic/hh-rlhf",
+        stripe:"#818cf8",lines:[
+        {t:"subsets: helpful-base + harmless-base",mono:true},
+        {t:"91,264 preference pairs"},
+        {t:"→ ~182K labeled responses (chosen=1 / rejected=0)"}]},
+      {id:"minilm",kind:"resource",x:20,y:srow(2)-30,w:300,h:66,title:"all-MiniLM-L6-v2",sub:"sentence-transformers",
+        lines:[{t:"384-d sentence embeddings"}]},
+      {id:"deberta",kind:"resource",x:20,y:srow(4)-24,w:300,h:66,title:"microsoft/deberta-v3-small",sub:"transformer base (fine-tuned)",
+        lines:[{t:"trained on Colab · T4 GPU"}]},
+      {id:"llmbar",kind:"resource",x:20,y:srow(6)+2,w:300,h:120,title:"LLM-Bar",sub:"princeton-nlp · EMNLP 2023",
+        stripe:"#fbbf24",lines:[
+        {t:"419 adversarial pairs, held out",cls:"em-warn"},
+        {t:"neighbor · gpt_inst · gpt_out",mono:true},
+        {t:"manual · natural",mono:true},
+        {t:"never seen in training → pure OOD"}]},
+
+      // ---- pipeline spine (centre) ----
+      {id:"s1",kind:"stage",x:SX,y:srow(0),w:SW,h:96,tag:"01",title:"Data loading & extraction",sub:"data/loader.py · nb 01_data_loading",
+        lines:[{t:"pull final Assistant turn, flatten pairs"},{t:"70 / 15 / 15 split · seed 42"}]},
+      {id:"s2",kind:"stage",x:SX,y:srow(1),w:SW,h:110,tag:"02",title:"Feature engineering",sub:"features/extractor.py · nb 02",
+        lines:[{t:"token length · type-token ratio · Flesch"},{t:"ROUGE-L · MiniLM embeddings"},{t:"BERTScore available (off by default)"}]},
+      {id:"s3",kind:"stage",x:SX,y:srow(2),w:SW,h:80,tag:"03",title:"EDA & visualization",sub:"nb 03_eda_visualization",
+        lines:[{t:"length dist · correlations · label corr"}]},
+      {id:"s4",kind:"stageKey",x:SX,y:srow(3),w:SW,h:118,tag:"04",title:"Unsupervised clustering",sub:"clustering/cluster.py · nb 02_clustering/*",
+        stripe:"#5eead4",lines:[{t:"K-Means (K 2–12: silhouette / DB / elbow)"},{t:"DBSCAN · Hierarchical (Ward) · UMAP 2-D"},{t:"→ chose K = 4 archetypes"}]},
+      {id:"s5",kind:"stageKey",x:SX,y:srow(4),w:SW,h:120,tag:"05",title:"Supervised training",sub:"models/train.py · nb 03_models/01–02",
+        stripe:"#818cf8",lines:[{t:"LogReg (L2, CV, balanced + scaler)"},{t:"XGBoost (grid, 5-fold, hist)"},{t:"DeBERTa-v3-small (Colab, 3 ep, lr 2e-5)"}]},
+      {id:"s6",kind:"stage",x:SX,y:srow(5),w:SW,h:96,tag:"06",title:"Standard evaluation",sub:"nb 03_model_comparison",
+        lines:[{t:"AUC-ROC · F1 · PR · calibration"},{t:"all ≈ 0.50 AUC (the finding, not a bug)"}]},
+      {id:"s7",kind:"gate",x:SX,y:srow(6),w:SW,h:122,tag:"07",title:"Adversarial stress-test",sub:"stress_test/evaluator.py · nb 04",
+        stripe:"#fbbf24",lines:[{t:"apply each model ZERO-SHOT to LLM-Bar"},{t:"per-category degradation + false-pref rate"},{t:"core analytical contribution"}]},
+      {id:"s8",kind:"stageKey",x:SX,y:srow(7),w:SW,h:110,tag:"08",title:"Live demo / deploy",sub:"app/main.py · deploy/hf-space · site JS",
+        stripe:"#4ade80",lines:[{t:"4-feature reduced set · torch-free"},{t:"DeBERTa excluded (LOAD_DEBERTA=False)"},{t:"paste 2 answers → watch the judge slip"}]},
+
+      // ---- artifacts (right) ----
+      {id:"a1",kind:"artifact",x:900,y:srow(0)+4,w:300,h:64,title:"hh_rlhf_flat.parquet",titleSize:13.5,sub:"data/processed/",lines:[{t:"1 row per preference pair"}]},
+      {id:"a2",kind:"artifact",x:900,y:srow(1)+6,w:300,h:80,title:"features.parquet + embeddings.npy",titleSize:12.5,sub:"data/processed/",lines:[{t:"scalar features + 384-d vectors,"},{t:"cached so re-runs load in seconds"}]},
+      {id:"a3",kind:"artifact",x:900,y:srow(2)-6,w:300,h:60,title:"figures 01–05",sub:"reports/figures/",lines:[{t:"EDA plots (png)"}]},
+      {id:"a4",kind:"result",x:900,y:srow(3),w:300,h:118,title:"4 archetypes",sub:"archetype_summary.csv · figs 06–13",stripe:"#5eead4",lines:[
+        {t:"conversational-engaging  51.6% ✓ high",cls:"em-good"},
+        {t:"medium-mixed 50.3% · ultra-short 50.1%"},
+        {t:"verbose-inconsistent  48.9% ✗ low",cls:"em-bad"},
+        {t:"length ≠ quality"}]},
+      {id:"a5",kind:"artifact",x:900,y:srow(4),w:300,h:84,title:"model artifacts",sub:"models/ (joblib + checkpoint)",lines:[
+        {t:"logreg · xgboost · scaler · kmeans .joblib",mono:true,size:10.3},{t:"deberta_checkpoint/",mono:true,size:11.5}]},
+      {id:"a6",kind:"result",x:900,y:srow(5)-4,w:300,h:96,title:"model_comparison_summary.csv",titleSize:12,sub:"reports/",stripe:"#818cf8",lines:[
+        {t:"LogReg 0.512 · XGB 0.517 · DeBERTa 0.622",mono:true,size:10.3},{t:"AUC-ROC: surface features at chance, text model clears it"}]},
+      {id:"a7",kind:"result",x:900,y:srow(6)+2,w:300,h:118,title:"stress_test_results.csv",titleSize:13,sub:"reports/",stripe:"#fbbf24",lines:[
+        {t:"LogReg neighbor FPR 82.1% (acc 17.9%)",cls:"em-bad"},
+        {t:"LogReg overall acc 32.7% (−18.3pp)"},
+        {t:"XGBoost 42.7% (−8.4pp) · DeBERTa 39.4% (−19.3pp)",cls:"em-bad"},
+        {t:"tied clean → opposite under attack"}]},
+      {id:"a8",kind:"deploy",x:900,y:srow(7)+2,w:300,h:80,title:"live scorer",sub:"HF Space · Streamlit · in-browser JS",lines:[
+        {t:"scorer.js + model.js (no server)",mono:true,size:11.5},{t:"MLflow tracks every run in mlruns/"}]}
+    ],
+    edges:[
+      // spine (straight vertical) 0..6
+      {from:"s1",to:"s2"},{from:"s2",to:"s3"},{from:"s3",to:"s4"},{from:"s4",to:"s5"},
+      {from:"s5",to:"s6"},{from:"s6",to:"s7"},{from:"s7",to:"s8"},
+      // resources feeding in (r -> l)  7..10
+      {from:"hh",to:"s1",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"minilm",to:"s2",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"deberta",to:"s5",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"llmbar",to:"s7",fromSide:"r",toSide:"l",stroke:"#5b4a24",dash:"6 5"},
+      // stage -> artifact (r -> l)  11..18
+      {from:"s1",to:"a1",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s2",to:"a2",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s3",to:"a3",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s4",to:"a4",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s5",to:"a5",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s6",to:"a6",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s7",to:"a7",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s8",to:"a8",fromSide:"r",toSide:"l",stroke:"#2a2f45"}
+    ],
+    // packets: main data path down the spine; adversarial path enters at s7; output leaves at s8
+    flow:[
+      {paths:[0,1,2,3,4,5],cls:"data",weight:6,dur:8200,splits:[{at:5,cls:"out"}]},   // full training flow, greens near the end
+      {paths:[7],cls:"data",weight:2,dur:1600},                                        // HH-RLHF -> s1
+      {paths:[9],cls:"data",weight:1,dur:1600},                                        // deberta -> s5
+      {paths:[10],cls:"adv",weight:3,dur:1700},                                        // LLM-Bar -> s7 (amber)
+      {paths:[6],cls:"out",weight:3,dur:1700},                                         // s7 -> s8 output
+      {paths:[13],cls:"data",weight:1,dur:1500},                                       // s4 -> archetypes
+      {paths:[17],cls:"adv",weight:2,dur:1500}                                         // s7 -> stress csv (amber)
+    ]
+  };
+
+  /* =====================================================================
+     SPEC 2 - CODE MAP (every file + data lineage)
+     centre spine = data artifacts; left = notebooks (drivers);
+     inner-left = package modules; right = config / meta / deploy
+     ===================================================================== */
+  function crow(i){ return 92 + i*120; }
+  var CX=430, CW=250;                          // module column
+  var AX=760, AW=250;                          // artifact spine column
+  var code={
+    w:1240, h:1400, r:4.5, every:720,
+    steps:[
+      {label:"notebooks",target:"nb1",color:"#d8cf9a"},
+      {label:"package",target:"loader",color:"#818cf8"},
+      {label:"data",target:"raw",color:"#818cf8"},
+      {label:"models",target:"mdls",color:"#4ade80"},
+      {label:"reports",target:"stress",color:"#fbbf24"},
+      {label:"deploy",target:"deploy",color:"#f0abfc"}
+    ],
+    bands:[
+      {x:20,y:60,w:360,h:1300,label:"NOTEBOOKS",stroke:"#3a381f"},
+      {x:CX-14,y:60,w:CW+28,h:1300,label:"src/inference_lens",stroke:"#2b3350"},
+      {x:AX-14,y:60,w:AW+28,h:1300,label:"DATA LINEAGE",stroke:"#24304a"},
+      {x:1050,y:60,w:170,h:1300,label:"META",stroke:"#262b3d"}
+    ],
+    nodes:[
+      // ----- package modules (centre-left), top: utils/config feed everything -----
+      {id:"cfg",kind:"config",x:CX,y:crow(0),w:CW,h:92,title:"utils/config.py",titleSize:14,sub:"+ configs/base.yaml",stripe:"#5eead4",lines:[
+        {t:"1 YAML source of truth"},{t:"paths · seed 42 · splits · model name"}]},
+      {id:"log",kind:"config",x:CX,y:crow(1)-8,w:CW,h:64,title:"utils/logging.py",titleSize:14,lines:[{t:"timestamped logs, quiets libs"}]},
+      {id:"loader",kind:"module",x:CX,y:crow(2)-14,w:CW,h:104,title:"data/loader.py",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"extract_assistant_response()"},{t:"flatten_hh_rlhf() · split_dataframe()"},{t:"load_llm_bar()  (held-out)"}]},
+      {id:"extr",kind:"module",x:CX,y:crow(3)+2,w:CW,h:104,title:"features/extractor.py",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"lexical · Flesch · ROUGE-L"},{t:"MiniLM embeddings · BERTScore"},{t:"extract_all_features()  (caches)"}]},
+      {id:"clus",kind:"module",x:CX,y:crow(4)+18,w:CW,h:104,title:"clustering/cluster.py",titleSize:14,stripe:"#5eead4",lines:[
+        {t:"run_kmeans / dbscan / hierarchical"},{t:"summarize_clusters()"},{t:"cluster × preference cross-tab"}]},
+      {id:"train",kind:"module",x:CX,y:crow(6)-6,w:CW,h:104,title:"models/train.py",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"train_logreg() · train_xgboost()"},{t:"load_deberta_for_inference()"},{t:"evaluate_model() → MLflow"}]},
+      {id:"eval",kind:"gate",x:CX,y:crow(8)-14,w:CW,h:96,title:"stress_test/evaluator.py",titleSize:13.5,sub:"the core contribution",stripe:"#fbbf24",lines:[
+        {t:"run_stress_test(): zero-shot on LLM-Bar,"},{t:"per-category degradation + FPR"}]},
+      {id:"app",kind:"module",x:CX,y:crow(10)-24,w:CW,h:90,title:"app/main.py",titleSize:14,stripe:"#4ade80",lines:[
+        {t:"Streamlit scorer, loads 3 joblibs"},{t:"symmetric A/B scoring + vote"}]},
+
+      // ----- notebooks (left) -----
+      {id:"nb1",kind:"notebook",x:20,y:crow(2)-14,w:360,h:60,title:"01_eda / 01_data_loading",titleSize:12.5,lines:[{t:"runs loader → flat parquet"}]},
+      {id:"nb2",kind:"notebook",x:20,y:crow(3)+2,w:360,h:60,title:"01_eda / 02_feature_extraction",titleSize:12.5,lines:[{t:"runs extractor → features + embeddings"}]},
+      {id:"nb3",kind:"notebook",x:20,y:crow(4)-40,w:360,h:56,title:"01_eda / 03_eda_visualization",titleSize:12.5,lines:[{t:"→ figures 01–05"}]},
+      {id:"nb4",kind:"notebook",x:20,y:crow(4)+18,w:360,h:78,title:"02_clustering / 01–03",titleSize:12.5,lines:[
+        {t:"01_kmeans · 02_advanced_clustering",mono:true,size:11},{t:"03_archetype_analysis → archetypes",mono:true,size:11}]},
+      {id:"nb5",kind:"notebook",x:20,y:crow(6)-6,w:360,h:78,title:"03_models / 01 & 02",titleSize:12.5,lines:[
+        {t:"01_logreg_xgboost (Colab)",mono:true,size:11},{t:"02_deberta_colab (GPU)",mono:true,size:11}]},
+      {id:"nb6",kind:"notebook",x:20,y:crow(7)+10,w:360,h:56,title:"03_models / 03_model_comparison",titleSize:12.5,lines:[{t:"→ comparison csv + ROC/PR/calibration"}]},
+      {id:"nb7",kind:"notebook",x:20,y:crow(8)-14,w:360,h:56,title:"03_models / 04_stress_test",titleSize:12.5,lines:[{t:"drives evaluator → stress csv"}]},
+      {id:"setup",kind:"config",x:20,y:crow(10)-24,w:360,h:56,title:"scripts/setup_mlflow.py",titleSize:12.5,lines:[{t:"creates the MLflow experiment"}]},
+
+      // ----- data lineage spine (right-centre) -----
+      {id:"raw",kind:"data",x:AX,y:crow(2)-14,w:AW,h:76,title:"data/raw/",titleSize:13.5,sub:"inputs on disk",lines:[
+        {t:"hh_rlhf/*.arrow (HF cache)",mono:true,size:11},{t:"llm_bar/*.json",mono:true,size:11}]},
+      {id:"flat",kind:"data",x:AX,y:crow(3)+2,w:AW,h:64,title:"hh_rlhf_flat.parquet",titleSize:12.5,sub:"data/processed/",lines:[{t:"+ hh_rlhf_long.parquet"}]},
+      {id:"feat",kind:"data",x:AX,y:crow(4)+18,w:AW,h:80,title:"features.parquet",titleSize:13,sub:"data/processed/",lines:[
+        {t:"+ embeddings.npy (384-d)",mono:true,size:11},{t:"+ features_with_labels.parquet",mono:true,size:11}]},
+      {id:"clusout",kind:"data",x:AX,y:crow(5)+34,w:AW,h:80,title:"features_with_clusters.parquet",titleSize:11.5,sub:"data/processed/",lines:[
+        {t:"+ umap_2d.npy · umap_sample_idx.npy",mono:true,size:10.5},{t:"→ reports/archetype_summary.csv",mono:true,size:10.5}]},
+      {id:"mdls",kind:"artifact",x:AX,y:crow(6)+38,w:AW,h:92,title:"models/*.joblib",titleSize:13,sub:"+ deberta_checkpoint/",stripe:"#818cf8",lines:[
+        {t:"logreg · xgboost · scaler · kmeans",mono:true,size:10.5},{t:"+ test_predictions.parquet",mono:true,size:10.5},{t:"+ deberta_test_predictions.parquet",mono:true,size:10.5}]},
+      {id:"cmp",kind:"data",x:AX,y:crow(8)-14,w:AW,h:64,title:"model_comparison_summary.csv",titleSize:11,sub:"reports/",lines:[{t:"clean-benchmark scores"}]},
+      {id:"stress",kind:"result",x:AX,y:crow(9)-8,w:AW,h:72,title:"stress_test_results.csv",titleSize:12.5,sub:"reports/",stripe:"#fbbf24",lines:[{t:"per-model × per-category degradation"}]},
+      {id:"mlruns",kind:"data",x:AX,y:crow(10)-24,w:AW,h:60,title:"mlruns/",titleSize:13.5,sub:"MLflow tracking store",lines:[{t:"params · metrics · model registry"}]},
+
+      // ----- meta / config / deploy (right) -----
+      {id:"cfgs",kind:"config",x:1050,y:crow(2)-14,w:170,h:104,title:"configs/",titleSize:13,lines:[
+        {t:"base.yaml",mono:true,size:11},{t:"models/logreg·xgboost",mono:true,size:10.5},{t:"·deberta.yaml",mono:true,size:10.5},{t:"clustering/kmeans.yaml",mono:true,size:10.5}]},
+      {id:"deploy",kind:"deploy",x:1050,y:crow(4)+2,w:170,h:104,title:"deploy/hf-space/",titleSize:12.5,lines:[
+        {t:"app.py",mono:true,size:11},{t:"3 joblib models",mono:true,size:11},{t:"requirements.txt",mono:true,size:10.5},{t:"(torch-free)",size:11}]},
+      {id:"docs",kind:"deploy",x:1050,y:crow(6)+6,w:170,h:76,title:"docs/ + site",titleSize:13,lines:[
+        {t:"index.html",mono:true,size:11},{t:"portfolio deep-dive",size:11}]},
+      {id:"meta",kind:"meta",x:1050,y:crow(8)-8,w:170,h:120,title:"project meta",titleSize:13,lines:[
+        {t:"pyproject.toml",mono:true,size:10.5},{t:"requirements.txt",mono:true,size:10.5},{t:"Makefile",mono:true,size:10.5},{t:"README.md",mono:true,size:10.5},{t:"LICENSE",mono:true,size:10.5}]}
+    ],
+    edges:[
+      // lineage spine (vertical) 0..7
+      {from:"raw",to:"flat",stroke:"#3b4570"},{from:"flat",to:"feat",stroke:"#3b4570"},
+      {from:"feat",to:"clusout",stroke:"#3b4570"},{from:"clusout",to:"mdls",stroke:"#3b4570"},
+      {from:"mdls",to:"cmp",stroke:"#3b4570"},{from:"cmp",to:"stress",stroke:"#3b4570"},
+      {from:"stress",to:"mlruns",stroke:"#2a2f45"},
+      // modules -> the artifact they produce (r -> l) 7..13
+      {from:"loader",to:"flat",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"extr",to:"feat",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"clus",to:"clusout",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"train",to:"mdls",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"eval",to:"stress",fromSide:"r",toSide:"l",stroke:"#5b4a24",dash:"6 5"},
+      {from:"raw",to:"loader",fromSide:"l",toSide:"r",stroke:"#3b4570",d:"M760,"+(crow(2)-14+38)+" H"+(CX+CW)},
+      // notebooks -> modules (r -> l) 13..19
+      {from:"nb1",to:"loader",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"nb2",to:"extr",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"nb4",to:"clus",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"nb5",to:"train",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"nb7",to:"eval",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      // config feeds package (down) 18
+      {from:"cfg",to:"loader",stroke:"#2c5148",dash:"5 5"},
+      // deploy consumes models 19
+      {from:"mdls",to:"deploy",fromSide:"r",toSide:"l",stroke:"#4a2f4a",dash:"5 5"},
+    ],
+    flow:[
+      {paths:[0,1,2,3,4,5],cls:"data",weight:6,dur:9000,splits:[{at:3,cls:"out"}]}, // lineage spine, turns green at models
+      {paths:[7],cls:"data",weight:2,dur:1500},   // loader->flat
+      {paths:[8],cls:"data",weight:2,dur:1500},   // extr->feat
+      {paths:[9],cls:"data",weight:2,dur:1500},   // clus->clusout
+      {paths:[10],cls:"out",weight:2,dur:1500},   // train->models
+      {paths:[11],cls:"adv",weight:2,dur:1500},   // eval->stress
+      {paths:[13],cls:"data",weight:1,dur:1400},  // nb1->loader
+      {paths:[14],cls:"data",weight:1,dur:1400},  // nb2->extr
+      {paths:[16],cls:"out",weight:1,dur:1400}    // nb5->train
+    ]
+  };
+
+  KVBlueprint.mount("svg-system","wrap-system",sys,"system");
+  KVBlueprint.mount("svg-code","wrap-code",code,"code");
+})();
 </script>
 </body>
 </html>
