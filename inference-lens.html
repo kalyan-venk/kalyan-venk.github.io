@@ -73,7 +73,7 @@
   <div class="wrap">
     <p class="kicker reveal">Live demo</p>
     <h2 class="section-title reveal">Score 2 responses and watch a judge get fooled</h2>
-    <p class="section-sub reveal">Paste 2 responses, or load the built in sample. 2 trained models pick the one they think is better. The case I want you to see is when they confidently choose the worse, padded answer. That is the behavior I want you to see, not a glitch.</p>
+    <p class="section-sub reveal">Paste 2 responses, or load the built in sample. 2 trained models pick the one they think is better. Watch what happens when they confidently choose the worse, padded answer. Nothing is broken when they do that. It is the model doing exactly what it learned to do.</p>
     <div class="il-app reveal">
       <div class="il-inputs">
         <div class="il-field"><label>Response A</label><textarea id="il-a" placeholder="Paste the first answer here..."></textarea></div>
@@ -101,7 +101,7 @@
         <p>
           Read it top to bottom. On the left are the <b>resources</b> that feed in, the datasets and pretrained models.
           The centre spine is the <b>pipeline</b> in run order. The right shows the <b>artifacts</b> each stage writes to disk.
-          The amber path is LLM-Bar. It stays out of training entirely and only enters at the stress-test, which is the whole point of the project.
+          The amber path is LLM-Bar. It stays out of training entirely and only enters at the stress-test, so nothing a model saw while training prepared it for that path.
         </p>
       </div>
 
@@ -167,13 +167,13 @@
 <section>
   <div class="wrap prose">
     <p class="kicker reveal">The setup</p>
-    <h2 class="reveal">Honest human judgment on natural language, then adversarial pressure</h2>
-    <p class="reveal">I started from Anthropic's HH-RLHF dataset, 170,000 plus human preference annotations. A rater sees 2 AI responses to the same conversation and just picks the one they prefer. No rubric, no scoring guide, only judgment. That is the honest NLP signal I trained on. The task is fundamentally one of natural language understanding: can a model learn what humans find genuinely useful or convincing in text?</p>
+    <h2 class="reveal">Real human judgment on natural language, then adversarial pressure</h2>
+    <p class="reveal">I started from Anthropic's HH-RLHF dataset, 170,000 plus human preference annotations. A rater sees 2 AI responses to the same conversation and just picks the one they prefer. No rubric, no scoring guide, only judgment. That is the signal I trained on. The task is fundamentally one of natural language understanding: can a model learn what humans find genuinely useful or convincing in text?</p>
     <p class="reveal">Then I tried to break them. LLM-Bar gives me 419 adversarially constructed NLP pairs built specifically to fool automated text evaluators. My plan was simple: train NLP scoring models on the clean preference data, then see how each architecture behaves the moment something is engineered to trip it.</p>
 
     <h2 class="reveal">3 things I walked away with</h2>
     <div class="finding reveal"><strong>The signal was there. It cancelled itself out.</strong> Pooled across the dataset, 4 surface features sit at chance: 0.512 and 0.517 AUC-ROC. Inside a single subset they reach 0.57. On helpfulness data, length is the strongest predictor and longer answers win, coefficient +0.220. On harmlessness data it is still the strongest predictor and longer answers lose, coefficient −0.252. Pool the 2 and length predicts nothing, because it predicts opposite things in each half.</div>
-    <div class="finding reveal"><strong>Competence is not robustness.</strong> DeBERTa was the only model that learned the task, and it degraded the most: 19.3 points, against 18.3 for Logistic Regression and 8.4 for XGBoost. The weak models could not fall far because they were already at chance. Being good at the job is what gives an adversary something to take.</div>
+    <div class="finding reveal"><strong>Competence is not robustness.</strong> DeBERTa was the only model that learned the task, and it degraded the most: 19.3 points, against 18.3 for Logistic Regression and 8.4 for XGBoost. The weak models could not fall far because they were already at chance. Whatever it actually learned is what the attack had to work with.</div>
     <div class="finding reveal"><strong>Every model was inverted, not just confused.</strong> All 3 architectures scored below 50 percent on adversarial pairs. On a forced binary choice that is systematic inversion: the attacks do not make a judge uncertain, they reliably flip it. Neighbor, the smallest edit of the 4, beat every architecture.</div>
   </div>
 </section>
@@ -196,7 +196,7 @@
   <div class="wrap">
     <p class="kicker reveal">The headline</p>
     <h2 class="section-title reveal">2 models, identical on paper, opposite under fire</h2>
-    <p class="section-sub reveal">All 3 models scored near 0.50 AUC-ROC on clean evaluation. The real separation only shows up once you attack them and that is the argument of the whole project.</p>
+    <p class="section-sub reveal">All 3 models scored near 0.50 AUC-ROC on clean evaluation. The real separation only shows up once you attack them. Read the clean column alone and these 3 models look interchangeable.</p>
     <div class="tbl-wrap reveal">
       <table>
         <thead><tr><th>Model</th><th>Clean AUC-ROC</th><th>Worst case under attack</th><th>Verdict</th></tr></thead>
@@ -215,7 +215,7 @@
   <div class="wrap">
     <p class="kicker reveal">What the data said</p>
     <h2 class="section-title reveal">Length is the opposite of quality</h2>
-    <p class="section-sub reveal">Before I touched a single label, I wanted to know what the response space naturally looks like, so I clustered 182K sentence embeddings with K-Means, DBSCAN and Ward. K-Means selected 4 groups by silhouette and those became the archetypes below. Worth being honest about how strong that structure is: the silhouette score is 0.020, close to zero, and allowed to choose for themselves Ward and DBSCAN both prefer 2 groups rather than 4. These are useful descriptive labels, not cleanly separated clusters.</p>
+    <p class="section-sub reveal">Before I touched a single label, I wanted to know what the response space naturally looks like, so I clustered 182K sentence embeddings with K-Means, DBSCAN and Ward. K-Means selected 4 groups by silhouette and those became the archetypes below. The structure is thin though: the silhouette score is 0.020, close to zero, and allowed to choose for themselves Ward and DBSCAN both prefer 2 groups rather than 4. These are useful descriptive labels, not cleanly separated clusters.</p>
     <div class="2-col">
       <div class="chart-card reveal">
         <h4>Human preference rate by archetype</h4>

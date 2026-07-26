@@ -76,8 +76,8 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">The thesis</p>
-    <h2 class="section-title reveal">2 questions about trust and the range to back them up</h2>
-    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work and standing over them is a quality inspector deciding what ships. Most work studies the models, so I went after the inspector instead. One project asks whether it can be fooled. The other asks whether hiring it even helped. The third is the range piece: the same "prove it, don't claim it" rigor applied to the unglamorous MLOps loop most portfolios skip.</p>
+    <h2 class="section-title reveal">2 questions about trust, and 1 project outside the lab</h2>
+    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work and standing over them is a quality inspector deciding what ships. Most work studies the models, so I went after the inspector instead. The first project asks whether that inspector can be fooled. The second asks whether hiring it even helped. The third steps off the research floor and holds a plain production MLOps loop to the same standard of evidence.</p>
     <div class="proj-grid">
       <a href="inference-lens" class="card reveal">
         <span class="glow" style="background:#6366f1;"></span>
@@ -95,7 +95,7 @@
         <span class="glow" style="background:#a855f7;"></span>
         <span class="tag">First-author research · under peer review</span>
         <h3>Multi-Agent Inference Reliability</h3>
-        <p>A 3 agent monitor, Planner, Critic, Fixer, that catches and corrects bad LLM output at runtime without retraining. The finding I care about is the failure condition: it lifts weak models about +30 points pass@1 but quietly costs strong ones, so above roughly 60 percent baseline the benefit fades.</p>
+        <p>A 3 agent monitor, Planner, Critic, Fixer, that catches and corrects bad LLM output at runtime without retraining. The finding I care about is the failure condition: it lifts weak models about +30 points pass@1 but leaves strong ones worse off, so above roughly 60 percent baseline the benefit fades.</p>
         <div class="metrics">
           <div><div class="m-num">+30.3pp</div><div class="m-lbl">weak-model gain, p=0.002</div></div>
           <div><div class="m-num">10</div><div class="m-lbl">research phases</div></div>
@@ -107,7 +107,7 @@
         <span class="glow" style="background:#22c55e;"></span>
         <span class="tag">Production MLOps · shipped</span>
         <h3>PredictOps</h3>
-        <p>A deliberately boring tabular model with all the depth put into the ops loop around it: cross-validated training comparison, a validated FastAPI serving layer, a multi-stage Docker build, a CI gate that blocks a bad model from shipping, MLflow registry promotion and PSI-based drift detection. Most portfolio projects stop at the trained model. This one is about everything after.</p>
+        <p>A deliberately boring tabular model with all the depth put into the ops loop around it: cross-validated training comparison, a validated FastAPI serving layer, a multi-stage Docker build, a CI gate that blocks a bad model from shipping, MLflow registry promotion and PSI-based drift detection. Most portfolio projects end at the trained model. This one starts there.</p>
         <div class="metrics">
           <div><div class="m-num">&ge;0.80</div><div class="m-lbl">ROC-AUC CI gate</div></div>
           <div><div class="m-num">0.846</div><div class="m-lbl">CV ROC-AUC</div></div>
@@ -123,7 +123,7 @@
   <div class="wrap">
     <p class="kicker reveal">The finding I keep coming back to</p>
     <h2 class="section-title reveal">More monitoring is not always better</h2>
-    <p class="section-sub reveal">Add a critic and fixer to a weak coding agent and it jumps 32 points. Add the exact same layer to a strong one and it quietly loses ground. Every model I tested landed on the same downward line, with the crossover around 65 percent baseline. You need to know which side of that line your model sits on before you ship.</p>
+    <p class="section-sub reveal">Add a critic and fixer to a weak coding agent and it jumps 32 points. Add the exact same layer to a strong one and it slips backwards. Every model I tested landed on the same downward line, with the crossover around 65 percent baseline. You need to know which side of that line your model sits on before you ship.</p>
     <div class="chart-card reveal">
       <h4>Monitoring benefit versus baseline capability</h4>
       <p class="cap">Each point is a model. X axis is how good it is on its own, Y axis is what the monitoring pipeline added or removed.</p>
@@ -147,9 +147,9 @@
 <section>
   <div class="wrap">
     <p class="kicker reveal">How I work</p>
-    <h2 class="section-title reveal">Reliability is the whole point, not a nice to have</h2>
+    <h2 class="section-title reveal">I would rather find the break myself</h2>
     <div class="feature-grid">
-      <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3.2v5.3c0 4.6-3.2 7.8-7.5 9.5-4.3-1.7-7.5-4.9-7.5-9.5V5.7L12 2.5z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg></div><h4>Assume someone will break it</h4><p>Clean accuracy is table stakes. I build expecting an adversary, then measure exactly how far the system bends before it gives.</p></div>
+      <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3.2v5.3c0 4.6-3.2 7.8-7.5 9.5-4.3-1.7-7.5-4.9-7.5-9.5V5.7L12 2.5z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg></div><h4>Assume someone will break it</h4><p>Clean accuracy only covers the easy half. I build expecting an adversary, then measure exactly how far the system bends before it gives.</p></div>
       <div class="feature reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5a8.5 8.5 0 0 1 14.3-3.2l2.2 2.2"/><path d="M20.5 4v4.5H16"/><path d="M20.5 14.5a8.5 8.5 0 0 1-14.3 3.2L4 15.5"/><path d="M3.5 20v-4.5H8"/></svg></div><h4>Prove it, do not claim it</h4><p>Local inference, MLflow tracking, pinned dependencies, confidence intervals. Every result can be rerun.</p></div>
       <div class="feature reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></div><h4>Ship it live</h4><p>The scoring pipeline runs as a public app you can poke right now. I would rather show a running demo than describe one.</p></div>
     </div>

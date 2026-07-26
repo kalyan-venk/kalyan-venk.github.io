@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kalyan's work</title>
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
-<meta name="description" content="A production MLOps pipeline built to prove the ops loop, not the model: training comparison, FastAPI serving, Docker, a CI eval gate, MLflow registry promotion, and PSI-based drift detection, all shipped.">
+<meta name="description" content="A production MLOps pipeline where all the depth sits in the ops loop: training comparison, FastAPI serving, Docker, a CI eval gate, MLflow registry promotion, and PSI-based drift detection, all shipped.">
 <meta property="og:title" content="PredictOps - a production MLOps pipeline, all 7 phases shipped">
 <meta property="og:description" content="Most portfolio projects stop at a trained model. This one is about everything after: serving, containerization, a CI gate that blocks a bad model, registry promotion, and drift detection.">
 <meta property="og:type" content="website">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="PredictOps - a production MLOps pipeline, all 7 phases shipped">
-<meta name="twitter:description" content="Most portfolio projects stop at a trained model. This one is about everything after: serving, containerization, a CI gate, registry promotion, drift detection.">
+<meta name="twitter:description" content="The interesting half of an ML project starts once the model trains: serving, containerization, a CI gate, registry promotion, drift detection.">
 <meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,7 +50,7 @@
   <div class="wrap">
     <span class="eyebrow reveal"><span class="blip"></span>Production MLOps · CI-gated &amp; drift-monitored</span>
     <h1 class="reveal">PredictOps</h1>
-    <p class="lead reveal d1">Every ML Engineer job description lists Docker, FastAPI, CI/CD, MLflow. Almost none of them list a novel model architecture. So this project deliberately uses a boring, well-understood tabular classification problem and puts all the depth into the ops loop around it: the training comparison, the serving contract, the container, a CI gate that actually blocks a bad model before it ships, registry promotion and drift detection. The system around the model is the point.</p>
+    <p class="lead reveal d1">Every ML Engineer job description lists Docker, FastAPI, CI/CD, MLflow. Almost none of them list a novel model architecture. So this project deliberately uses a boring, well-understood tabular classification problem and puts all the depth into the ops loop around it: the training comparison, the serving contract, the container, a CI gate that actually blocks a bad model before it ships, registry promotion and drift detection. The model itself is almost incidental here.</p>
     <div class="meta reveal d2">
       <span class="chip">scikit-learn</span>
       <span class="chip">XGBoost</span>
@@ -70,7 +70,7 @@
 <section style="padding-top:30px;">
   <div class="wrap">
     <div class="stats">
-      <div class="stat reveal"><div class="num">&ge;<span data-count="0.80" data-dp="2">0</span></div><div class="lbl">ROC-AUC gate &mdash; a bad model fails CI</div></div>
+      <div class="stat reveal"><div class="num">&ge;<span data-count="0.80" data-dp="2">0</span></div><div class="lbl">ROC-AUC gate, a bad model fails CI</div></div>
       <div class="stat reveal d1"><div class="num"><span data-count="0.846" data-dp="3">0</span></div><div class="lbl">CV ROC-AUC, winning model</div></div>
       <div class="stat reveal d2"><div class="num"><span data-count="4">0</span></div><div class="lbl">served REST endpoints</div></div>
       <div class="stat reveal d3"><div class="num"><span data-count="2">0</span></div><div class="lbl">candidate models compared</div></div>
@@ -101,7 +101,7 @@
 <section id="blueprints">
   <div class="wrap">
     <p class="kicker reveal">Under the hood</p>
-    <h2 class="section-title reveal">See exactly how it is built</h2>
+    <h2 class="section-title reveal">The whole loop, drawn out</h2>
     <p class="section-sub reveal">2 live blueprints. One traces the ops loop stage by stage. The other maps every file in the repo and how one artifact becomes the next. The moving dots are data in flight, coloured by what kind of data it is.</p>
 
     <!-- ============================ DIAGRAM 1 ============================ -->
@@ -109,7 +109,7 @@
       <div class="sec-head">
         <h3><span class="num">01</span>System design, the stages in run order</h3>
         <p>
-          Read it top to bottom. The model is deliberately boring, a tabular churn classifier; the point is everything after it. On the left are the inputs and config.
+          Read it top to bottom. The model is deliberately boring, a tabular churn classifier, so what is worth reading is everything downstream of it. On the left are the inputs and config.
           The centre spine is the <b>ops loop</b> in run order: load, train and compare, export to ONNX, the CI eval gate, registry promotion, serving, and drift.
           The right shows what each stage writes to disk. The amber path is the drift monitor watching production for feature shift.
         </p>
@@ -133,10 +133,10 @@
       </div>
 
       <div class="bp-notes">
-        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>The ops loop is the project</h4>
-          <p>The churn model is plumbing. The contribution is everything after it: a CI gate that fails the build below <b>0.80</b> ROC-AUC, registry promotion, and drift detection wired into one make pipeline.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>The churn model is plumbing</h4>
+          <p>All the depth sits after it: a CI gate that fails the build below <b>0.80</b> ROC-AUC, registry promotion, and drift detection wired into one make pipeline.</p></div>
         <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>The simpler model won, and shipped</h4>
-          <p>Logistic Regression beat XGBoost on cross-validated ROC-AUC, <b>0.846 to 0.842</b>, so the simpler model is the one that got promoted. Not a foregone conclusion picked to look tidy.</p></div>
+          <p>Logistic Regression beat XGBoost on cross-validated ROC-AUC, <b>0.846 to 0.842</b>, so the simpler model is the one that got promoted. I did not go in expecting that.</p></div>
         <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>A tiny serving image, on purpose</h4>
           <p>A multi-stage build trains and exports to <code>ONNX</code>, then serves with onnxruntime alone, no sklearn at runtime. That takes the image from about <b>1.17 GB to 343 MB</b>.</p></div>
       </div>
@@ -147,10 +147,10 @@
       <div class="sec-head">
         <h3><span class="num">02</span>Code map, every file and the data lineage</h3>
         <p>
-          Same project, a different lens. The centre spine is the <b>data lineage</b>: a CSV becomes a cleaned frame, a trained model,
+          Same repo, viewed by file instead of by stage. The centre spine is the <b>data lineage</b>: a CSV becomes a cleaned frame, a trained model,
           an ONNX artifact, a promoted registry version, then a served prediction. The tests, CI and build files sit on the left,
           the package modules (<b>src/predictops</b>) are in the middle, and Docker, dependencies and docs sit on the right.
-          Every file in the repo is here with its one-line job.
+          If a file exists in the repo, it is somewhere on this map.
         </p>
       </div>
 
@@ -178,7 +178,7 @@
   <div class="wrap">
     <p class="kicker reveal">Where it actually stands</p>
     <h2 class="section-title reveal">All 7 phases shipped.</h2>
-    <p class="section-sub reveal">This project was built one working phase at a time, each committed separately, each with its own "why" before moving on. Here's exactly what's real, instead of rounding up.</p>
+    <p class="section-sub reveal">This project was built one working phase at a time, each committed separately, each with its own "why" before moving on. Here's what is actually in the repo.</p>
     <div class="2-col">
       <div class="tbl-wrap reveal" style="align-self:start;">
         <table>
@@ -199,8 +199,8 @@
     </div>
 
     <div class="2-col" style="margin-top:28px;">
-      <div class="finding reveal" style="align-self:start;"><strong>Phase 5-6: registry promotion and real PSI, not a rounded-off drift score.</strong> The winning run gets registered in the MLflow model registry and promoted Staging &rarr; Production. Drift detection runs Evidently with PSI (Population Stability Index) as the actual per-column stattest, comparing a reference split against a synthetically shifted "current" split, tripping an alert when any feature's PSI exceeds 0.15.</div>
-      <div class="finding reveal" style="align-self:start;"><strong>Phase 3 revisited: multi-stage Docker that actually earns the name.</strong> The first pass copied the entire build environment (MLflow, Evidently, pytest, ruff) into the runtime image. Splitting serving-only dependencies out cut the served image from 1.66GB to 733MB, a 56% reduction, from an actual measured build, not an estimate.</div>
+      <div class="finding reveal" style="align-self:start;"><strong>Phase 5-6: registry promotion and a real PSI drift check.</strong> The winning run gets registered in the MLflow model registry and promoted Staging &rarr; Production. Drift detection runs Evidently with PSI (Population Stability Index) as the actual per-column stattest, comparing a reference split against a synthetically shifted "current" split, tripping an alert when any feature's PSI exceeds 0.15.</div>
+      <div class="finding reveal" style="align-self:start;"><strong>Phase 3 revisited: multi-stage Docker that actually earns the name.</strong> The first pass copied the entire build environment (MLflow, Evidently, pytest, ruff) into the runtime image. Splitting serving-only dependencies out cut the served image from 1.66GB to 733MB, a 56% reduction, measured off a real build rather than estimated.</div>
     </div>
   </div>
 </section>
@@ -209,7 +209,7 @@
   <div class="wrap prose">
     <p class="kicker reveal">Why this project exists</p>
     <h2 class="reveal">The model is the boring part on purpose</h2>
-    <p class="reveal">My other 2 projects are LLM research. This one is the breadth piece that sits next to them: a plain tabular classification problem (customer churn, never the headline) so nobody mistakes the domain for the point. The point is the ops loop, the part almost every portfolio project skips because it stops at the trained model. A pipeline that prevents leakage, a served API with real input validation and a health check, a container that only ships what it needs and a CI gate that actually fails a merge. That's the same instinct behind the other 2 projects, applied to the plumbing instead of the research question: build the plumbing that makes the system trustworthy, beyond the part that demos well.</p>
+    <p class="reveal">My other 2 projects are LLM research. This one is the breadth piece that sits next to them: a plain tabular classification problem (customer churn, never the headline) so nobody mistakes the domain for the interesting part. What I wanted to build was the ops loop, which is the half most portfolios never get to. A pipeline that prevents leakage, a served API with real input validation and a health check, a container that only ships what it needs and a CI gate that actually fails a merge. That's the same instinct behind the other 2 projects, pointed at the machinery rather than a research question, because the machinery is what decides whether the system can be trusted once nobody is watching it.</p>
   </div>
 </section>
 

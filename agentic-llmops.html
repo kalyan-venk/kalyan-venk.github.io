@@ -8,7 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
 <meta name="description" content="First-author research on a 3-agent runtime monitor that catches bad LLM output without retraining. The Inverse Capability Hypothesis, with confidence intervals.">
 <meta property="og:title" content="Multi-Agent Inference Reliability - the Inverse Capability Hypothesis">
-<meta property="og:description" content="A runtime monitor for AI agents. It lifts weak models and quietly hurts strong ones. First-author research, currently under peer review.">
+<meta property="og:description" content="A runtime monitor for AI agents. It lifts weak models and drags strong ones down. First-author research, currently under peer review.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalyanvenk.com/agentic-llmops">
 <meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Multi-Agent Inference Reliability - the Inverse Capability Hypothesis">
-<meta name="twitter:description" content="A runtime monitor that lifts weak models and quietly hurts strong ones. First-author research, currently under peer review.">
+<meta name="twitter:description" content="A runtime monitor that helps weak models and hurts strong ones. First-author research, currently under peer review.">
 <meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -146,7 +146,7 @@
 <section id="blueprints">
   <div class="wrap">
     <p class="kicker reveal">Under the hood</p>
-    <h2 class="section-title reveal">See exactly how it is built</h2>
+    <h2 class="section-title reveal">How the pieces actually connect</h2>
     <p class="section-sub reveal">2 live blueprints. One traces the Planner-Critic-Fixer pipeline stage by stage. The other maps every file in the repo and how one run becomes the next result. The moving dots are data in flight, coloured by what kind of data it is.</p>
 
     <!-- ============================ DIAGRAM 1 ============================ -->
@@ -178,9 +178,9 @@
       </div>
 
       <div class="bp-notes">
-        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>The finding is the failure condition</h4>
-          <p>Monitoring is not a free win. Below roughly <b>65% baseline</b> it lifts a weak agent a lot; above it, the same layer quietly costs a strong one points. Knowing which side your model sits on is the contribution.</p></div>
-        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>The gate is do-no-harm, not the hero</h4>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>Where monitoring stops helping</h4>
+          <p>Monitoring is not a free win. Below roughly <b>65% baseline</b> it lifts a weak agent a lot; above it, the same layer takes points away from a strong one. Get that wrong and you ship a monitor that makes the agent worse.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>What the gate is actually for</h4>
           <p>The reversion gate throws away <b>73.4%</b> of the Fixer's rewrites, keeping only strict improvements. The ablation shows problem context and fixer scale drive the gains; the gate mostly protects the downside.</p></div>
         <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>The critic is a hybrid</h4>
           <p>A static <code>AST</code> pass catches syntax errors and undefined names first and sets a floor. The LLM critic can only push the risk score higher, never talk a real defect down to clean.</p></div>
@@ -192,10 +192,10 @@
       <div class="sec-head">
         <h3><span class="num">02</span>Code map, every file and the data lineage</h3>
         <p>
-          Same project, a different lens. The centre spine is the <b>data lineage</b>: a benchmark becomes a planner cache,
+          The same project seen from the file system. The centre spine is the <b>data lineage</b>: a benchmark becomes a planner cache,
           then per-run CSVs, then the summary tables, then the confidence intervals. The phase scripts that drive each run sit on the left,
           the single-file pipeline (<b>agent.py</b>) is in the middle, and the paper, Docker and dependencies sit on the right.
-          Every file in the repo is here with its one-line job.
+          Every file the repo ships is on the map with a one-line job.
         </p>
       </div>
 
@@ -223,7 +223,7 @@
   <div class="wrap">
     <p class="kicker reveal">The result and the better finding</p>
     <h2 class="section-title reveal">The gain was real, but the failure case taught me more.</h2>
-    <p class="section-sub reveal">Across 10 phases and 5 model families, the story was never a single average gain. The number I care about is the failure condition: a weak model (Code Llama 7B) gained +30.3 points pass@1 while a strong one (Qwen2.5 Coder 7B) lost 4.0, both statistically significant. I call it the Inverse Capability Hypothesis. Below roughly 60 percent baseline monitoring is worth deploying; above that the benefit fades, and the exact crossover is still an open question. Knowing when the monitor starts doing harm matters as much as the monitor itself.</p>
+    <p class="section-sub reveal">Across 10 phases and 5 model families, the story was never a single average gain. It was a split: a weak model (Code Llama 7B) gained +30.3 points pass@1 while a strong one (Qwen2.5 Coder 7B) lost 4.0, both statistically significant. I call it the Inverse Capability Hypothesis. Below roughly 60 percent baseline monitoring is worth deploying; above that the benefit fades, and the exact crossover is still an open question. Knowing when the monitor starts doing harm matters as much as the monitor itself.</p>
     <div class="2-col">
       <div class="chart-card reveal">
         <h4>Monitoring delta by model</h4>
@@ -293,7 +293,7 @@
     <h2 class="section-title reveal">What 10 phases taught me</h2>
     <div class="finding-grid">
       <div class="finding reveal"><strong>Monitoring benefit is inversely proportional to baseline capability.</strong> The central result, now backed by 95 percent intervals that exclude zero at both ends. A model that already gets 9 of 10 right has little to gain and real risk of harm. A model that gets 2 of 10 right has everything to gain.</div>
-      <div class="finding reveal d1"><strong>The reversion gate is a safety device, not an accelerator.</strong> It reverts 73.4 percent of attempted fixes. On weak models that costs a point. On strong models it keeps the whole thing from going negative.</div>
+      <div class="finding reveal d1"><strong>The reversion gate exists to stop the monitor doing damage.</strong> It reverts 73.4 percent of attempted fixes. On weak models that costs a point. On strong models it keeps the whole thing from going negative.</div>
       <div class="finding reveal d2"><strong>The fixer, not the critic, is the bottleneck.</strong> Scaling the critic to 8B did nothing early on. A bigger judge gives better scores but cannot rescue a fixer that introduces fresh bugs.</div>
       <div class="finding reveal d3"><strong>Context beat raw model size.</strong> The ablation says handing the fixer the problem statement mattered more than upgrading its parameter count.</div>
       <div class="finding reveal"><strong>It generalizes beyond 1 benchmark.</strong> On HumanEval+ and MBPP, both harder than the original HumanEval, the weak model still gained around 30 points and the strong models still lost a little. The law is not a quirk of a single dataset.</div>
@@ -307,14 +307,14 @@
     <h2 class="section-title reveal">10 phases, from first signal to publishable</h2>
     <div class="timeline reveal">
       <div class="tl-item"><div class="ph">Phase 1</div><h4>Baseline and a calibration trap</h4><p>3B models throughout. The critic caught risk reliably but the small fixer was net negative. Set the threshold too low and the fixer fired on 74 percent of problems, dropping accuracy by 18 points. Calibration clearly mattered.</p></div>
-      <div class="tl-item"><div class="ph">Phase 2</div><h4>A bigger critic was not the answer</h4><p>I scaled the critic to 8B and kept the 3B fixer. Still net negative across all 18 conditions. That pinned the bottleneck on the fixer, not the critic.</p></div>
+      <div class="tl-item"><div class="ph">Phase 2</div><h4>A bigger critic was not the answer</h4><p>I scaled the critic to 8B and kept the 3B fixer. Still net negative across all 18 conditions. That pinned the bottleneck on the fixer.</p></div>
       <div class="tl-item"><div class="ph">Phase 3</div><h4>The turning point</h4><p>An 8B fixer, the problem statement as context and a reversion gate together flipped the direction to net-positive on the pilot model. The reversion gate reverted 73.4 percent of the fixes it saw, keeping only the ones that strictly improved.</p></div>
       <div class="tl-item"><div class="ph">Phase 4 and 4b</div><h4>Cross-model comparison</h4><p>I extended it to Code Llama 7B and ran a full sweep. Code Llama gained 32 points, the largest in the study. The inverse relationship between capability and benefit came into view.</p></div>
       <div class="tl-item"><div class="ph">Phase 5</div><h4>The pattern holds</h4><p>Added DeepSeek Coder 6.7B at -1 and Qwen2.5 Coder 7B at -3. The inverse law held across architectures.</p></div>
       <div class="tl-item"><div class="ph">Phase 6</div><h4>Threshold and retry sweep</h4><p>Swept &tau; across 0.60, 0.70, 0.75. At 0.70 the system stopped over-triggering with no loss for weak models and 0.75 was identical, marking the plateau. For Llama 3.1 8B the fixer trigger rate fell from 46 to 10 percent and latency dropped 39 percent. A single retry lifted Code Llama's pass@2 from 20 to 38 percent.</p></div>
       <div class="tl-item"><div class="ph">Phase 7</div><h4>Confidence intervals on the endpoints</h4><p>My advisor pointed out that single-trial numbers would not survive review. So I reran the 2 endpoints as 3 independent trials each. Code Llama landed at +30 to +31 points and Qwen at -2 to -4, both excluding zero.</p></div>
       <div class="tl-item"><div class="ph">Phase 8</div><h4>Component ablation</h4><p>One change at a time on Code Llama. Problem context was the biggest single lever at +4 points, the fixer model upgrade added +1 and the gate slightly lowered raw accuracy on a weak model while staying the safeguard for strong ones.</p></div>
-      <div class="tl-item"><div class="ph">Phase 9</div><h4>Extending intervals and an honest catch</h4><p>I ran the interval study across the remaining models, then caught my own flaw. The planner caches were built deterministically, so the 3 trials were identical and carried no real variance. Worth flagging rather than reporting fake error bars.</p></div>
+      <div class="tl-item"><div class="ph">Phase 9</div><h4>Extending intervals, and a flaw in my own setup</h4><p>I ran the interval study across the remaining models, then found a problem. The planner caches were built deterministically, so the 3 trials were identical and carried no real variance. Worth flagging rather than reporting fake error bars.</p></div>
       <div class="tl-item"><div class="ph">Phase 10</div><h4>Cross-benchmark generalization and it held</h4><p>Regenerated the caches with a non-deterministic planner for genuine intervals, then ran the law on 2 harder benchmarks. On HumanEval+ Code Llama gained about 32 points and Qwen lost about 4. On MBPP Code Llama gained 30 and Qwen lost a few. The inverse capability law held on both, so the central finding is not a quirk of HumanEval. Those runs are the core evidence in the submission.</p></div>
     </div>
   </div>
