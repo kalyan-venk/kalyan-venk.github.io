@@ -3,9 +3,12 @@
    project page's #blueprints section.
 
    EVERY rule is scoped under .bpx on purpose. style.css already owns .card,
-   .pkt, .tag and .legend for other pages (see the CSS-collision note in
-   CLAUDE.md), so an unscoped rule here would silently restyle the project
-   cards and any flow legend on a project page. Keep the .bpx prefix.
+   .pkt, .tag and .legend for other pages, so an unscoped rule here would
+   silently restyle the project cards and any flow legend on a project page.
+   Keep the .bpx prefix. For the same reason the read-along cards are .bp-note
+   rather than .card, and the legend swatch is .k.swatch rather than .k.node
+   (style.css has an unscoped .node{padding:16px 20px;min-width:120px} that
+   stretches it into a wide empty box).
 
    Design tokens come from style.css — this file defines none of its own.
    =========================================================================== */
