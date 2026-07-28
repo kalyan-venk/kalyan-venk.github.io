@@ -6,303 +6,170 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kalyan Venkatesh</title>
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
-<meta name="description" content="ML Engineer targeting Data Scientist, AI Engineer, ML Engineer, and Software Engineer roles. Research on LLM evaluation and agent reliability, plus a production MLOps pipeline built phase by phase.">
-<meta property="og:title" content="Kalyan Venkatesh - ML Engineer, AI Systems That Hold Up">
-<meta property="og:description" content="Making AI and ML systems you can actually trust. Research on evaluating and hardening the judges and monitors inside AI pipelines, plus a production MLOps pipeline built the same way.">
+<meta name="description" content="Kalyan Venkatesh, machine learning engineer. I build and ensure AI systems stay reliable in production.">
+<meta property="og:title" content="Kalyan Venkatesh">
+<meta property="og:description" content="I build and ensure AI systems stay reliable in production.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalyanvenk.com/">
 <meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Kalyan Venkatesh - ML Engineer, AI Systems That Hold Up">
-<meta name="twitter:description" content="Making AI and ML systems you can actually trust.">
+<meta name="twitter:title" content="Kalyan Venkatesh">
+<meta name="twitter:description" content="I build and ensure AI systems stay reliable in production.">
 <meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
-<link rel="stylesheet" href="assets/style.css?v=6">
+<link rel="stylesheet" href="assets/home.css?v=3">
 </head>
 <body>
-<div class="progress"></div>
+<main class="wrap">
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="/" class="brand"><span class="mark">KV</span>Kalyan Venkatesh</a>
-    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
-    <div class="nav-links">
-      <a href="/" class="active">Home</a>
-      <div class="nav-drop">
-        <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Projects <span class="caret">&#9662;</span></button>
-        <div class="mega" role="menu">
-          <div class="mega-col">
-            <p class="mega-h">Agents &amp; LLM reliability</p>
-            <a href="inference-lens">Inference-Lens <span>judge robustness, live demo</span></a>
-            <a href="secret-agent">secret-agent <span>frameworkless agent runtime</span></a>
-          </div>
-          <div class="mega-col">
-            <p class="mega-h">Experimentation &amp; MLOps</p>
-            <a href="groundtruth">GroundTruth <span>A/B testing, CUPED</span></a>
-            <a href="predictops">PredictOps <span>CI-gated MLOps loop</span></a>
-          </div>
-          <div class="mega-col">
-            <p class="mega-h">Data &amp; systems</p>
-            <a href="streamlake">StreamLake <span>streaming lakehouse, contracts</span></a>
-            <a href="vaultex">vaultex <span>double-entry ledger</span></a>
-          </div>
-        </div>
-      </div>
-      <a href="about">About</a>
-      <a href="inference-lens#demo" class="nav-cta">Live demo</a>
-          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
-        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
-      </button>
-</div>
-  </div>
-</nav>
-
-<header class="hero">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="blip"></span>Research Engineer</span>
-    <h1 class="reveal">Multi-Agent Systems <span class="grad">&amp; Reliability</span></h1>
-    <p class="lead reveal d1">I have spent 3 plus years on 1 problem. ML systems that hold up when it actually matters, not just on a benchmark. Every LLM pipeline leans on an automated judge that grades its output and a monitor meant to catch its failures and most teams simply assume both work. My research measures when you can trust them and builds the ones that do. The same instinct now runs into a production MLOps pipeline built the same way, phase by phase, with proof instead of claims.</p>
-    <div class="cta-row reveal d2">
-      <a href="inference-lens#demo" class="btn btn-primary">Try the live scorer &rarr;</a>
-      <a href="about" class="btn btn-ghost">About me</a>
+  <header class="rail">
+    <div>
+      <h1><a href="/">Kalyan Venkatesh</a></h1>
+      <h2>Data &middot; AI</h2>
+      <p class="pitch">I build and ensure AI systems stay reliable in production.</p>
+      <nav class="nav">
+        <a href="#about" data-sec="about"><span class="ind"></span>About</a>
+        <a href="#experience" data-sec="experience"><span class="ind"></span>Experience</a>
+        <a href="#projects" data-sec="projects"><span class="ind"></span>Projects</a>
+      </nav>
     </div>
-    <div class="trust reveal d3">
-      <span><span class="ok">●</span> First-author research, under peer review</span>
-      <span><span class="ok">●</span> Production ML across 26 deployments</span>
-      <span><span class="ok">●</span> MS Computer Science, DePaul, 2026</span>
-    </div>
-  </div>
-</header>
-
-<section style="padding-top:24px;">
-  <div class="wrap">
-    <div class="stats">
-      <div class="stat reveal"><div class="num"><span data-count="170" data-suffix="K+">0</span></div><div class="lbl">human preference annotations analyzed</div></div>
-      <div class="stat reveal d1"><div class="num"><span data-count="82.1" data-suffix="%" data-dp="1">0</span></div><div class="lbl">false preference rate under attack</div></div>
-      <div class="stat reveal d2"><div class="num">+<span data-count="32" data-suffix="pp">0</span></div><div class="lbl">accuracy lift for a weak agent</div></div>
-      <div class="stat reveal d3"><div class="num"><span data-count="8" data-suffix="">0</span></div><div class="lbl">model architectures stress-tested, across both research projects</div></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">The work</p>
-    <h2 class="section-title reveal">Six builds, one standard</h2>
-    <p class="section-sub reveal">Each one made to break first, then measured. Filter by track.</p>
-    <div class="track-filter reveal">
-      <button class="fchip on" data-track="all">All</button>
-      <button class="fchip" data-track="agents">Agents &amp; LLM reliability</button>
-      <button class="fchip" data-track="experimentation">Experimentation &amp; MLOps</button>
-      <button class="fchip" data-track="data">Data &amp; systems</button>
-    </div>
-    <div class="proj-grid">
-      <a href="inference-lens" class="card reveal" data-track="agents">
-        <span class="glow" style="background:#6366f1;"></span>
-        <span class="tag">Judge robustness · live demo</span>
-        <h3>Inference-Lens</h3>
-        <p>Trained NLP scoring models on human preference data, then attacked them. The one model that learned preference lost the most under attack.</p>
-        <div class="metrics">
-          <div><div class="m-num">182K</div><div class="m-lbl">labeled responses</div></div>
-          <div><div class="m-num">419</div><div class="m-lbl">adversarial pairs</div></div>
-          <div><div class="m-num">3</div><div class="m-lbl">architectures</div></div>
-        </div>
-        <span class="arrow">Explore and try it live &rarr;</span>
-      </a>
-      <a href="secret-agent" class="card reveal d1" data-track="agents">
-        <span class="glow" style="background:#a855f7;"></span>
-        <span class="tag">Frameworkless agent runtime</span>
-        <h3>secret-agent</h3>
-        <p>An LLM agent loop in 53 lines, no LangChain. A hostile review found a total sandbox escape, now closed. Step through a live trace.</p>
-        <div class="metrics">
-          <div><div class="m-num">0.90</div><div class="m-lbl">retrieval hit@3</div></div>
-          <div><div class="m-num">0.756</div><div class="m-lbl">MRR</div></div>
-          <div><div class="m-num">219</div><div class="m-lbl">tests</div></div>
-        </div>
-        <span class="arrow">Step through a run &rarr;</span>
-      </a>
-      <a href="groundtruth" class="card reveal d2" data-track="experimentation">
-        <span class="glow" style="background:#22c55e;"></span>
-        <span class="tag">A/B testing · CUPED</span>
-        <h3>GroundTruth</h3>
-        <p>Variance-reduced A/B analysis on a 14M-row log. Move the sliders and watch power and CUPED confidence intervals recompute live.</p>
-        <div class="metrics">
-          <div><div class="m-num">+47.4%</div><div class="m-lbl">CUPED lift</div></div>
-          <div><div class="m-num">14M</div><div class="m-lbl">row log</div></div>
-          <div><div class="m-num">live</div><div class="m-lbl">A/B simulator</div></div>
-        </div>
-        <span class="arrow">Run the simulator &rarr;</span>
-      </a>
-      <a href="predictops" class="card reveal" data-track="experimentation">
-        <span class="glow" style="background:#10b981;"></span>
-        <span class="tag">Production MLOps · shipped</span>
-        <h3>PredictOps</h3>
-        <p>A boring tabular model wrapped in a real ops loop. A CI gate blocks a bad model, PSI catches drift, and MLflow promotes on merit.</p>
-        <div class="metrics">
-          <div><div class="m-num">&ge;0.80</div><div class="m-lbl">ROC-AUC CI gate</div></div>
-          <div><div class="m-num">0.846</div><div class="m-lbl">CV ROC-AUC</div></div>
-          <div><div class="m-num">71%</div><div class="m-lbl">smaller image</div></div>
-        </div>
-        <span class="arrow">See what's built &rarr;</span>
-      </a>
-      <a href="streamlake" class="card reveal d1" data-track="data">
-        <span class="glow" style="background:#fbbf24;"></span>
-        <span class="tag">Streaming lakehouse · contracts</span>
-        <h3>StreamLake</h3>
-        <p>Kafka to Iceberg with a custom data-contract engine. Bad rows get quarantined, not silently ingested. Break a record and watch it get caught.</p>
-        <div class="metrics">
-          <div><div class="m-num">3M</div><div class="m-lbl">trips processed</div></div>
-          <div><div class="m-num">47</div><div class="m-lbl">contract checks</div></div>
-          <div><div class="m-num">1.3%</div><div class="m-lbl">quarantined</div></div>
-        </div>
-        <span class="arrow">Break a record &rarr;</span>
-      </a>
-      <a href="vaultex" class="card reveal d2" data-track="data">
-        <span class="glow" style="background:#5eead4;"></span>
-        <span class="tag">Double-entry ledger</span>
-        <h3>vaultex</h3>
-        <p>A Java payments ledger where debits always equal credits, held under concurrent load. Post a transaction in the browser and watch the invariant hold.</p>
-        <div class="metrics">
-          <div><div class="m-num">86</div><div class="m-lbl">tests green</div></div>
-          <div><div class="m-num">0</div><div class="m-lbl">lost of 56,523</div></div>
-          <div><div class="m-num">live</div><div class="m-lbl">ledger demo</div></div>
-        </div>
-        <span class="arrow">Post a transaction &rarr;</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">The finding I keep coming back to</p>
-    <h2 class="section-title reveal">More monitoring is not always better</h2>
-    <p class="section-sub reveal">Add a critic and fixer to a weak coding agent and it jumps 32 points. Add the exact same layer to a strong one and it slips backwards. Every model I tested landed on the same downward line, with the crossover around 65 percent baseline. You need to know which side of that line your model sits on before you ship.</p>
-    <div class="chart-card reveal">
-      <h4>Monitoring benefit versus baseline capability</h4>
-      <p class="cap">Each point is a model. X axis is how good it is on its own, Y axis is what the monitoring pipeline added or removed.</p>
-      <div class="chart-holder"><canvas id="homeScatter"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">Why it matters</p>
-    <h2 class="section-title reveal">You cannot pick an evaluator from a clean benchmark</h2>
-    <div class="finding-grid">
-      <div class="finding reveal"><strong>The leaderboard hides the gap.</strong> Logistic Regression and XGBoost scored almost the same on clean data. Under attack one fell to an 82.1 percent false preference rate and the other held near chance. Nothing on the benchmark told you which to trust.</div>
-      <div class="finding reveal d1"><strong>Competence is not robustness.</strong> The DeBERTa fine-tune was the only model to clear chance on clean data at 0.622 AUC. It also degraded the most under attack, 19.3 points. Being good at the task is what gives an adversary something to take.</div>
-      <div class="finding reveal d2"><strong>Knowing where it breaks is half the value.</strong> A reliability system that helps weak models and hurts strong ones is only safe if you know the crossover. I treat that failure condition as a core result.</div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">How I work</p>
-    <h2 class="section-title reveal">I would rather find the break myself</h2>
-    <div class="feature-grid">
-      <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3.2v5.3c0 4.6-3.2 7.8-7.5 9.5-4.3-1.7-7.5-4.9-7.5-9.5V5.7L12 2.5z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg></div><h4>Assume someone will break it</h4><p>Clean accuracy only covers the easy half. I build expecting an adversary, then measure exactly how far the system bends before it gives.</p></div>
-      <div class="feature reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5a8.5 8.5 0 0 1 14.3-3.2l2.2 2.2"/><path d="M20.5 4v4.5H16"/><path d="M20.5 14.5a8.5 8.5 0 0 1-14.3 3.2L4 15.5"/><path d="M3.5 20v-4.5H8"/></svg></div><h4>Prove it, do not claim it</h4><p>Local inference, MLflow tracking, pinned dependencies, confidence intervals. Every result can be rerun.</p></div>
-      <div class="feature reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></div><h4>Ship it live</h4><p>The scoring pipeline runs as a public app you can poke right now. I would rather show a running demo than describe one.</p></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">Toolkit</p>
-    <h2 class="section-title reveal">What I build with</h2>
-    <div class="tags reveal" style="gap:10px;">
-      <span>Python</span><span>Java</span><span>Spring Boot</span><span>NLP</span><span>text classification</span><span>scikit-learn</span><span>XGBoost</span><span>PyTorch</span><span>transformers</span><span>sentence-transformers</span><span>LangGraph</span><span>Ollama</span><span>MLflow</span><span>FastAPI</span><span>Pydantic</span><span>GitHub Actions</span><span>Evidently</span><span>Streamlit</span><span>Docker</span><span>SQL</span><span>Hugging Face</span><span>HumanEval</span><span>HH-RLHF</span><span>LLM-Bar</span><span>adversarial NLP</span>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="cta-band reveal">
-      <h2>Hiring a research engineer?</h2>
-      <p>I just finished my Masters in Computer Science this June, and I want a team that cares whether its AI actually holds up in production. That is the only thing I have ever worked on.</p>
-      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
-        <a href="mailto:adavivenkatesh@gmail.com" class="btn btn-primary">Email</a>
-        <a href="about" class="btn btn-ghost">See the full background</a>
+    <div class="rail-foot">
+      <div class="socials">
+        <a href="https://github.com/kalyan-venk" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.05 0-1.12.39-2.03 1.03-2.74-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 2.5-.34c.85 0 1.71.12 2.5.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.71 1.03 1.62 1.03 2.74 0 3.92-2.34 4.78-4.57 5.04.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.81 0 .27.18.59.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg></a>
+        <a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.3c0-1.26-.02-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.8V21H9z"/></svg></a>
+        <a href="mailto:adavivenkatesh@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
       </div>
     </div>
-  </div>
-</section>
+  </header>
 
-<footer class="footer">
-  <div class="wrap footer-inner">
-    <div class="col">
-      <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
-      <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters. Built and broken in public.</p>
-    </div>
-    <div class="col">
-      <h5>Projects</h5>
-      <a href="inference-lens">Inference-Lens</a>
-      <a href="secret-agent">secret-agent</a><a href="groundtruth">GroundTruth</a><a href="streamlake">StreamLake</a><a href="vaultex">vaultex</a>
-      <a href="predictops">PredictOps</a>
-      <a href="inference-lens#demo">Live demo</a>
-    </div>
-    <div class="col">
-      <h5>Elsewhere</h5>
-      <a href="https://github.com/kalyan-venk" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="mailto:adavivenkatesh@gmail.com">Email</a>
-    </div>
-  </div>
-  <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh. Built with care, hosted on GitHub Pages.</p></div>
-</footer>
+  <div class="content">
 
-<script src="assets/script.js?v=5"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <section class="sec" id="about">
+      <h2 class="sec-h">About</h2>
+      <div class="prose">
+        <p class="reveal">Hey! I'm Kalyan, and I love experimenting with agents across AI systems. I just finished my Master's in Computer Science from DePaul University, Chicago this June. I take pride in my expertise across the fields Computer Vision and LLMs.</p>
+        <p class="reveal">At sensen.ai my computer vision models turned traffic footage into enforcement tickets that reached real people, so a digit misread in bad light became someone's actual problem. That taught me to distrust clean metrics and keep asking whether a system still holds 6 months after it ships, and whether I can prove it.</p>
+        <p class="reveal">My 2 research projects come from the same instinct. <a href="inference-lens">Inference-Lens</a> asks whether the automated judge inside an LLM pipeline can be fooled. The <a href="agentic-llmops">multi-agent reliability work</a> asks whether a runtime monitor actually helps, and finds the point where it starts to hurt. Both are under review.</p>
+        <p class="reveal">Away from the models I build the plumbing too: a streaming lakehouse with its own data-contract engine, a double-entry payments ledger in Java, and an MLOps pipeline that fails a bad model in CI.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="experience">
+      <h2 class="sec-h">Experience</h2>
+
+      <div class="row reveal">
+        <div class="when">2025 to 2026</div>
+        <div>
+          <h3>Graduate Research Engineer <span class="at">· DePaul University</span></h3>
+          <p>Led the multi-agent inference reliability research with 2 faculty co-authors, now under review. Owned it from the problem to the architecture to the statistics, across 10 phases and 5 model families.</p>
+          <a class="arrow-link" href="agentic-llmops">Read the research &rarr;</a>
+          <ul class="tags"><li>Python</li><li>LangGraph</li><li>Ollama</li><li>statistics</li></ul>
+        </div>
+      </div>
+
+      <div class="row reveal">
+        <div class="when">2022 to 2024</div>
+        <div>
+          <h3>Data Scientist <span class="at">· sensen.ai</span></h3>
+          <p>Sole data scientist and forward-deployed technical contact across sensen's client base. Fine-tuned the ANPR vehicle-entry classifier (CNN, transfer learning) to ~90% accuracy, built the company-standard model-evaluation framework whose discrepancy metric tied model error to lost revenue, and owned 300+ pipelines plus the analytical SQL serving all 80 clients on AWS, Azure, and GCP.</p>
+          <ul class="tags"><li>Python</li><li>computer vision</li><li>ETL</li><li>AWS</li></ul>
+        </div>
+      </div>
+
+      <div class="row reveal">
+        <div class="when">2021 to 2022</div>
+        <div>
+          <h3>Data Engineer <span class="at">· Aecom &amp; Siri</span></h3>
+          <p>Built Python and pandas pipelines for cost consolidation, cutting dashboard turnaround from 3 hours to under 1 and tuning SQL across cost databases from about 20s to 8s.</p>
+          <ul class="tags"><li>Python</li><li>pandas</li><li>SQL</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="projects">
+      <h2 class="sec-h">Projects</h2>
+
+      <a class="row reveal title-link" href="inference-lens">
+        <div class="when">LLM-as-a-judge</div>
+        <div>
+          <h3>Inference-Lens</h3>
+          <p>Trained NLP scoring models on human preference data, then attacked them. The model that learned preference lost the most under attack. Includes a live in-browser scorer.</p>
+          <ul class="tags"><li>PyTorch</li><li>transformers</li><li>adversarial NLP</li></ul>
+        </div>
+      </a>
+
+      <a class="row reveal title-link" href="secret-agent">
+        <div class="when">Agents</div>
+        <div>
+          <h3>secret-agent</h3>
+          <p>An LLM agent loop in 53 lines, no framework. A hostile review found a total sandbox escape, since closed. Step through a live agent trace.</p>
+          <ul class="tags"><li>Python</li><li>RAG</li><li>agents</li></ul>
+        </div>
+      </a>
+
+      <a class="row reveal title-link" href="groundtruth">
+        <div class="when">Data Science</div>
+        <div>
+          <h3>GroundTruth</h3>
+          <p>Variance-reduced A/B analysis on a 14M-row log, with an in-browser simulator for power and CUPED confidence intervals.</p>
+          <ul class="tags"><li>statistics</li><li>CUPED</li><li>Spark</li></ul>
+        </div>
+      </a>
+
+      <a class="row reveal title-link" href="predictops">
+        <div class="when">MLOps</div>
+        <div>
+          <h3>PredictOps</h3>
+          <p>A tabular model wrapped in a real ops loop. A CI gate fails a bad model, PSI catches drift, and MLflow promotes on merit.</p>
+          <ul class="tags"><li>FastAPI</li><li>MLflow</li><li>Docker</li><li>CI</li></ul>
+        </div>
+      </a>
+
+      <a class="row reveal title-link" href="streamlake">
+        <div class="when">Data</div>
+        <div>
+          <h3>StreamLake</h3>
+          <p>Kafka to Iceberg with a custom data-contract engine that quarantines bad rows before they land. Break a record and watch it get caught.</p>
+          <ul class="tags"><li>Spark</li><li>Kafka</li><li>dbt</li><li>Airflow</li></ul>
+        </div>
+      </a>
+
+      <a class="row reveal title-link" href="vaultex">
+        <div class="when">Systems</div>
+        <div>
+          <h3>vaultex</h3>
+          <p>A Java payments ledger where debits always equal credits, held under concurrent load. Post a transaction in the browser and watch the invariant hold.</p>
+          <ul class="tags"><li>Java</li><li>Spring Boot</li><li>PostgreSQL</li></ul>
+        </div>
+      </a>
+    </section>
+
+    <footer class="foot reveal">
+      <p>Built with plain HTML, CSS, and JavaScript, hosted on GitHub Pages. Design inspired by <a href="https://brittanychiang.com" target="_blank" rel="noopener">Brittany Chiang</a> and <a href="https://leerob.com" target="_blank" rel="noopener">Lee Robinson</a>.</p>
+    </footer>
+
+  </div>
+</main>
+
 <script>
-window.addEventListener('load', () => {
-  if (!window.Chart) return;
-  applyChartTheme();
-  const ctx = document.getElementById('homeScatter');
-  if (!ctx) return;
-  const data = [
-    { x: 20, y: 32, m: 'Code Llama 7B' },
-    { x: 65, y: 0.7, m: 'Llama 3.1 8B (not significant)' },
-    { x: 77, y: -1, m: 'DeepSeek Coder 6.7B' },
-    { x: 90, y: -3, m: 'Qwen2.5 Coder 7B' },
-  ];
-  new Chart(ctx, {
-    type: 'scatter',
-    data: { datasets: [{
-      label: 'Models',
-      data: data,
-      pointRadius: 9, pointHoverRadius: 12,
-      backgroundColor: ['#5eead4','#fbbf24','#818cf8','#fb7185'],
-      borderColor: 'rgba(120,130,150,0.55)', borderWidth: 1.5,
-    },
-    {
-      label: 'Trend', type: 'line',
-      data: [{x:15,y:35},{x:95,y:-9}],
-      borderColor: 'rgba(192,132,252,0.55)', borderDash: [6,6], borderWidth: 2,
-      pointRadius: 0, fill: false,
-    }] },
-    options: {
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: (c) => c.raw.m ? `${c.raw.m}: ${c.raw.y>0?'+':''}${c.raw.y}pp at ${c.raw.x}% baseline` : '' } }
-      },
-      scales: {
-        x: { title: { display: true, text: 'Baseline pass@1 (%)', color: '#6b7488' }, min: 10, max: 95, grid: { color: 'rgba(130,140,160,0.16)' } },
-        y: { title: { display: true, text: 'Monitoring delta (pp)', color: '#6b7488' }, grid: { color: 'rgba(130,140,160,0.16)' } }
-      }
-    }
-  });
-});
+  // reveal on scroll
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  // scrollspy: highlight the nav item for the section in view
+  var links = document.querySelectorAll('.nav a');
+  var secs = [].map.call(links, function (a) { return document.getElementById(a.getAttribute('data-sec')); });
+  var spy = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('data-sec') === e.target.id); });
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  secs.forEach(function (s) { if (s) spy.observe(s); });
 </script>
 </body>
 </html>

@@ -1,108 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<link rel="canonical" href="https://kalyanvenk.com/agentic-llmops">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalyan's work</title>
-<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
-<meta name="description" content="First-author research on a 3-agent runtime monitor that catches bad LLM output without retraining. The Inverse Capability Hypothesis, with confidence intervals.">
-<meta property="og:title" content="Multi-Agent Inference Reliability - the Inverse Capability Hypothesis">
-<meta property="og:description" content="A runtime monitor for AI agents. It lifts weak models and drags strong ones down. First-author research, currently under peer review.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://kalyanvenk.com/agentic-llmops">
-<meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Multi-Agent Inference Reliability - the Inverse Capability Hypothesis">
-<meta name="twitter:description" content="A runtime monitor that helps weak models and hurts strong ones. First-author research, currently under peer review.">
-<meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
-<link rel="stylesheet" href="assets/style.css?v=6">
-<link rel="stylesheet" href="assets/blueprint.css?v=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://kalyanvenk.com/agentic-llmops">
+  <title>Multi-Agent Inference Reliability Framework · Kalyan Venkatesh</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
+  <meta name="description" content="A 3-agent runtime monitor for LLM code that lifts weak models and drags strong ones down. Local, no retraining.">
+  <script>document.documentElement.setAttribute('data-theme','dark');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/proj.css?v=2">
+  <link rel="stylesheet" href="assets/blueprint.css?v=1">
+  <style>
+    /* Tokens the kept flow diagram + blueprints reference but proj.css does not
+       define. All mapped to warm values so nothing renders with a cool or
+       missing color. */
+    :root {
+      --sans: 'Inter', system-ui, sans-serif;
+      --good: var(--ok);
+      --cyan: #6bb6ab;
+      --shadow: 0 6px 24px rgba(0,0,0,0.45);
+      --surface-2: #26211b;
+      --text-faint: var(--text-dim);
+    }
+
+    .pintro { margin: 0 0 20px; font-size: 0.98rem; color: var(--text); max-width: 640px; }
+
+    /* flow.js animated pipeline (ported from the retired style.css, warm palette) */
+    .agentflow { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 26px 22px 20px; overflow-x: auto; }
+    .agentflow svg { display: block; width: 100%; height: auto; }
+    .agentflow svg.wide { min-width: 900px; }
+    .fnode rect { fill: var(--surface-2); stroke: var(--border); stroke-width: 1; }
+    .fnode .nm { fill: var(--text); font: 700 13px var(--sans); }
+    .fnode .role { fill: var(--text-faint); font: 400 10.5px var(--mono); }
+    .fnode.accent rect { fill: var(--accent-soft); stroke: rgba(217,179,130,0.55); }
+    .fnode.gate rect { fill: rgba(107,182,171,0.08); stroke: rgba(107,182,171,0.45); }
+    .fedge { fill: none; stroke: var(--border); stroke-width: 1.5; }
+    .fedge.branch { stroke-dasharray: 5 5; stroke: var(--border-strong); }
+    .flabel { fill: var(--text-faint); font: 400 10px var(--mono); }
+    .pkt { transition: fill 0.25s linear; }
+    .pkt.live  { fill: var(--indigo); filter: drop-shadow(0 0 5px rgba(217,179,130,0.85)); }
+    .pkt.ok    { fill: var(--good);   filter: drop-shadow(0 0 5px rgba(134,201,138,0.85)); }
+    .pkt.warn  { fill: var(--warn);   filter: drop-shadow(0 0 5px rgba(224,184,119,0.85)); }
+    .pkt.muted { fill: #6e6558; filter: none; opacity: 0.75; }
+    .flow-legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border-soft); }
+    .flow-legend div { display: flex; align-items: flex-start; gap: 9px; font-size: 0.82rem; color: var(--text-dim); }
+    .flow-legend .k { width: 9px; height: 9px; border-radius: 50%; flex: none; margin-top: 6px; }
+    .flow-legend .k.live  { background: var(--indigo); box-shadow: 0 0 6px rgba(217,179,130,0.8); }
+    .flow-legend .k.ok    { background: var(--good);   box-shadow: 0 0 6px rgba(134,201,138,0.8); }
+    .flow-legend .k.warn  { background: var(--warn);   box-shadow: 0 0 6px rgba(224,184,119,0.8); }
+    .flow-legend .k.muted { background: #6e6558; }
+    @media (max-width: 720px) { .agentflow { padding: 18px 14px 14px; } }
+    @media (prefers-reduced-motion: reduce) { .pkt { transition: none; } }
+
+    /* bar chart */
+    .chart-cap { font-size: 0.86rem; color: var(--text-dim); margin: 0 0 18px; }
+    .chart-holder { position: relative; height: 300px; }
+  </style>
 </head>
 <body>
-<div class="progress"></div>
+<div class="pwrap">
+  <a class="back" href="/">&larr; Kalyan Venkatesh</a>
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="/" class="brand"><span class="mark">KV</span>Kalyan Venkatesh</a>
-    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <div class="nav-drop">
-        <button class="nav-drop-btn active" aria-expanded="false" aria-haspopup="true">Projects <span class="caret">&#9662;</span></button>
-        <div class="mega" role="menu">
-          <div class="mega-col">
-            <p class="mega-h">Agents &amp; LLM reliability</p>
-            <a href="inference-lens">Inference-Lens <span>judge robustness, live demo</span></a>
-            <a href="secret-agent">secret-agent <span>frameworkless agent runtime</span></a>
-          </div>
-          <div class="mega-col">
-            <p class="mega-h">Experimentation &amp; MLOps</p>
-            <a href="groundtruth">GroundTruth <span>A/B testing, CUPED</span></a>
-            <a href="predictops">PredictOps <span>CI-gated MLOps loop</span></a>
-          </div>
-          <div class="mega-col">
-            <p class="mega-h">Data &amp; systems</p>
-            <a href="streamlake">StreamLake <span>streaming lakehouse, contracts</span></a>
-            <a href="vaultex">vaultex <span>double-entry ledger</span></a>
-          </div>
-        </div>
-      </div>
-      <a href="about">About</a>
-      <a href="inference-lens#demo" class="nav-cta">Live demo</a>
-          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
-        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
-      </button>
-</div>
-  </div>
-</nav>
-
-<header class="proj-hero">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="blip"></span>First-author research · under peer review</span>
+  <header class="phero">
     <h1 class="reveal">Multi-Agent Inference Reliability Framework</h1>
-    <p class="lead reveal d1">What happens when the model itself starts failing at runtime and there is no human in the loop to catch it? That became my research problem. I drove it as first author alongside 2 faculty co-authors, owning everything from the question to the architecture to the statistics. The answer was a 3 agent monitor that catches and corrects bad LLM output without retraining anything.</p>
-    <div class="meta reveal d2">
-      <span class="chip">LangGraph</span>
-      <span class="chip">Ollama</span>
-      <span class="chip">MLflow</span>
-      <span class="chip">HumanEval</span>
-      <span class="chip">HumanEval+</span>
-      <span class="chip">MBPP</span>
-      <span class="chip">Python 3.12</span>
+    <p class="ptag reveal">A 3-agent runtime monitor for LLM code. It lifts weak models and drags strong ones down.</p>
+    <ul class="pstats reveal">
+      <li><b>+30.3pp</b> Code Llama 7B, p=0.002</li>
+      <li><b>&minus;4.0pp</b> Qwen2.5 Coder 7B, p=0.020</li>
+      <li><b>73.4%</b> fixer rewrites the gate discarded</li>
+      <li><b>10</b> experiment phases</li>
+    </ul>
+    <div class="plinks reveal">
+      <a href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener">GitHub</a>
+      <a href="#try">See it</a>
     </div>
-    <div class="cta-row reveal d3" style="margin-top:28px;">
-      <a href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener" class="btn btn-primary">View on GitHub</a>
-    </div>
-  </div>
-</header>
+  </header>
 
-<section style="padding-top:30px;">
-  <div class="wrap">
-    <div class="stats">
-      <div class="stat reveal"><div class="num">+<span data-count="30.3" data-suffix="pp" data-dp="1">0</span></div><div class="lbl">pass@1 gain on a weak model (Code Llama 7B) &middot; p = 0.002</div></div>
-      <div class="stat reveal d1"><div class="num"><span data-count="-4" data-suffix="pp" data-dp="1">0</span></div><div class="lbl">cost on a strong model (Qwen2.5 Coder 7B) &middot; p = 0.020</div></div>
-      <div class="stat reveal d2"><div class="num"><span data-count="73.4" data-suffix="%" data-dp="1">0</span></div><div class="lbl">of fixer rewrites the reversion gate discarded</div></div>
-      <div class="stat reveal d3"><div class="num"><span data-count="5">0</span></div><div class="lbl">model families stress-tested</div></div>
-      <div class="stat reveal"><div class="num"><span data-count="10">0</span></div><div class="lbl">experimental phases, pilot to cross-benchmark</div></div>
-      <div class="stat reveal d1"><div class="num"><span data-count="3">0</span></div><div class="lbl">code benchmarks: HumanEval, HumanEval+, MBPP</div></div>
-      <div class="stat reveal d2"><div class="num"><span data-count="100">0</span></div><div class="lbl">problems per benchmark, per condition</div></div>
-      <div class="stat reveal d3"><div class="num"><span data-count="0">0</span></div><div class="lbl">API calls or fine-tuning &middot; fully local via Ollama</div></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">The architecture</p>
-    <h2 class="section-title reveal">3 agents and a do-no-harm gate</h2>
-    <p class="section-sub reveal">A Planner writes the code. A Critic scores it for hallucination risk between 0 and 1. If that score crosses a threshold the Fixer rewrites it and a Post-Critic scores the result. Then a reversion gate checks whether the rewrite actually improved things and throws it away if it did not. Everything runs locally through Ollama. No API calls, no fine-tuning, fully reproducible.</p>
+  <section class="psec reveal" id="try">
+    <h2>The pipeline</h2>
+    <p class="pintro">A Critic scores each Planner output for hallucination risk. Above the 0.70 threshold a Fixer rewrites it, and a reversion gate keeps the rewrite only if it strictly improves. All local through Ollama.</p>
     <div class="agentflow reveal">
       <svg class="wide" viewBox="0 0 960 300" role="img" aria-label="Planner to Pre-Critic. Low risk output skips the Fixer. Output at or above the threshold is rewritten by the Fixer, then a reversion gate keeps the rewrite only if it improved things."
         data-flow='{"r":5,"every":760,"routes":[
@@ -155,21 +134,23 @@
         <div><span class="k muted"></span><span>Rewrite reverted. The gate threw it away and kept the original, which is what happens to 73.4% of them.</span></div>
       </div>
     </div>
+  </section>
 
-<p class="section-sub reveal" style="margin-top:16px;">A baseline of Planner straight to Post-Critic runs alongside every condition, so every result is a clean before and after. The operating threshold &tau; settles at 0.70.</p>
-  </div>
-</section>
+  <section class="psec reveal">
+    <h2>By capability</h2>
+    <div class="panel">
+      <p class="chart-cap">Change in pass@1 from adding the monitor.</p>
+      <div class="chart-holder"><canvas id="deltaChart"></canvas></div>
+    </div>
+  </section>
 
-<section id="blueprints">
-  <div class="wrap">
-    <p class="kicker reveal">Under the hood</p>
-    <h2 class="section-title reveal">How the pieces actually connect</h2>
-    <p class="section-sub reveal">2 live blueprints. One traces the Planner-Critic-Fixer pipeline stage by stage. The other maps every file in the repo and how one run becomes the next result. The moving dots are data in flight, coloured by what kind of data it is.</p>
+  <section class="psec reveal" id="how">
+    <h2>How it works</h2>
 
     <!-- ============================ DIAGRAM 1 ============================ -->
     <div class="bpx" id="system">
       <div class="sec-head">
-        <h3><span class="num">01</span>System design, the stages in run order</h3>
+        <h3>System design, the stages in run order</h3>
         <p>
           Read it top to bottom. On the left are the models and data, all served locally through Ollama with no retraining.
           The centre spine is the <b>monitoring pipeline</b> in run order: Planner, hybrid Pre-Critic, the Fixer behind a threshold, a reversion gate, Post-Critic and the test.
@@ -203,168 +184,26 @@
           <p>A static <code>AST</code> pass catches syntax errors and undefined names first and sets a floor. The LLM critic can only push the risk score higher, never talk a real defect down to clean.</p></div>
       </div>
     </div>
+  </section>
 
-    <!-- ============================ DIAGRAM 2 ============================ -->
-    <div class="bpx" id="code">
-      <div class="sec-head">
-        <h3><span class="num">02</span>Code map, every file and the data lineage</h3>
-        <p>
-          The same project seen from the file system. The centre spine is the <b>data lineage</b>: a benchmark becomes a planner cache,
-          then per-run CSVs, then the summary tables, then the confidence intervals. The phase scripts that drive each run sit on the left,
-          the single-file pipeline (<b>agent.py</b>) is in the middle, and the paper, Docker and dependencies sit on the right.
-          Every file the repo ships is on the map with a one-line job.
-        </p>
-      </div>
-
-      <div class="dgm-frame">
-        <div class="dgm-bar">
-          <span class="tag">code.blueprint</span>
-          <div class="flowsteps" data-steps="code"></div>
-          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
-        </div>
-        <div class="dgm-wrap" id="wrap-code">
-          <svg class="dgm" id="svg-code" role="img" aria-label="Code map of Multi-Agent Inference Reliability: every file with its role, arranged around the data lineage spine."></svg>
-        </div>
-        <div class="legend">
-          <div><span class="k data"></span>Data moving through the lineage</div>
-          <div><span class="k out"></span>The confirmed result (95% CIs)</div>
-          <div><span class="k swatch"></span>File · module · artifact</div>
-          <div><span style="font-family:var(--mono);font-size:.8rem;color:var(--text-faint)">italic monospace = a file on disk</span></div>
-        </div>
-      </div>
+  <section class="psec reveal">
+    <h2>Notes</h2>
+    <div class="notes">
+      <div class="note reveal"><b>Benefit is inverse to baseline skill.</b><p>A model that gets 2 of 10 right has everything to gain. One at 9 of 10 risks harm.</p></div>
+      <div class="note reveal"><b>The gate exists to prevent harm.</b><p>It reverts 73.4% of the Fixer's rewrites, keeping only strict improvements.</p></div>
+      <div class="note reveal"><b>It held beyond 1 benchmark.</b><p>On HumanEval+ and MBPP the weak model still gained about 30 points.</p></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">The result and the better finding</p>
-    <h2 class="section-title reveal">The gain was real, but the failure case taught me more.</h2>
-    <p class="section-sub reveal">Across 10 phases and 5 model families, the story was never a single average gain. It was a split: a weak model (Code Llama 7B) gained +30.3 points pass@1 while a strong one (Qwen2.5 Coder 7B) lost 4.0, both statistically significant. I call it the Inverse Capability Hypothesis. Below roughly 60 percent baseline monitoring is worth deploying; above that the benefit fades, and the exact crossover is still an open question. Knowing when the monitor starts doing harm matters as much as the monitor itself.</p>
-    <div class="2-col">
-      <div class="chart-card reveal">
-        <h4>Monitoring delta by model</h4>
-        <p class="cap">Change in pass@1 from adding the monitoring pipeline. 4 are single-trial checkpoints. Llama 3.1 8B is the 3-trial average, which is not statistically significant, near-zero rather than a real regression.</p>
-        <div class="chart-holder"><canvas id="deltaChart"></canvas></div>
-      </div>
-      <div class="tbl-wrap reveal" style="align-self:start;">
-        <table>
-          <thead><tr><th>Model</th><th>Base</th><th>Monitored</th><th>&Delta;</th></tr></thead>
-          <tbody>
-            <tr><td>StarCoder2 7B</td><td>~0%</td><td>~0%</td><td><span class="pill warn">floor</span></td></tr>
-            <tr><td>Code Llama 7B</td><td>20%</td><td>52%</td><td><span class="pill good">+32</span></td></tr>
-            <tr><td>Llama 3.1 8B</td><td>65%</td><td>66%</td><td><span class="pill warn">+0.7, n.s.</span></td></tr>
-            <tr><td>DeepSeek Coder 6.7B</td><td>77%</td><td>76%</td><td><span class="pill warn">-1</span></td></tr>
-            <tr><td>Qwen2.5 Coder 7B</td><td>90%</td><td>87%</td><td><span class="pill bad">-3</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="finding reveal" style="margin-top:20px;"><strong>StarCoder2 is the floor case that proves the rule from below.</strong> At roughly zero baseline the fixer has nothing to work with, so the benefit collapses back to nothing. The gain is largest in the middle-low band, where the model is wrong often but not hopeless.</div>
-  </div>
-</section>
+  <footer class="pfoot"><a href="/">&larr; Back to all work</a></footer>
+</div>
 
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">Making it defensible</p>
-    <h2 class="section-title reveal">A single run has no error bars, so reviewers would not buy it</h2>
-    <p class="section-sub reveal">A deterministic run has zero variance and a number with no confidence interval will not survive peer review at a serious venue. So I reran the 2 endpoints as 3 genuinely independent trials each with a non-deterministic planner. Both intervals exclude zero. The gain and the regression are both statistically defensible, not a pair of lucky runs.</p>
-    <div class="tbl-wrap reveal">
-      <table>
-        <thead><tr><th>Model</th><th>&tau;</th><th>Trials</th><th>Mean &Delta; (pp)</th><th>95% CI</th><th>Excludes zero</th></tr></thead>
-        <tbody>
-          <tr><td>Code Llama 7B</td><td>0.60</td><td>3</td><td>+30.3</td><td>+24.1 to +36.6</td><td><span class="pill good">yes</span></td></tr>
-          <tr><td>Code Llama 7B</td><td>0.70</td><td>3</td><td>+31.0</td><td>+26.7 to +35.3</td><td><span class="pill good">yes</span></td></tr>
-          <tr><td>Qwen2.5 Coder 7B</td><td>0.60</td><td>3</td><td>-4.0</td><td>-6.5 to -1.5</td><td><span class="pill good">yes</span></td></tr>
-          <tr><td>Qwen2.5 Coder 7B</td><td>0.70</td><td>3</td><td>-2.0</td><td>tight, near -2.0</td><td><span class="pill good">yes</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">What actually does the work</p>
-    <h2 class="section-title reveal">I turned each piece off to see which one carried the result</h2>
-    <p class="section-sub reveal">Between the net-negative early phases and the net-positive turn, 3 things changed at once. An 8B fixer, the problem statement handed to the fixer and the reversion gate. So I turned each one off in isolation on Code Llama to see which one actually mattered.</p>
-    <div class="tbl-wrap reveal">
-      <table>
-        <thead><tr><th>Configuration</th><th>pass@1</th><th>Contribution of the missing piece</th></tr></thead>
-        <tbody>
-          <tr><td>Baseline, no monitoring</td><td>20%</td><td>reference</td></tr>
-          <tr><td>Full pipeline, all on</td><td>52%</td><td>control</td></tr>
-          <tr><td>Without problem context</td><td>48%</td><td><span class="pill good">context worth +4pp</span></td></tr>
-          <tr><td>With 3B fixer instead of 8B</td><td>51%</td><td><span class="pill warn">model upgrade worth +1pp</span></td></tr>
-          <tr><td>Without the reversion gate</td><td>53%</td><td><span class="pill warn">gate costs 1pp here</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="finding reveal" style="margin-top:20px;"><strong>The gate surprised me.</strong> On a weak model it slightly lowers raw pass@1, because almost any fix helps when you start at 20 percent. Its real value shows up on strong models, where it reverts bad rewrites and keeps the monitor from doing harm. Handing the fixer the problem statement was the single biggest lever on the weak model.</div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">Core findings</p>
-    <h2 class="section-title reveal">What 10 phases taught me</h2>
-    <div class="finding-grid">
-      <div class="finding reveal"><strong>Monitoring benefit is inversely proportional to baseline capability.</strong> The central result, now backed by 95 percent intervals that exclude zero at both ends. A model that already gets 9 of 10 right has little to gain and real risk of harm. A model that gets 2 of 10 right has everything to gain.</div>
-      <div class="finding reveal d1"><strong>The reversion gate exists to stop the monitor doing damage.</strong> It reverts 73.4 percent of attempted fixes. On weak models that costs a point. On strong models it keeps the whole thing from going negative.</div>
-      <div class="finding reveal d2"><strong>The fixer, not the critic, is the bottleneck.</strong> Scaling the critic to 8B did nothing early on. A bigger judge gives better scores but cannot rescue a fixer that introduces fresh bugs.</div>
-      <div class="finding reveal d3"><strong>Context beat raw model size.</strong> The ablation says handing the fixer the problem statement mattered more than upgrading its parameter count.</div>
-      <div class="finding reveal"><strong>It generalizes beyond 1 benchmark.</strong> On HumanEval+ and MBPP, both harder than the original HumanEval, the weak model still gained around 30 points and the strong models still lost a little. The law is not a quirk of a single dataset.</div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">The full arc</p>
-    <h2 class="section-title reveal">10 phases, from first signal to publishable</h2>
-    <div class="timeline reveal">
-      <div class="tl-item"><div class="ph">Phase 1</div><h4>Baseline and a calibration trap</h4><p>3B models throughout. The critic caught risk reliably but the small fixer was net negative. Set the threshold too low and the fixer fired on 74 percent of problems, dropping accuracy by 18 points. Calibration clearly mattered.</p></div>
-      <div class="tl-item"><div class="ph">Phase 2</div><h4>A bigger critic was not the answer</h4><p>I scaled the critic to 8B and kept the 3B fixer. Still net negative across all 18 conditions. That pinned the bottleneck on the fixer.</p></div>
-      <div class="tl-item"><div class="ph">Phase 3</div><h4>The turning point</h4><p>An 8B fixer, the problem statement as context and a reversion gate together flipped the direction to net-positive on the pilot model. The reversion gate reverted 73.4 percent of the fixes it saw, keeping only the ones that strictly improved.</p></div>
-      <div class="tl-item"><div class="ph">Phase 4 and 4b</div><h4>Cross-model comparison</h4><p>I extended it to Code Llama 7B and ran a full sweep. Code Llama gained 32 points, the largest in the study. The inverse relationship between capability and benefit came into view.</p></div>
-      <div class="tl-item"><div class="ph">Phase 5</div><h4>The pattern holds</h4><p>Added DeepSeek Coder 6.7B at -1 and Qwen2.5 Coder 7B at -3. The inverse law held across architectures.</p></div>
-      <div class="tl-item"><div class="ph">Phase 6</div><h4>Threshold and retry sweep</h4><p>Swept &tau; across 0.60, 0.70, 0.75. At 0.70 the system stopped over-triggering with no loss for weak models and 0.75 was identical, marking the plateau. For Llama 3.1 8B the fixer trigger rate fell from 46 to 10 percent and latency dropped 39 percent. A single retry lifted Code Llama's pass@2 from 20 to 38 percent.</p></div>
-      <div class="tl-item"><div class="ph">Phase 7</div><h4>Confidence intervals on the endpoints</h4><p>My advisor pointed out that single-trial numbers would not survive review. So I reran the 2 endpoints as 3 independent trials each. Code Llama landed at +30 to +31 points and Qwen at -2 to -4, both excluding zero.</p></div>
-      <div class="tl-item"><div class="ph">Phase 8</div><h4>Component ablation</h4><p>One change at a time on Code Llama. Problem context was the biggest single lever at +4 points, the fixer model upgrade added +1 and the gate slightly lowered raw accuracy on a weak model while staying the safeguard for strong ones.</p></div>
-      <div class="tl-item"><div class="ph">Phase 9</div><h4>Extending intervals, and a flaw in my own setup</h4><p>I ran the interval study across the remaining models, then found a problem. The planner caches were built deterministically, so the 3 trials were identical and carried no real variance. Worth flagging rather than reporting fake error bars.</p></div>
-      <div class="tl-item"><div class="ph">Phase 10</div><h4>Cross-benchmark generalization and it held</h4><p>Regenerated the caches with a non-deterministic planner for genuine intervals, then ran the law on 2 harder benchmarks. On HumanEval+ Code Llama gained about 32 points and Qwen lost about 4. On MBPP Code Llama gained 30 and Qwen lost a few. The inverse capability law held on both, so the central finding is not a quirk of HumanEval. Those runs are the core evidence in the submission.</p></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap prose">
-    <p class="kicker reveal">Status</p>
-    <h2 class="reveal">Where it stands</h2>
-    <p class="reveal">All 10 experiment phases are done. I am writing it up as first author with Prof. Vahid Alizadeh and Prof. Noriko Tomuro as faculty co-authors at DePaul, currently under peer review at a top-tier venue. The Phase 10 cross-benchmark runs were built to test whether the claim holds beyond HumanEval and it did. The law held on both HumanEval+ and MBPP.</p>
-    <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="wrap footer-inner">
-    <div class="col">
-      <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
-      <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
-    </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="secret-agent">secret-agent</a><a href="groundtruth">GroundTruth</a><a href="streamlake">StreamLake</a><a href="vaultex">vaultex</a><a href="predictops">PredictOps</a><a href="inference-lens#demo">Live demo</a></div>
-    <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
-  </div>
-  <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
-</footer>
-
-<script src="assets/script.js?v=5"></script>
 <script src="assets/flow.js?v=2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 window.addEventListener('load', () => {
   if (!window.Chart) return;
-  applyChartTheme();
+  if (window.applyChartTheme) applyChartTheme();
   const ctx = document.getElementById('deltaChart');
   if (!ctx) return;
   new Chart(ctx, {
@@ -373,7 +212,7 @@ window.addEventListener('load', () => {
       labels: ['Code Llama 7B', 'StarCoder2 7B', 'DeepSeek 6.7B', 'Qwen2.5 7B', 'Llama 3.1 8B'],
       datasets: [{
         data: [32, 0, -1, -3, 0.7],
-        backgroundColor: ['#4ade80','#fbbf24','#fbbf24','#fb7185','#fbbf24'],
+        backgroundColor: ['#86c98a','#e0b877','#e0b877','#e0857a','#e0b877'],
         borderRadius: 8, barThickness: 42,
       }]
     },
@@ -381,8 +220,8 @@ window.addEventListener('load', () => {
       maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => (c.parsed.y>0?'+':'') + c.parsed.y + ' pp' } } },
       scales: {
-        y: { title: { display: true, text: 'pass@1 delta (pp)', color: '#6b7488' }, grid: { color: 'rgba(130,140,160,0.16)' } },
-        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+        y: { title: { display: true, text: 'pass@1 delta (pp)', color: '#6e6558' }, grid: { color: 'rgba(140,130,110,0.16)' } },
+        x: { grid: { display: false }, ticks: { color: '#6e6558', font: { size: 10 } } }
       }
     }
   });
@@ -416,42 +255,42 @@ window.addEventListener('load', () => {
     ],
     nodes:[
       {id:"ds",kind:"resource",x:20,y:srow(0),w:300,h:84,title:"Benchmarks",sub:"HuggingFace",stripe:"#818cf8",lines:[
-        {t:"HumanEval \u00b7 HumanEval+ \u00b7 MBPP"},{t:"100 problems each (N = 100)"}]},
+        {t:"HumanEval · HumanEval+ · MBPP"},{t:"100 problems each (N = 100)"}]},
       {id:"planners",kind:"resource",x:20,y:srow(1),w:300,h:102,title:"Planner models",sub:"swept per phase",stripe:"#818cf8",lines:[
-        {t:"Code Llama 7B \u00b7 Llama 3.1 8B"},{t:"DeepSeek 6.7B \u00b7 Qwen2.5 Coder 7B"},{t:"StarCoder2 7B \u00b7 Llama 3.2 3B"}]},
-      {id:"ollama",kind:"resource",x:20,y:srow(2)+6,w:300,h:78,title:"Ollama",sub:"local \u00b7 no external API",lines:[
+        {t:"Code Llama 7B · Llama 3.1 8B"},{t:"DeepSeek 6.7B · Qwen2.5 Coder 7B"},{t:"StarCoder2 7B · Llama 3.2 3B"}]},
+      {id:"ollama",kind:"resource",x:20,y:srow(2)+6,w:300,h:78,title:"Ollama",sub:"local · no external API",lines:[
         {t:"serves every model over HTTP"},{t:"no retraining, fully reproducible"}]},
       {id:"cf",kind:"resource",x:20,y:srow(3)+8,w:300,h:82,title:"Critic + Fixer model",sub:"held fixed",stripe:"#5eead4",lines:[
-        {t:"Llama 3.1 8B \u00b7 T = 0.0"},{t:"fixer scale is the real bottleneck"}]},
+        {t:"Llama 3.1 8B · T = 0.0"},{t:"fixer scale is the real bottleneck"}]},
       {id:"base",kind:"resource",x:20,y:srow(5),w:300,h:82,title:"Baseline (control)",sub:"runs alongside",lines:[
-        {t:"Planner \u2192 Post-Critic \u2192 Eval"},{t:"no critic, no fixer \u2014 a clean A/B"}]},
+        {t:"Planner → Post-Critic → Eval"},{t:"no critic, no fixer, a clean A/B"}]},
 
-      {id:"s1",kind:"stageKey",x:470,y:srow(0),w:300,h:84,tag:"01",title:"Planner",sub:"planner() \u00b7 agent.py",stripe:"#818cf8",lines:[
-        {t:"writes the Python function"},{t:"planner T \u2208 {0.0, 0.3, 0.7}"}]},
-      {id:"s2",kind:"gate",x:470,y:srow(1),w:300,h:102,tag:"02",title:"Pre-Critic \u00b7 hybrid",sub:"run_hybrid_critic()",stripe:"#5eead4",lines:[
-        {t:"static AST floor + LLM critic"},{t:"hallucination risk, scored 0 \u2192 1"},{t:"the static score can only push it up"}]},
-      {id:"s3",kind:"stageKey",x:470,y:srow(2),w:300,h:102,tag:"03",title:"Fixer \u00b7 \u03c4 gate",sub:"fixer() \u00b7 agent.py",stripe:"#fbbf24",lines:[
-        {t:"runs only if score > \u03c4 (default 0.60)"},{t:"rewrites, given the problem context"},{t:"below \u03c4 \u2192 ships untouched"}]},
+      {id:"s1",kind:"stageKey",x:470,y:srow(0),w:300,h:84,tag:"01",title:"Planner",sub:"planner() · agent.py",stripe:"#818cf8",lines:[
+        {t:"writes the Python function"},{t:"planner T ∈ {0.0, 0.3, 0.7}"}]},
+      {id:"s2",kind:"gate",x:470,y:srow(1),w:300,h:102,tag:"02",title:"Pre-Critic · hybrid",sub:"run_hybrid_critic()",stripe:"#5eead4",lines:[
+        {t:"static AST floor + LLM critic"},{t:"hallucination risk, scored 0 → 1"},{t:"the static score can only push it up"}]},
+      {id:"s3",kind:"stageKey",x:470,y:srow(2),w:300,h:102,tag:"03",title:"Fixer · τ gate",sub:"fixer() · agent.py",stripe:"#fbbf24",lines:[
+        {t:"runs only if score > τ (default 0.60)"},{t:"rewrites, given the problem context"},{t:"below τ → ships untouched"}]},
       {id:"s4",kind:"gate",x:470,y:srow(3),w:300,h:102,tag:"04",title:"Reversion gate",sub:"inside fixer()",stripe:"#fbbf24",lines:[
         {t:"keep the fix only if it strictly improves"},{t:"otherwise revert to the original"},{t:"reverts 73.4% of fixer attempts",cls:"em-warn"}]},
       {id:"s5",kind:"stage",x:470,y:srow(4),w:300,h:84,tag:"05",title:"Post-Critic",sub:"post_critic()",lines:[
         {t:"re-scores the final code"},{t:"same model + prompt as the pre-critic"}]},
       {id:"s6",kind:"stageKey",x:470,y:srow(5),w:300,h:90,tag:"06",title:"Evaluation",sub:"run_tests()",stripe:"#4ade80",lines:[
-        {t:"pass@1 on hidden unit tests"},{t:"10 s SIGALRM timeout \u00b7 pass@2 on retry"}]},
+        {t:"pass@1 on hidden unit tests"},{t:"10 s SIGALRM timeout · pass@2 on retry"}]},
 
       {id:"a1",kind:"artifact",x:900,y:srow(0),w:300,h:84,title:"planner cache",sub:"results/cache/*.json",lines:[
         {t:"1 JSON per model + trial"},{t:"baseline + monitoring score the same code"}]},
       {id:"a2",kind:"artifact",x:900,y:srow(2)+6,w:300,h:84,title:"per-run raw CSV",sub:"results/raw/ (193 files)",lines:[
-        {t:"pass@1 \u00b7 pre / post score"},{t:"fixer_triggered \u00b7 gate_reverted"}]},
+        {t:"pass@1 · pre / post score"},{t:"fixer_triggered · gate_reverted"}]},
       {id:"a3",kind:"artifact",x:900,y:srow(3)+8,w:300,h:82,title:"summary + CI CSVs",sub:"results/summary/",lines:[
-        {t:"master_results_phase*.csv",mono:true,size:11},{t:"phase7_ci_summary.csv \u2192 95% CIs",mono:true,size:11}]},
+        {t:"master_results_phase*.csv",mono:true,size:11},{t:"phase7_ci_summary.csv → 95% CIs",mono:true,size:11}]},
       {id:"a4",kind:"result",x:900,y:srow(4)+6,w:300,h:120,title:"Inverse Capability Hypothesis",titleSize:13.5,stripe:"#5eead4",lines:[
-        {t:"Code Llama 7B (20%)  +30.3pp \u2713",cls:"em-good"},
-        {t:"Qwen2.5 Coder 7B (90%)  \u22124.0pp \u2717",cls:"em-bad"},
-        {t:"crossover \u2248 65% baseline pass@1"},
+        {t:"Code Llama 7B (20%)  +30.3pp ✓",cls:"em-good"},
+        {t:"Qwen2.5 Coder 7B (90%)  −4.0pp ✗",cls:"em-bad"},
+        {t:"crossover ≈ 65% baseline pass@1"},
         {t:"help the weak, hurt the strong"}]},
       {id:"aml",kind:"data",x:900,y:srow(5),w:300,h:64,title:"MLflow tracking",sub:"results/tracking.db",lines:[
-        {t:"params \u00b7 metrics \u00b7 every run (SQLite)"}]}
+        {t:"params · metrics · every run (SQLite)"}]}
     ],
     edges:[
       {from:"s1",to:"s2",stroke:"#3b4570"},{from:"s2",to:"s3",stroke:"#3b4570"},{from:"s3",to:"s4",stroke:"#3b4570"},
@@ -477,86 +316,12 @@ window.addEventListener('load', () => {
     ]
   };
 
-  function crow(i){ return 92 + i*120; }
-  var CX=430, CW=250, AX=760, AW=250;
-  var code={
-    w:1240, h:960, r:4.5, every:720,
-    steps:[
-      {label:"benchmark",target:"bench",color:"#818cf8"},
-      {label:"agent.py",target:"agentpy",color:"#818cf8"},
-      {label:"cache",target:"cache",color:"#818cf8"},
-      {label:"raw CSVs",target:"raw",color:"#818cf8"},
-      {label:"summary",target:"summary",color:"#fbbf24"},
-      {label:"CIs",target:"ci",color:"#4ade80"}
-    ],
-    bands:[
-      {x:20,y:60,w:360,h:880,label:"SCRIPTS \u00b7 phases 1\u201310",stroke:"#3a381f"},
-      {x:CX-14,y:60,w:CW+28,h:880,label:"src/",stroke:"#2b3350"},
-      {x:AX-14,y:60,w:AW+28,h:880,label:"DATA LINEAGE",stroke:"#24304a"},
-      {x:1050,y:60,w:170,h:880,label:"META",stroke:"#262b3d"}
-    ],
-    nodes:[
-      {id:"agentpy",kind:"module",x:CX,y:crow(2)-10,w:CW,h:150,title:"src/agent.py",titleSize:14,sub:"the whole pipeline (901 lines)",stripe:"#818cf8",lines:[
-        {t:"planner \u00b7 pre_critic \u00b7 fixer \u00b7 post_critic",size:10},
-        {t:"run_hybrid_critic() + static_analysis()",size:10},
-        {t:"baseline_graph() \u00b7 monitoring_graph()",size:10},
-        {t:"run_tests() \u2014 pass@1, SIGALRM 10s",size:10},
-        {t:"MLflow logging + CSV writers",size:10}]},
-      {id:"cipy",kind:"module",x:CX,y:crow(6),w:CW,h:80,title:"src/compute_phase7_ci.py",titleSize:12.5,stripe:"#4ade80",lines:[
-        {t:"pairs baseline / monitoring trials"},{t:"mean \u0394pp + 95% CI (t, df = 2)"}]},
-
-      {id:"sc3",kind:"notebook",x:20,y:crow(0),w:360,h:54,title:"run_experiments.sh  \u00b7  Phase 3",titleSize:12.5,lines:[{t:"full 8B critic + fixer + gate matrix"}]},
-      {id:"sc4",kind:"notebook",x:20,y:crow(1),w:360,h:54,title:"run_phase4 / 4b.sh  \u00b7  Phase 4",titleSize:12.5,lines:[{t:"few-shot + iterative, then 2\u00d72 at N=100"}]},
-      {id:"sc5",kind:"notebook",x:20,y:crow(2),w:360,h:54,title:"run_phase5.sh  \u00b7  Phase 5",titleSize:12.5,lines:[{t:"code-pretrained planners added"}]},
-      {id:"sc6",kind:"notebook",x:20,y:crow(3),w:360,h:54,title:"run_phase6.sh  \u00b7  Phase 6",titleSize:12.5,lines:[{t:"\u03c4 sweep {0.60, 0.70, 0.75} + retry"}]},
-      {id:"sc7",kind:"notebook",x:20,y:crow(4),w:360,h:54,title:"run_phase7.sh  \u00b7  Phase 7",titleSize:12.5,lines:[{t:"CI endpoints (Code Llama, Qwen)"}]},
-      {id:"sc8",kind:"notebook",x:20,y:crow(5),w:360,h:54,title:"run_phase8_ablation.sh  \u00b7  Phase 8",titleSize:12.5,lines:[{t:"ablate fixer scale / context / gate"}]},
-      {id:"sc9",kind:"notebook",x:20,y:crow(6),w:360,h:64,title:"run_phase9 / 10.sh  \u00b7  Phase 9\u201310",titleSize:12.5,lines:[{t:"mid-model CIs + HumanEval+ / MBPP"}]},
-
-      {id:"bench",kind:"data",x:AX,y:crow(0),w:AW,h:72,title:"benchmark",titleSize:13.5,sub:"HuggingFace datasets",lines:[
-        {t:"HumanEval / HumanEval+ / MBPP",mono:true,size:11},{t:"N = 100 problems",mono:true,size:11}]},
-      {id:"cache",kind:"data",x:AX,y:crow(1)+6,w:AW,h:78,title:"results/cache/*.json",titleSize:12,sub:"planner outputs",lines:[
-        {t:"1 per model + trial",mono:true,size:11},{t:"__metadata__ few-shot guard",mono:true,size:10.5}]},
-      {id:"raw",kind:"data",x:AX,y:crow(2)+16,w:AW,h:78,title:"results/raw/  (193 CSVs)",titleSize:11.5,sub:"per problem",lines:[
-        {t:"pass@1 \u00b7 pre / post score",mono:true,size:11},{t:"fixer_triggered \u00b7 gate_reverted",mono:true,size:10}]},
-      {id:"summary",kind:"data",x:AX,y:crow(3)+26,w:AW,h:70,title:"master_results_phase*.csv",titleSize:11,sub:"results/summary/",lines:[
-        {t:"1 aggregate row per run"}]},
-      {id:"ci",kind:"result",x:AX,y:crow(4)+32,w:AW,h:82,title:"phase7_ci_summary.csv",titleSize:12,sub:"the headline CIs",stripe:"#4ade80",lines:[
-        {t:"+30.3pp [24.1, 36.6]",mono:true,size:10.5,cls:"em-good"},{t:"\u22124.0pp [\u22126.5, \u22121.5]",mono:true,size:10.5,cls:"em-bad"}]},
-      {id:"track",kind:"data",x:AX,y:crow(6),w:AW,h:64,title:"results/tracking.db",titleSize:12.5,sub:"MLflow (SQLite)",lines:[
-        {t:"params \u00b7 metrics per run"}]},
-
-      {id:"paper",kind:"meta",x:1050,y:crow(0),w:170,h:88,title:"paper/",titleSize:13,lines:[
-        {t:"main.tex \u00b7 sections/",mono:true,size:10.5},{t:"figures/ \u00b7 main.pdf",mono:true,size:10.5},{t:"(frozen, anonymized)",size:10.5}]},
-      {id:"docker",kind:"deploy",x:1050,y:crow(2)-6,w:170,h:88,title:"Docker",titleSize:13,lines:[
-        {t:"Dockerfile",mono:true,size:11},{t:"compose (+ .cpu)",mono:true,size:10.5},{t:"py3.12-slim runner",size:10.5}]},
-      {id:"deps",kind:"config",x:1050,y:crow(4)-2,w:170,h:96,title:"requirements.txt",titleSize:12,lines:[
-        {t:"LangGraph \u00b7 LangChain",mono:true,size:10.5},{t:"langchain-ollama",mono:true,size:10.5},{t:"MLflow \u00b7 evalplus",mono:true,size:10.5}]},
-      {id:"cmeta",kind:"meta",x:1050,y:crow(6)-2,w:170,h:76,title:"docs",titleSize:13,lines:[
-        {t:"README.md",mono:true,size:10.5},{t:"notebooks/ (Colab)",mono:true,size:10}]}
-    ],
-    edges:[
-      {from:"bench",to:"cache",stroke:"#3b4570"},{from:"cache",to:"raw",stroke:"#3b4570"},
-      {from:"raw",to:"summary",stroke:"#3b4570"},{from:"summary",to:"ci",stroke:"#3b4570"},
-      {from:"agentpy",to:"cache",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"agentpy",to:"raw",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"cipy",to:"ci",fromSide:"r",toSide:"l",stroke:"#2c5148"},
-      {from:"bench",to:"agentpy",fromSide:"l",toSide:"r",stroke:"#3b4570"},
-      {from:"sc7",to:"agentpy",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
-      {from:"sc9",to:"cipy",fromSide:"r",toSide:"l",stroke:"#4d4a2a"}
-    ],
-    flow:[
-      {paths:[0,1,2,3],cls:"data",weight:6,dur:9000,splits:[{at:3,cls:"out"}]},
-      {paths:[4],cls:"data",weight:2,dur:1500},
-      {paths:[5],cls:"data",weight:2,dur:1500},
-      {paths:[6],cls:"out",weight:2,dur:1500},
-      {paths:[8],cls:"data",weight:1,dur:1500}
-    ]
-  };
-
   KVBlueprint.mount("svg-system","wrap-system",sys,"system");
-  KVBlueprint.mount("svg-code","wrap-code",code,"code");
 })();
+</script>
+<script>
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 </script>
 </body>
 </html>

@@ -1,182 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<link rel="canonical" href="https://kalyanvenk.com/predictops">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalyan's work</title>
-<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
-<meta name="description" content="A production MLOps pipeline where all the depth sits in the ops loop: training comparison, FastAPI serving, Docker, a CI eval gate, MLflow registry promotion, and PSI-based drift detection, all shipped.">
-<meta property="og:title" content="PredictOps - a production MLOps pipeline, all 7 phases shipped">
-<meta property="og:description" content="Most portfolio projects stop at a trained model. This one is about everything after: serving, containerization, a CI gate that blocks a bad model, registry promotion, and drift detection.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://kalyanvenk.com/predictops">
-<meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PredictOps - a production MLOps pipeline, all 7 phases shipped">
-<meta name="twitter:description" content="The interesting half of an ML project starts once the model trains: serving, containerization, a CI gate, registry promotion, drift detection.">
-<meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
-<link rel="stylesheet" href="assets/style.css?v=6">
-<link rel="stylesheet" href="assets/blueprint.css?v=1">
-<style>
-/* Drift toggle interactive (assets/drift-toggle.js). Page-specific, tokens from
-   style.css so it flips with the theme. Classes are .dt-* to avoid collisions. */
-.dt-app { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
-.dt-head { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 26px; }
-.dt-title { font-weight: 700; font-size: 1.12rem; letter-spacing: -0.01em; }
-.dt-sub { color: var(--text-dim); font-size: 0.9rem; margin-top: 4px; max-width: 420px; }
-.dt-switch { display: inline-flex; align-items: center; gap: 12px; background: none; border: 0; cursor: pointer; color: var(--text); font: inherit; padding: 0; }
-.dt-switch-lbl { font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.03em; color: var(--text-dim); transition: color 0.2s; }
-.dt-switch.on .dt-switch-lbl { color: var(--bad); }
-.dt-track { width: 52px; height: 28px; border-radius: 999px; background: var(--surface-3); border: 1px solid var(--border); position: relative; transition: background 0.25s, border-color 0.25s; }
-.dt-knob { position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; border-radius: 50%; background: #c7cede; transition: left 0.26s cubic-bezier(.2,.8,.2,1), background 0.25s; box-shadow: 0 2px 6px rgba(0,0,0,0.35); }
-.dt-switch.on .dt-track { background: rgba(251,113,133,0.22); border-color: var(--bad); }
-.dt-switch.on .dt-knob { left: 28px; background: var(--bad); }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://kalyanvenk.com/predictops">
+  <title>PredictOps · Kalyan Venkatesh</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
+  <meta name="description" content="A tabular churn classifier wrapped in a production ops loop: a CI eval gate, PSI drift detection, and MLflow registry promotion.">
+  <script>document.documentElement.setAttribute('data-theme','dark');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/proj.css?v=2">
+  <link rel="stylesheet" href="assets/blueprint.css?v=1">
+  <style>
+  /* Tokens the drift toggle references that proj.css doesn't define, mapped to warm values. */
+  :root { --good: #86c98a; --cyan: #7fb8a8; --surface-2: #231f1a; --surface-3: #2a2620; --text-faint: #544c40; --shadow: 0 8px 24px rgba(0,0,0,0.35); --sans: 'Inter', system-ui, sans-serif; }
 
-.dt-machine { display: flex; align-items: stretch; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
-.dt-arrow { display: flex; align-items: center; color: var(--text-faint); font-size: 1.3rem; flex: none; }
-.dt-stage { flex: 1 1 0; min-width: 150px; border: 1px solid var(--border); background: var(--surface-2); border-radius: 14px; padding: 15px 16px; transition: border-color 0.25s, background 0.25s, opacity 0.25s; }
-.dt-stage-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.dt-badge { font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint); font-weight: 600; }
-.dt-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text-faint); transition: background 0.25s, box-shadow 0.25s; }
-.dt-stage-nm { font-weight: 700; font-size: 0.98rem; }
-.dt-stage-role { font-family: var(--mono); font-size: 0.75rem; color: var(--text-faint); margin-top: 4px; }
-.dt-stage.is-done { border-color: rgba(129,140,248,0.5); background: var(--accent-soft); }
-.dt-stage.is-done .dt-dot { background: var(--indigo); box-shadow: 0 0 8px rgba(129,140,248,0.8); }
-.dt-stage.is-ok { border-color: rgba(74,222,128,0.45); background: rgba(74,222,128,0.06); }
-.dt-stage.is-ok .dt-dot { background: var(--good); box-shadow: 0 0 8px rgba(74,222,128,0.8); }
-.dt-stage.is-bad { border-color: rgba(251,113,133,0.6); background: rgba(251,113,133,0.09); }
-.dt-stage.is-bad .dt-dot { background: var(--bad); box-shadow: 0 0 8px rgba(251,113,133,0.85); }
-.dt-stage.is-blocked { border-style: dashed; border-color: var(--border); background: transparent; opacity: 0.55; }
-.dt-stage.is-blocked .dt-dot { background: var(--text-faint); box-shadow: none; }
+  /* Drift toggle interactive (assets/drift-toggle.js). Page-specific; inherits proj.css
+     tokens so it reads in the warm dark palette. Classes are .dt-* to avoid collisions. */
+  .dt-app { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+  .dt-head { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 26px; }
+  .dt-title { font-weight: 700; font-size: 1.12rem; letter-spacing: -0.01em; color: var(--head); }
+  .dt-sub { color: var(--text-dim); font-size: 0.9rem; margin-top: 4px; max-width: 420px; }
+  .dt-switch { display: inline-flex; align-items: center; gap: 12px; background: none; border: 0; cursor: pointer; color: var(--text); font: inherit; padding: 0; }
+  .dt-switch-lbl { font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.03em; color: var(--text-dim); transition: color 0.2s; }
+  .dt-switch.on .dt-switch-lbl { color: var(--bad); }
+  .dt-track { width: 52px; height: 28px; border-radius: 999px; background: var(--surface-3); border: 1px solid var(--border); position: relative; transition: background 0.25s, border-color 0.25s; }
+  .dt-knob { position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; border-radius: 50%; background: #c7cede; transition: left 0.26s cubic-bezier(.2,.8,.2,1), background 0.25s; box-shadow: 0 2px 6px rgba(0,0,0,0.35); }
+  .dt-switch.on .dt-track { background: rgba(224,133,122,0.22); border-color: var(--bad); }
+  .dt-switch.on .dt-knob { left: 28px; background: var(--bad); }
 
-.dt-meter { margin: 24px 0 20px; }
-.dt-meter-head { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--mono); font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px; }
-.dt-psi-val { font-size: 1.05rem; font-weight: 600; color: var(--text); }
-.dt-track-bar { position: relative; height: 12px; border-radius: 99px; background: var(--surface-3); overflow: visible; }
-.dt-fill { height: 100%; border-radius: 99px; background: var(--good); width: 8%; transition: width 0.5s cubic-bezier(.2,.7,.2,1), background 0.3s; }
-.dt-fill.over { background: var(--bad); }
-.dt-thresh { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--warn); }
-.dt-thresh span { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-family: var(--mono); font-size: 0.7rem; color: var(--warn); }
+  .dt-machine { display: flex; align-items: stretch; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+  .dt-arrow { display: flex; align-items: center; color: var(--text-faint); font-size: 1.3rem; flex: none; }
+  .dt-stage { flex: 1 1 0; min-width: 150px; border: 1px solid var(--border); background: var(--surface-2); border-radius: 14px; padding: 15px 16px; transition: border-color 0.25s, background 0.25s, opacity 0.25s; }
+  .dt-stage-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .dt-badge { font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint); font-weight: 600; }
+  .dt-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text-faint); transition: background 0.25s, box-shadow 0.25s; }
+  .dt-stage-nm { font-weight: 700; font-size: 0.98rem; color: var(--head); }
+  .dt-stage-role { font-family: var(--mono); font-size: 0.75rem; color: var(--text-faint); margin-top: 4px; }
+  .dt-stage.is-done { border-color: rgba(217,179,130,0.5); background: var(--accent-soft); }
+  .dt-stage.is-done .dt-dot { background: var(--indigo); box-shadow: 0 0 8px rgba(217,179,130,0.8); }
+  .dt-stage.is-ok { border-color: rgba(134,201,138,0.45); background: rgba(134,201,138,0.06); }
+  .dt-stage.is-ok .dt-dot { background: var(--good); box-shadow: 0 0 8px rgba(134,201,138,0.8); }
+  .dt-stage.is-bad { border-color: rgba(224,133,122,0.6); background: rgba(224,133,122,0.09); }
+  .dt-stage.is-bad .dt-dot { background: var(--bad); box-shadow: 0 0 8px rgba(224,133,122,0.85); }
+  .dt-stage.is-blocked { border-style: dashed; border-color: var(--border); background: transparent; opacity: 0.55; }
+  .dt-stage.is-blocked .dt-dot { background: var(--text-faint); box-shadow: none; }
 
-.dt-status { border-radius: var(--radius-sm); padding: 16px 20px; font-size: 0.96rem; color: var(--text-dim); line-height: 1.6; border: 1px solid var(--border-soft); border-left-width: 3px; }
-.dt-status b { color: var(--text); }
-.dt-status.ok { border-left-color: var(--good); background: rgba(74,222,128,0.06); }
-.dt-status.bad { border-left-color: var(--bad); background: rgba(251,113,133,0.07); }
-@media (max-width: 600px) { .dt-head { flex-direction: column; align-items: flex-start; } }
-</style>
+  .dt-meter { margin: 24px 0 20px; }
+  .dt-meter-head { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--mono); font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px; }
+  .dt-psi-val { font-size: 1.05rem; font-weight: 600; color: var(--head); }
+  .dt-track-bar { position: relative; height: 12px; border-radius: 99px; background: var(--surface-3); overflow: visible; }
+  .dt-fill { height: 100%; border-radius: 99px; background: var(--good); width: 8%; transition: width 0.5s cubic-bezier(.2,.7,.2,1), background 0.3s; }
+  .dt-fill.over { background: var(--bad); }
+  .dt-thresh { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--warn); }
+  .dt-thresh span { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-family: var(--mono); font-size: 0.7rem; color: var(--warn); }
+
+  .dt-status { border-radius: var(--radius-sm); padding: 16px 20px; font-size: 0.96rem; color: var(--text-dim); line-height: 1.6; border: 1px solid var(--border-soft); border-left-width: 3px; }
+  .dt-status b { color: var(--head); }
+  .dt-status.ok { border-left-color: var(--good); background: rgba(134,201,138,0.06); }
+  .dt-status.bad { border-left-color: var(--bad); background: rgba(224,133,122,0.07); }
+  @media (max-width: 600px) { .dt-head { flex-direction: column; align-items: flex-start; } }
+  </style>
 </head>
 <body>
-<div class="progress"></div>
+<div class="pwrap">
+  <a class="back" href="/">&larr; Kalyan Venkatesh</a>
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="/" class="brand"><span class="mark">KV</span>Kalyan Venkatesh</a>
-    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <div class="nav-drop">
-        <button class="nav-drop-btn active" aria-expanded="false" aria-haspopup="true">Projects <span class="caret">&#9662;</span></button>
-        <div class="mega" role="menu">
-          <div class="mega-col">
-            <p class="mega-h">Agents &amp; LLM reliability</p>
-            <a href="inference-lens">Inference-Lens <span>judge robustness, live demo</span></a>
-            <a href="secret-agent">secret-agent <span>frameworkless agent runtime</span></a>
-          </div>
-          <div class="mega-col">
-            <p class="mega-h">Experimentation &amp; MLOps</p>
-            <a href="groundtruth">GroundTruth <span>A/B testing, CUPED</span></a>
-            <a href="predictops">PredictOps <span>CI-gated MLOps loop</span></a>
-          </div>
-          <div class="mega-col">
-            <p class="mega-h">Data &amp; systems</p>
-            <a href="streamlake">StreamLake <span>streaming lakehouse, contracts</span></a>
-            <a href="vaultex">vaultex <span>double-entry ledger</span></a>
-          </div>
-        </div>
-      </div>
-      <a href="about">About</a>
-      <a href="inference-lens#demo" class="nav-cta">Live demo</a>
-          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
-        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
-      </button>
-</div>
-  </div>
-</nav>
-
-<header class="proj-hero">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="blip"></span>Production MLOps · CI-gated &amp; drift-monitored</span>
+  <header class="phero">
     <h1 class="reveal">PredictOps</h1>
-    <p class="lead reveal d1">Most ML job listings ask for Docker, FastAPI, CI/CD, MLflow, and almost never for a novel model. So the model here is a plain tabular churn classifier, and the work went into the ops loop around it: a training comparison, a validated API, a slim container, a CI gate that blocks a bad model, registry promotion, and PSI drift detection.</p>
-    <div class="meta reveal d2">
-      <span class="chip">scikit-learn</span>
-      <span class="chip">XGBoost</span>
-      <span class="chip">FastAPI</span>
-      <span class="chip">Pydantic</span>
-      <span class="chip">MLflow</span>
-      <span class="chip">Docker</span>
-      <span class="chip">GitHub Actions</span>
-      <span class="chip">Evidently</span>
+    <p class="ptag reveal">A tabular churn model wrapped in a real ops loop: CI gate, drift detection, registry promotion.</p>
+    <ul class="pstats reveal">
+      <li><b>&ge;0.80</b> ROC-AUC CI gate</li>
+      <li><b>0.846</b> CV ROC-AUC, winner</li>
+      <li><b>71%</b> smaller serving image</li>
+      <li><b>7</b> phases shipped</li>
+    </ul>
+    <div class="plinks reveal">
+      <a href="https://github.com/kalyan-venk/PredictOps" target="_blank" rel="noopener">GitHub</a>
+      <a href="#try">Try it</a>
     </div>
-    <div class="cta-row reveal d3" style="margin-top:28px;">
-      <a href="https://github.com/kalyan-venk/PredictOps" target="_blank" rel="noopener" class="btn btn-primary">View on GitHub</a>
-    </div>
-  </div>
-</header>
+  </header>
 
-<section style="padding-top:30px;">
-  <div class="wrap">
-    <div class="stats">
-      <div class="stat reveal"><div class="num">&ge;<span data-count="0.80" data-dp="2">0</span></div><div class="lbl">ROC-AUC gate, a bad model fails CI</div></div>
-      <div class="stat reveal d1"><div class="num"><span data-count="0.846" data-dp="3">0</span></div><div class="lbl">CV ROC-AUC, winning model</div></div>
-      <div class="stat reveal d2"><div class="num"><span data-count="4">0</span></div><div class="lbl">served REST endpoints</div></div>
-      <div class="stat reveal d3"><div class="num"><span data-count="2">0</span></div><div class="lbl">candidate models compared</div></div>
-    </div>
-  </div>
-</section>
+  <section class="psec reveal" id="try">
+    <h2>Try it</h2>
+    <p class="ptag">Flip the switch, shift a feature, watch PSI cross 0.15 and stop the deploy. Runs in your browser.</p>
+    <div id="drift-demo"></div>
+  </section>
 
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">The pipeline</p>
-    <h2 class="section-title reveal">Train, compare, serve, containerize</h2>
-    <p class="section-sub reveal">A single sklearn <code>Pipeline</code> (impute &rarr; scale numeric &rarr; one-hot encode categorical &rarr; classifier) so preprocessing can never leak test data into training. Logistic Regression and XGBoost both run 5-fold stratified CV, the CV ROC-AUC winner gets logged to MLflow and saved, and FastAPI loads it behind validated request and response models.</p>
-    <div class="pipeline reveal">
-      <div class="flow">
-        <div class="node accent"><div class="nm">Train</div><div class="role">LogReg vs XGBoost, 5-fold CV</div></div>
-        <span class="edge">&rarr;</span>
-        <div class="node"><div class="nm">MLflow</div><div class="role">params, metrics, artifact</div></div>
-        <span class="edge">&rarr;</span>
-        <div class="node accent"><div class="nm">FastAPI</div><div class="role">/health /predict /info /reload</div></div>
-        <span class="edge">&rarr;</span>
-        <div class="node gate"><div class="nm">Docker</div><div class="role">multi-stage, docker-compose</div></div>
-      </div>
-    </div>
-    <div class="finding reveal" style="margin-top:20px;"><strong>The simpler model won.</strong> Logistic Regression beat XGBoost on 5-fold CV ROC-AUC, 0.846 to 0.842, and held the edge on the held-out test too (0.842 vs 0.837). The pipeline serves whichever model wins, so this was the measured outcome, not a tidy pick.</div>
-  </div>
-</section>
-
-<section id="blueprints">
-  <div class="wrap">
-    <p class="kicker reveal">Under the hood</p>
-    <h2 class="section-title reveal">The whole loop, drawn out</h2>
-    <p class="section-sub reveal">2 live blueprints. One traces the ops loop stage by stage. The other maps every file in the repo and how one artifact becomes the next. The moving dots are data in flight, coloured by what kind of data it is.</p>
+  <section class="psec reveal" id="how">
+    <h2>How it works</h2>
+    <p class="ptag">A live map. The moving dots are data in flight, coloured by kind.</p>
 
     <!-- ============================ DIAGRAM 1 ============================ -->
     <div class="bpx" id="system">
       <div class="sec-head">
-        <h3><span class="num">01</span>System design, the stages in run order</h3>
-        <p>
-          Read it top to bottom. The model is deliberately boring, a tabular churn classifier, so what is worth reading is everything downstream of it. On the left are the inputs and config.
-          The centre spine is the <b>ops loop</b> in run order: load, train and compare, export to ONNX, the CI eval gate, registry promotion, serving, and drift.
-          The right shows what each stage writes to disk. The amber path is the drift monitor watching production for feature shift.
-        </p>
+        <h3><span class="num">01</span>System design, stages in run order</h3>
+        <p>Top to bottom: load, train and compare, export to ONNX, the CI gate, registry promotion, serving, and drift. Left is inputs, right is artifacts, the amber path is the drift monitor.</p>
       </div>
 
       <div class="dgm-frame">
@@ -191,115 +112,34 @@
         <div class="legend">
           <div><span class="k data"></span>Data & features, in flight</div>
           <div><span class="k adv"></span>Drift alert (PSI > 0.15)</div>
-          <div><span class="k out"></span>Cleared the gate → promoted & served</div>
+          <div><span class="k out"></span>Cleared the gate, promoted & served</div>
           <div><span class="k swatch"></span>Stage · artifact · model</div>
         </div>
       </div>
 
       <div class="bp-notes">
         <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>The churn model is plumbing</h4>
-          <p>All the depth sits after it: a CI gate that fails the build below <b>0.80</b> ROC-AUC, registry promotion, and drift detection wired into one make pipeline.</p></div>
+          <p>All the depth sits after it: a CI gate that fails the build below <b>0.80</b> ROC-AUC, registry promotion, and drift detection wired into 1 make pipeline.</p></div>
         <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>The simpler model won, and shipped</h4>
-          <p>Logistic Regression beat XGBoost on cross-validated ROC-AUC, <b>0.846 to 0.842</b>, so the simpler model is the one that got promoted. I did not go in expecting that.</p></div>
+          <p>Logistic Regression beat XGBoost on cross-validated ROC-AUC, <b>0.846 to 0.842</b>, so the simpler model is the one that got promoted.</p></div>
         <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>A tiny serving image, on purpose</h4>
-          <p>A multi-stage build trains and exports to <code>ONNX</code>, then serves with onnxruntime alone, no sklearn at runtime. That takes the image from about <b>1.17 GB to 343 MB</b>.</p></div>
+          <p>A multi-stage build trains and exports to <code>ONNX</code>, then serves with onnxruntime alone, no sklearn at runtime. That takes the image from <b>1.17 GB to 343 MB</b>.</p></div>
       </div>
     </div>
+  </section>
 
-    <!-- ============================ DIAGRAM 2 ============================ -->
-    <div class="bpx" id="code">
-      <div class="sec-head">
-        <h3><span class="num">02</span>Code map, every file and the data lineage</h3>
-        <p>
-          Same repo, viewed by file instead of by stage. The centre spine is the <b>data lineage</b>: a CSV becomes a cleaned frame, a trained model,
-          an ONNX artifact, a promoted registry version, then a served prediction. The tests, CI and build files sit on the left,
-          the package modules (<b>src/predictops</b>) are in the middle, and Docker, dependencies and docs sit on the right.
-          If a file exists in the repo, it is somewhere on this map.
-        </p>
-      </div>
-
-      <div class="dgm-frame">
-        <div class="dgm-bar">
-          <span class="tag">code.blueprint</span>
-          <div class="flowsteps" data-steps="code"></div>
-          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
-        </div>
-        <div class="dgm-wrap" id="wrap-code">
-          <svg class="dgm" id="svg-code" role="img" aria-label="Code map of PredictOps: every file with its role, arranged around the data lineage spine."></svg>
-        </div>
-        <div class="legend">
-          <div><span class="k data"></span>Data moving through the lineage</div>
-          <div><span class="k out"></span>Gated, promoted, served</div>
-          <div><span class="k swatch"></span>File · module · artifact</div>
-          <div><span style="font-family:var(--mono);font-size:.8rem;color:var(--text-faint)">italic monospace = a file on disk</span></div>
-        </div>
-      </div>
+  <section class="psec reveal">
+    <h2>Notes</h2>
+    <div class="notes">
+      <div class="note reveal"><b>The simpler model won.</b><p>LogReg beat XGBoost on 5-fold CV, 0.846 to 0.842, and held on the test set. The pipeline serves whichever wins.</p></div>
+      <div class="note reveal"><b>The gate blocks bad models.</b><p>CI asserts ROC-AUC &ge; 0.80 or the build fails. Proven by degrading a model, watching CI go red, then fixing it green.</p></div>
+      <div class="note reveal"><b>Multi-stage Docker, on purpose.</b><p>Trains, exports to ONNX, serves on onnxruntime alone. 1.17 GB down to 343 MB, a 71% cut.</p></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="drift">
-  <div class="wrap">
-    <p class="kicker reveal">Try it</p>
-    <h2 class="section-title reveal">Inject drift, watch the gate block deploy</h2>
-    <p class="section-sub reveal">The drift gate runs on PSI with a 0.15 per-feature limit. Flip the switch to shift a feature out from under the model and watch the run stop before promotion. Runs in your browser, no server.</p>
-    <div id="drift-demo" class="reveal"></div>
-  </div>
-</section>
+  <footer class="pfoot"><a href="/">&larr; Back to all work</a></footer>
+</div>
 
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">Where it stands</p>
-    <h2 class="section-title reveal">All 7 phases shipped.</h2>
-    <p class="section-sub reveal">Built one phase at a time, each committed on its own. What is in the repo:</p>
-    <div class="two-col">
-      <div class="tbl-wrap reveal" style="align-self:start;">
-        <table>
-          <thead><tr><th>Phase</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td>0 &middot; Repo scaffold</td><td><span class="pill good">done</span></td></tr>
-            <tr><td>1 &middot; Training + MLflow</td><td><span class="pill good">done</span></td></tr>
-            <tr><td>2 &middot; FastAPI serving</td><td><span class="pill good">done</span></td></tr>
-            <tr><td>3 &middot; Multi-stage Docker</td><td><span class="pill good">done</span></td></tr>
-            <tr><td>4 &middot; CI eval gate</td><td><span class="pill good">done</span></td></tr>
-            <tr><td>5 &middot; MLflow registry + promotion</td><td><span class="pill good">done</span></td></tr>
-            <tr><td>6 &middot; Evidently drift detection</td><td><span class="pill good">done</span></td></tr>
-            <tr><td>7 &middot; Wire the full loop</td><td><span class="pill good">done</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="finding reveal" style="align-self:start;"><strong>Phase 4 was the centerpiece.</strong> A GitHub Actions workflow lints, tests, then asserts ROC-AUC &ge; 0.80 or the build fails, the same way a broken unit test does. Proven by shipping a deliberately degraded model, watching CI go red, then fixing it to green.</div>
-    </div>
-
-    <div class="two-col" style="margin-top:28px;">
-      <div class="finding reveal" style="align-self:start;"><strong>Phase 5-6: registry promotion and a real PSI drift check.</strong> The winning run registers in the MLflow registry and promotes Staging &rarr; Production. Drift runs Evidently with PSI (Population Stability Index) as the per-column stattest, comparing a reference split against a shifted "current" split, and alerts when any feature's PSI exceeds 0.15.</div>
-      <div class="finding reveal" style="align-self:start;"><strong>Phase 3: multi-stage Docker that earns the name.</strong> The first pass copied the whole build environment (MLflow, Evidently, pytest, ruff) into the runtime image. Splitting serving-only dependencies out cut the served image from 1.17GB to 343MB, a 71% reduction measured off a real build.</div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap prose">
-    <p class="kicker reveal">Why it exists</p>
-    <h2 class="reveal">The model is the boring part on purpose</h2>
-    <p class="reveal">My other 2 projects are LLM research. This is the breadth piece beside them: a plain churn classifier so nobody mistakes the domain for the point, wrapped in the ops loop most portfolios skip. A leakage-safe pipeline, a validated API with a health check, a container that ships only what it serves, and a CI gate that fails a bad merge. The full loop runs end to end with one command.</p>
-    <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/PredictOps" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="wrap footer-inner">
-    <div class="col">
-      <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
-      <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
-    </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="secret-agent">secret-agent</a><a href="groundtruth">GroundTruth</a><a href="streamlake">StreamLake</a><a href="vaultex">vaultex</a><a href="predictops">PredictOps</a><a href="inference-lens#demo">Live demo</a></div>
-    <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/PredictOps" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
-  </div>
-  <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
-</footer>
-
-<script src="assets/script.js?v=5"></script>
 <script src="assets/blueprint.js?v=2"></script>
 <script>
 /* Diagram specs for this project. The engine that draws them is shared
@@ -331,35 +171,35 @@
       {id:"data",kind:"resource",x:20,y:srow(0),w:300,h:84,title:"Telco churn CSV",sub:"data/raw/",stripe:"#818cf8",lines:[
         {t:"~7k customers, tabular"},{t:"a deliberately boring classifier"}]},
       {id:"cfg",kind:"config",x:20,y:srow(1),w:300,h:96,title:"config.py",sub:"1 import-light source",stripe:"#5eead4",lines:[
-        {t:"seed 42 \u00b7 80/20 split \u00b7 5-fold"},{t:"gate \u2265 0.80 \u00b7 PSI 0.15"},{t:"paths + experiment name"}]},
+        {t:"seed 42 · 80/20 split · 5-fold"},{t:"gate ≥ 0.80 · PSI 0.15"},{t:"paths + experiment name"}]},
       {id:"mlf",kind:"data",x:20,y:srow(4),w:300,h:80,title:"MLflow (file store)",sub:"mlruns/",lines:[
         {t:"nested runs: parent + per model"},{t:"tracks CV + test metrics"}]},
 
       {id:"s1",kind:"stage",x:470,y:srow(0),w:300,h:84,tag:"01",title:"Data load + normalize",sub:"data.py load_dataset()",lines:[
         {t:"drop customerID, coerce TotalCharges"},{t:"derive binary target (Churn = Yes)"}]},
       {id:"s2",kind:"stageKey",x:470,y:srow(1),w:300,h:104,tag:"02",title:"Train + CV compare",sub:"train.py",stripe:"#818cf8",lines:[
-        {t:"preprocess: scale + one-hot (ONNX-safe)"},{t:"LogReg vs XGBoost \u00b7 5-fold ROC-AUC"},{t:"LogReg wins 0.846 vs 0.842",cls:"em-good"}]},
+        {t:"preprocess: scale + one-hot (ONNX-safe)"},{t:"LogReg vs XGBoost · 5-fold ROC-AUC"},{t:"LogReg wins 0.846 vs 0.842",cls:"em-good"}]},
       {id:"s3",kind:"stage",x:470,y:srow(2),w:300,h:96,tag:"03",title:"Select + ONNX export",sub:"export_onnx()",lines:[
         {t:"save winner to model.joblib"},{t:"export model.onnx (opset 17) + meta"}]},
       {id:"s4",kind:"gate",x:470,y:srow(3),w:300,h:96,tag:"04",title:"CI eval gate",sub:".github/workflows + pytest",stripe:"#4ade80",lines:[
         {t:"fails the build if ROC-AUC < 0.80",cls:"em-good"},{t:"the centerpiece: no bad model ships"}]},
       {id:"s5",kind:"stage",x:470,y:srow(4),w:300,h:96,tag:"05",title:"Registry promote",sub:"registry.py",lines:[
-        {t:"register predictops-classifier"},{t:"Staging \u2192 Production (archive old)"}]},
-      {id:"s6",kind:"stageKey",x:470,y:srow(5),w:300,h:104,tag:"06",title:"Serve",sub:"app.py \u00b7 FastAPI",stripe:"#4ade80",lines:[
-        {t:"onnxruntime only, no sklearn at runtime"},{t:"/health \u00b7 /predict \u00b7 /info \u00b7 /reload"},{t:"Pydantic-validated requests"}]},
-      {id:"s7",kind:"gate",x:470,y:srow(6),w:300,h:96,tag:"07",title:"Drift monitor",sub:"drift.py \u00b7 Evidently",stripe:"#fbbf24",lines:[
+        {t:"register predictops-classifier"},{t:"Staging → Production (archive old)"}]},
+      {id:"s6",kind:"stageKey",x:470,y:srow(5),w:300,h:104,tag:"06",title:"Serve",sub:"app.py · FastAPI",stripe:"#4ade80",lines:[
+        {t:"onnxruntime only, no sklearn at runtime"},{t:"/health · /predict · /info · /reload"},{t:"Pydantic-validated requests"}]},
+      {id:"s7",kind:"gate",x:470,y:srow(6),w:300,h:96,tag:"07",title:"Drift monitor",sub:"drift.py · Evidently",stripe:"#fbbf24",lines:[
         {t:"PSI per feature, alert at > 0.15",cls:"em-warn"},{t:"writes an HTML drift report"}]},
 
       {id:"a1",kind:"artifact",x:900,y:srow(2),w:300,h:88,title:"model artifacts",sub:"models/",lines:[
         {t:"model.joblib: gate + MLflow",mono:true,size:11},{t:"model.onnx + model_meta.json",mono:true,size:11}]},
       {id:"aR",kind:"result",x:900,y:srow(3),w:300,h:110,title:"the proof",titleSize:14,stripe:"#4ade80",lines:[
         {t:"LogReg 0.846 > XGBoost 0.842 CV",cls:"em-good"},
-        {t:"gate holds at ROC-AUC \u2265 0.80"},
-        {t:"Docker 1.17 GB \u2192 343 MB (~71%)"}]},
+        {t:"gate holds at ROC-AUC ≥ 0.80"},
+        {t:"Docker 1.17 GB → 343 MB (~71%)"}]},
       {id:"a2",kind:"data",x:900,y:srow(4),w:300,h:80,title:"model registry",sub:"mlruns/",lines:[
         {t:"predictops-classifier v2"},{t:"stage = Production (v1 archived)"}]},
       {id:"a3",kind:"deploy",x:900,y:srow(5),w:300,h:80,title:"live API",sub:"onnxruntime",lines:[
-        {t:"POST /predict \u2192"},{t:"{ prediction, probability }",mono:true,size:11}]},
+        {t:"POST /predict →"},{t:"{ prediction, probability }",mono:true,size:11}]},
       {id:"a4",kind:"result",x:900,y:srow(6),w:300,h:80,title:"drift_report.html",titleSize:13,sub:"reports/",stripe:"#fbbf24",lines:[
         {t:"per-feature PSI, logged to MLflow"}]}
     ],
@@ -386,89 +226,13 @@
     ]
   };
 
-  function crow(i){ return 92 + i*120; }
-  var CX=430, CW=250, AX=760, AW=250;
-  var code={
-    w:1240, h:1000, r:4.5, every:720,
-    steps:[
-      {label:"CSV",target:"csv",color:"#818cf8"},
-      {label:"data.py",target:"data",color:"#818cf8"},
-      {label:"train.py",target:"train",color:"#818cf8"},
-      {label:"model.onnx",target:"onnx",color:"#4ade80"},
-      {label:"registry",target:"registry",color:"#4ade80"},
-      {label:"app.py",target:"api",color:"#4ade80"}
-    ],
-    bands:[
-      {x:20,y:60,w:360,h:900,label:"TESTS \u00b7 CI \u00b7 BUILD",stroke:"#3a381f"},
-      {x:CX-14,y:60,w:CW+28,h:900,label:"src/predictops",stroke:"#2b3350"},
-      {x:AX-14,y:60,w:AW+28,h:900,label:"DATA LINEAGE",stroke:"#24304a"},
-      {x:1050,y:60,w:170,h:900,label:"META",stroke:"#262b3d"}
-    ],
-    nodes:[
-      {id:"cfg",kind:"config",x:CX,y:crow(0),w:CW,h:70,title:"config.py",titleSize:14,stripe:"#5eead4",lines:[
-        {t:"seed 42 \u00b7 splits \u00b7 thresholds \u00b7 paths"}]},
-      {id:"data",kind:"module",x:CX,y:crow(1),w:CW,h:70,title:"data.py",titleSize:14,stripe:"#818cf8",lines:[
-        {t:"load_dataset(): clean + derive target"}]},
-      {id:"train",kind:"module",x:CX,y:crow(2),w:CW,h:120,title:"train.py",titleSize:14,stripe:"#818cf8",lines:[
-        {t:"build_preprocessor() + candidates"},{t:"5-fold CV \u00b7 MLflow nested runs"},{t:"save joblib \u00b7 export_onnx()"}]},
-      {id:"registry",kind:"module",x:CX,y:crow(4)-2,w:CW,h:72,title:"registry.py",titleSize:14,stripe:"#4ade80",lines:[
-        {t:"register + Staging \u2192 Production"}]},
-      {id:"drift",kind:"module",x:CX,y:crow(5)-4,w:CW,h:72,title:"drift.py",titleSize:14,stripe:"#fbbf24",lines:[
-        {t:"Evidently PSI drift report"}]},
-      {id:"api",kind:"module",x:CX,y:crow(6)-6,w:CW,h:88,title:"app.py + schemas.py",titleSize:13.5,stripe:"#4ade80",lines:[
-        {t:"FastAPI on onnxruntime only"},{t:"Pydantic PredictRequest / Response"}]},
-
-      {id:"gate",kind:"notebook",x:20,y:crow(2),w:360,h:64,title:"tests/test_model_quality.py",titleSize:12.5,lines:[
-        {t:"the eval gate: assert ROC-AUC \u2265 0.80"}]},
-      {id:"ci",kind:"notebook",x:20,y:crow(3)+2,w:360,h:64,title:".github/workflows/ci.yml",titleSize:12.5,lines:[
-        {t:"ruff + pytest \u2192 docker-build on pass"}]},
-      {id:"mk",kind:"notebook",x:20,y:crow(4)+4,w:360,h:64,title:"Makefile",titleSize:12.5,lines:[
-        {t:"pipeline: train test drift register serve"}]},
-      {id:"pp",kind:"notebook",x:20,y:crow(5)+6,w:360,h:56,title:"pyproject.toml",titleSize:12.5,lines:[
-        {t:"src-layout package (predictops)"}]},
-
-      {id:"csv",kind:"data",x:AX,y:crow(0),w:AW,h:62,title:"telco_customer_churn.csv",titleSize:10.5,sub:"data/raw/",lines:[]},
-      {id:"feat",kind:"data",x:AX,y:crow(1),w:AW,h:64,title:"feature frame",titleSize:13,sub:"in memory",lines:[{t:"clean + target"}]},
-      {id:"joblib",kind:"data",x:AX,y:crow(2),w:AW,h:70,title:"models/model.joblib",titleSize:11.5,sub:"eval gate + MLflow",lines:[]},
-      {id:"onnx",kind:"data",x:AX,y:crow(3),w:AW,h:74,title:"models/model.onnx",titleSize:11.5,sub:"the served artifact",lines:[{t:"+ model_meta.json",mono:true,size:10.5}]},
-      {id:"registryA",kind:"result",x:AX,y:crow(4),w:AW,h:80,title:"model registry",titleSize:13,sub:"mlruns/",stripe:"#4ade80",lines:[
-        {t:"predictops-classifier v2",mono:true,size:10.5},{t:"stage = Production",mono:true,size:10.5}]},
-      {id:"apiA",kind:"deploy",x:AX,y:crow(5),w:AW,h:64,title:"live API",titleSize:13,sub:"onnxruntime",lines:[{t:"POST /predict",mono:true,size:11}]},
-      {id:"driftA",kind:"result",x:AX,y:crow(6),w:AW,h:62,title:"drift_report.html",titleSize:12,sub:"reports/",stripe:"#fbbf24",lines:[]},
-
-      {id:"docker",kind:"deploy",x:1050,y:crow(0),w:170,h:96,title:"Docker",titleSize:13,lines:[
-        {t:"Dockerfile (multi-stage)",mono:true,size:9.5},{t:"+ .singlestage",mono:true,size:10.5},{t:"compose \u00b7 dockerignore",mono:true,size:9.5}]},
-      {id:"reqs",kind:"config",x:1050,y:crow(2),w:170,h:96,title:"requirements",titleSize:12.5,lines:[
-        {t:".txt (dev / CI)",mono:true,size:10.5},{t:"-train.txt",mono:true,size:10.5},{t:"-serve.txt (onnxrt)",mono:true,size:10}]},
-      {id:"docs",kind:"meta",x:1050,y:crow(4),w:170,h:64,title:"docs",titleSize:13,lines:[
-        {t:"README.md",mono:true,size:10.5}]}
-    ],
-    edges:[
-      {from:"csv",to:"feat",stroke:"#3b4570"},{from:"feat",to:"joblib",stroke:"#3b4570"},
-      {from:"joblib",to:"onnx",stroke:"#3b4570"},{from:"onnx",to:"registryA",stroke:"#2c5148"},
-      {from:"registryA",to:"apiA",stroke:"#2c5148"},
-      {from:"data",to:"feat",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"train",to:"joblib",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"train",to:"onnx",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"registry",to:"registryA",fromSide:"r",toSide:"l",stroke:"#2c5148"},
-      {from:"api",to:"apiA",fromSide:"r",toSide:"l",stroke:"#2c5148"},
-      {from:"drift",to:"driftA",fromSide:"r",toSide:"l",stroke:"#5b4a24"},
-      {from:"csv",to:"data",fromSide:"l",toSide:"r",stroke:"#3b4570"},
-      {from:"gate",to:"train",fromSide:"r",toSide:"l",stroke:"#4d4a2a"}
-    ],
-    flow:[
-      {paths:[0,1,2,3,4],cls:"data",weight:6,dur:9000,splits:[{at:3,cls:"out"}]},
-      {paths:[5],cls:"data",weight:2,dur:1500},
-      {paths:[6],cls:"data",weight:2,dur:1500},
-      {paths:[7],cls:"out",weight:2,dur:1500},
-      {paths:[9],cls:"out",weight:2,dur:1500}
-    ]
-  };
-
   KVBlueprint.mount("svg-system","wrap-system",sys,"system");
-  KVBlueprint.mount("svg-code","wrap-code",code,"code");
 })();
 </script>
 <script src="assets/drift-toggle.js?v=1"></script>
+<script>
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+</script>
 </body>
 </html>

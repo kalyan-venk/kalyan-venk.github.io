@@ -1,0 +1,80 @@
+/* Project deep-dive pages. Same warm dark palette as the landing (home.css),
+   minimal single column. Includes compatibility aliases (--indigo, --surface,
+   --border, ...) so the existing interactive + blueprint CSS inherits the new
+   colors instead of referencing the retired style.css. Dark only. */
+
+:root {
+  --bg: #141210;
+  --bg-soft: #1d1915;
+  --surface: #1d1915;
+  --line: #2a2620;
+  --border: #2a2620;
+  --border-soft: #231f1a;
+  --text: #a69c8c;
+  --text-dim: #6e6558;
+  --head: #ece6da;
+  --text-strong: #ece6da;
+  --accent: #d9b382;
+  --indigo: #d9b382;
+  --accent-soft: rgba(217, 179, 130, 0.12);
+  --tag-bg: rgba(217, 179, 130, 0.08);
+  --sel: rgba(217, 179, 130, 0.2);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --glow: 0 0 30px rgba(217, 179, 130, 0.14);
+  --grad: linear-gradient(120deg, #d9b382, #b98a4e);
+  --border-strong: #3a342b;
+  --ok: #86c98a;
+  --warn: #e0b877;
+  --bad: #e0857a;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --maxw: 820px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--sel); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.pwrap { max-width: var(--maxw); margin: 0 auto; padding: 40px 24px 96px; }
+
+.back { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); font-weight: 600; }
+.back:hover { color: var(--head); text-decoration: none; }
+
+.phero { margin: 48px 0 0; }
+.phero h1 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--head); margin: 0; }
+.ptag { margin: 12px 0 0; font-size: 1.1rem; max-width: 620px; }
+.pstats { display: flex; flex-wrap: wrap; gap: 28px; margin: 26px 0 0; padding: 0; list-style: none; }
+.pstats li { font-size: 0.9rem; color: var(--text-dim); }
+.pstats b { display: block; font-family: var(--mono); font-size: 1.35rem; font-weight: 600; color: var(--head); letter-spacing: -0.01em; }
+.plinks { margin: 24px 0 0; display: flex; gap: 20px; font-weight: 500; }
+
+.psec { margin: 72px 0 0; scroll-margin-top: 24px; }
+.psec > h2 { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--head); font-weight: 700; margin: 0 0 20px; }
+
+.panel { background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+
+.notes { display: grid; gap: 14px; }
+.note { border-left: 2px solid var(--accent); padding: 2px 0 2px 18px; }
+.note b { color: var(--head); font-weight: 600; }
+.note p { margin: 4px 0 0; font-size: 0.95rem; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; list-style: none; padding: 0; }
+.tags li { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); background: var(--tag-bg); padding: 4px 11px; border-radius: 999px; }
+
+.pfoot { margin: 80px 0 0; font-size: 0.84rem; color: var(--text-dim); }
+.pfoot a { color: var(--text); }
+
+@keyframes riseIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.reveal { animation: riseIn 0.55s ease both; }
+@media (prefers-reduced-motion: reduce) { .reveal { animation: none; } html { scroll-behavior: auto; } }

@@ -1,97 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<link rel="canonical" href="https://kalyanvenk.com/inference-lens">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalyan's work</title>
-<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
-<meta name="description" content="Can the LLM-as-judge be fooled? I trained scoring models on human preference data and put them under adversarial pressure. Try the live scorer.">
-<meta property="og:title" content="Inference-Lens - can the AI judge be fooled?">
-<meta property="og:description" content="I trained scoring models on human preference data, then attacked them. The best model on the clean benchmark degraded the most under adversarial pressure.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://kalyanvenk.com/inference-lens">
-<meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Inference-Lens - can the AI judge be fooled?">
-<meta name="twitter:description" content="The best model on the clean benchmark degraded the most under adversarial pressure.">
-<meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
-<link rel="stylesheet" href="assets/style.css?v=6">
-<link rel="stylesheet" href="assets/blueprint.css?v=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://kalyanvenk.com/inference-lens">
+  <title>Inference-Lens · Kalyan Venkatesh</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
+  <meta name="description" content="Trained scoring models on human preference data, then attacked them to find which judge breaks first.">
+  <script>document.documentElement.setAttribute('data-theme','dark');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/proj.css?v=2">
+  <link rel="stylesheet" href="assets/blueprint.css?v=1">
+  <style>
+    /* Tokens the kept interactive + blueprint expect but proj.css doesn't define.
+       Warm-mapped; the data colors (--cyan/--good) match the diagram's own dots. */
+    :root {
+      --surface-2: #231f1a;
+      --text-faint: #5a5248;
+      --shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6);
+      --sans: 'Inter', system-ui, sans-serif;
+      --good: #4ade80;
+      --cyan: #5eead4;
+    }
+
+    /* Buttons (ported from the retired style.css, now on warm tokens). */
+    .btn { display: inline-flex; align-items: center; gap: 9px; padding: 13px 24px; border-radius: 999px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; font-family: inherit; }
+    .btn-primary { background: var(--grad); color: #1a1510; box-shadow: 0 10px 30px -12px rgba(217, 179, 130, 0.5); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -12px rgba(217, 179, 130, 0.6); }
+    .btn-ghost { background: rgba(255, 255, 255, 0.03); border-color: var(--border); color: var(--text); }
+    .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    /* Live scorer (ported verbatim from the retired style.css). */
+    .il-app { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+    .il-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .il-field label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; color: var(--text); }
+    .il-field textarea { width: 100%; min-height: 260px; resize: vertical; background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; font: inherit; font-size: 0.98rem; line-height: 1.6; outline: none; transition: border-color 0.15s; }
+    .il-field textarea:focus { border-color: var(--accent); }
+    .il-field textarea::placeholder { color: var(--text-faint); }
+    .il-controls { display: flex; gap: 14px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+    .il-results { opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .il-results.show { opacity: 1; transform: none; margin-top: 26px; }
+    .il-verdict { background: var(--accent-soft); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 22px 26px; line-height: 1.75; font-size: 1.05rem; color: var(--text); }
+    .il-verdict b { color: var(--head); }
+    .il-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+    .il-scorecard { background: var(--bg-soft); border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 18px 20px; }
+    .il-sc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .il-sc-name { font-weight: 700; color: var(--head); }
+    .il-sc-pick { font-size: 0.76rem; color: var(--accent); background: var(--tag-bg); padding: 3px 11px; border-radius: 999px; font-family: var(--mono); }
+    .il-sc-row { display: flex; align-items: center; gap: 10px; margin: 9px 0; }
+    .il-sc-lbl { width: 14px; color: var(--text-faint); font-weight: 700; font-size: 0.9rem; }
+    .il-bar { flex: 1; height: 10px; background: rgba(255, 255, 255, 0.06); border-radius: 99px; overflow: hidden; }
+    .il-fill { height: 100%; border-radius: 99px; background: #39322a; transition: width 0.55s cubic-bezier(.2, .7, .2, 1); }
+    .il-fill.win { background: var(--grad); }
+    .il-sc-num { width: 50px; text-align: right; color: var(--text-dim); font-family: var(--mono); font-size: 0.88rem; }
+    .il-features { margin-top: 16px; }
+    .il-feat-title { font-weight: 600; margin-bottom: 10px; color: var(--text); }
+    .il-feat-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .il-feat-table th { background: var(--surface-2); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-dim); text-align: left; padding: 11px 14px; }
+    .il-feat-table td { padding: 11px 14px; border-top: 1px solid var(--border-soft); color: var(--text); }
+    .il-feat-table td.il-note { color: var(--text-faint); font-size: 0.85rem; }
+    @media (max-width: 700px) { .il-inputs, .il-cards { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
-<div class="progress"></div>
+<div class="pwrap">
+  <a class="back" href="/">&larr; Kalyan Venkatesh</a>
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="/" class="brand"><span class="mark">KV</span>Kalyan Venkatesh</a>
-    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <div class="nav-drop">
-        <button class="nav-drop-btn active" aria-expanded="false" aria-haspopup="true">Projects <span class="caret">&#9662;</span></button>
-        <div class="mega" role="menu">
-          <div class="mega-col">
-            <p class="mega-h">Agents &amp; LLM reliability</p>
-            <a href="inference-lens">Inference-Lens <span>judge robustness, live demo</span></a>
-            <a href="secret-agent">secret-agent <span>frameworkless agent runtime</span></a>
-          </div>
-          <div class="mega-col">
-            <p class="mega-h">Experimentation &amp; MLOps</p>
-            <a href="groundtruth">GroundTruth <span>A/B testing, CUPED</span></a>
-            <a href="predictops">PredictOps <span>CI-gated MLOps loop</span></a>
-          </div>
-          <div class="mega-col">
-            <p class="mega-h">Data &amp; systems</p>
-            <a href="streamlake">StreamLake <span>streaming lakehouse, contracts</span></a>
-            <a href="vaultex">vaultex <span>double-entry ledger</span></a>
-          </div>
-        </div>
-      </div>
-      <a href="about">About</a>
-      <a href="inference-lens#demo" class="nav-cta">Live demo</a>
-          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
-        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
-      </button>
-</div>
-  </div>
-</nav>
-
-<header class="proj-hero">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="blip"></span>Can the judge be fooled</span>
+  <header class="phero">
     <h1 class="reveal">Inference-Lens</h1>
-    <p class="lead reveal d1">LLM as judge is the default evaluation paradigm now. Almost nobody is asking how easily that judge can be deceived. So I built an NLP evaluation pipeline to find out. It is a natural language text classification problem: I trained scoring models on 182K real human-labeled responses, then put them under systematic adversarial NLP pressure to see where they break and by how much.</p>
-    <div class="meta reveal d2">
-      <span class="chip">Natural Language Processing</span>
-      <span class="chip">Text Classification</span>
-      <span class="chip">Adversarial NLP</span>
-      <span class="chip">HH-RLHF</span>
-      <span class="chip">LLM-Bar</span>
-      <span class="chip">scikit-learn</span>
-      <span class="chip">XGBoost</span>
-      <span class="chip">DeBERTa-v3</span>
-      <span class="chip">Streamlit</span>
+    <p class="ptag reveal">Trained scoring models on human preference data, then attacked them to find which judge breaks first.</p>
+    <ul class="pstats reveal">
+      <li><b>182K</b> labeled responses</li>
+      <li><b>419</b> adversarial pairs</li>
+      <li><b>3</b> models</li>
+      <li><b>19.3pp</b> worst drop</li>
+    </ul>
+    <div class="plinks reveal">
+      <a href="https://github.com/kalyan-venk/Inference-Lens" target="_blank" rel="noopener">GitHub</a>
+      <a href="#try">Try it</a>
     </div>
-    <div class="cta-row reveal d3" style="margin-top:28px;">
-      <a href="#demo" class="btn btn-primary">Try the live scorer &darr;</a>
-      <a href="https://github.com/kalyan-venk/Inference-Lens" target="_blank" rel="noopener" class="btn btn-ghost">View on GitHub</a>
-    </div>
-  </div>
-</header>
+  </header>
 
-<section id="demo">
-  <div class="wrap">
-    <p class="kicker reveal">Live demo</p>
-    <h2 class="section-title reveal">Score 2 responses and watch a judge get fooled</h2>
-    <p class="section-sub reveal">Paste 2 responses, or load the built in sample. 2 trained models pick the one they think is better. Watch what happens when they confidently choose the worse, padded answer. Nothing is broken when they do that. It is the model doing exactly what it learned to do.</p>
-    <div class="il-app reveal">
+  <section class="psec reveal" id="try">
+    <h2>Try it</h2>
+    <p style="margin:0 0 20px;">Paste 2 answers, or load the sample. 2 trained models pick the better one. Watch a padded answer win.</p>
+    <div class="il-app">
       <div class="il-inputs">
         <div class="il-field"><label>Response A</label><textarea id="il-a" placeholder="Paste the first answer here..."></textarea></div>
         <div class="il-field"><label>Response B</label><textarea id="il-b" placeholder="Paste the second answer here..."></textarea></div>
@@ -102,23 +97,19 @@
       </div>
       <div id="il-results" class="il-results"></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="blueprints">
-  <div class="wrap">
-    <p class="kicker reveal">Under the hood</p>
-    <h2 class="section-title reveal">See exactly how it is built</h2>
-    <p class="section-sub reveal">2 live blueprints. One traces the pipeline stage by stage. The other maps every file in the repo and how the data moves between them. The moving dots are data in flight, coloured by what kind of data it is.</p>
+  <section class="psec reveal" id="how">
+    <h2>How it works</h2>
+    <p style="margin:0 0 24px;">A live map of the build.</p>
 
     <!-- ============================ DIAGRAM 1 ============================ -->
     <div class="bpx" id="system">
       <div class="sec-head">
         <h3><span class="num">01</span>System design, the stages in run order</h3>
         <p>
-          Read it top to bottom. On the left are the <b>resources</b> that feed in, the datasets and pretrained models.
-          The centre spine is the <b>pipeline</b> in run order. The right shows the <b>artifacts</b> each stage writes to disk.
-          The amber path is LLM-Bar. It stays out of training entirely and only enters at the stress-test, so nothing a model saw while training prepared it for that path.
+          Left: the datasets and pretrained models that feed in. Centre: the pipeline in run order. Right: what each stage writes to disk.
+          The amber path is LLM-Bar. It stays out of training and enters only at the stress-test, so nothing a model saw prepared it for that path.
         </p>
       </div>
 
@@ -138,175 +129,23 @@
           <div><span class="k swatch"></span>Stage · resource · artifact</div>
         </div>
       </div>
-
-      <div class="bp-notes">
-        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>The clean scores are the finding</h4>
-          <p>All 3 models land near <b>0.50 AUC-ROC</b> on the held-out HH-RLHF test set. That is not a failure. It says surface features like length, readability and overlap do not reliably predict human preference.</p></div>
-        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>Same benchmark, opposite robustness</h4>
-          <p>Under the Neighbor attack, Logistic Regression's false-preference rate hits <b>82.1%</b> (picks the worse answer 4 in 5). DeBERTa, the only model that beat chance on the clean benchmark, degrades the most overall at <b>19.3pp</b>. Architecture decides robustness, and the headline score ranks them almost exactly wrong.</p></div>
-        <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>Length ≠ quality</h4>
-          <p>Unsupervised clustering found the most <code>verbose-inconsistent</code> archetype had the <b>lowest</b> chosen-rate (48.9%); the shorter <code>conversational-engaging</code> one the highest (51.6%).</p></div>
-      </div>
     </div>
+  </section>
 
-    <!-- ============================ DIAGRAM 2 ============================ -->
-    <div class="bpx" id="code">
-      <div class="sec-head">
-        <h3><span class="num">02</span>Code map, every file and the data lineage</h3>
-        <p>
-          Same project, a different lens. The centre spine is the <b>data lineage</b>: how one artifact on disk becomes the next,
-          from raw arrow to parquet to embeddings to clusters to models to the stress-test CSV to the live demo. Around it sit the actual
-          <b>files</b>. The notebooks that drive each step are on the left, the Python package modules that do the work attach to the spine,
-          and the config, meta and deploy files sit on the right. Every file in the repo is here with its one-line job.
-        </p>
-      </div>
-
-      <div class="dgm-frame">
-        <div class="dgm-bar">
-          <span class="tag">code.blueprint</span>
-          <div class="flowsteps" data-steps="code"></div>
-          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
-        </div>
-        <div class="dgm-wrap" id="wrap-code">
-          <svg class="dgm" id="svg-code" role="img" aria-label="Code map of Inference-Lens: every file with its role, arranged around the data lineage spine."></svg>
-        </div>
-        <div class="legend">
-          <div><span class="k data"></span>Data flowing through the lineage spine</div>
-          <div><span class="k out"></span>Trained model artifact produced</div>
-          <div><span class="k swatch"></span>File · module · artifact</div>
-          <div><span style="font-family:var(--mono);font-size:.8rem;color:var(--text-faint)">italic monospace = a file on disk</span></div>
-        </div>
-      </div>
+  <section class="psec reveal">
+    <h2>Notes</h2>
+    <div class="notes">
+      <div class="note reveal"><b>The best model failed hardest</b><p>DeBERTa led the clean benchmark at 0.622 AUC and lost the most under attack, 19.3pp.</p></div>
+      <div class="note reveal"><b>Longer answers scored worse</b><p>The most verbose archetype had the lowest human pick rate, 48.9%, below the 50.1% of the shortest.</p></div>
+      <div class="note reveal"><b>Every judge flipped</b><p>All 3 models fell below 50% on adversarial pairs. On a forced choice that is systematic inversion.</p></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section>
-  <div class="wrap prose">
-    <p class="kicker reveal">The setup</p>
-    <h2 class="reveal">Real human judgment on natural language, then adversarial pressure</h2>
-    <p class="reveal">I started from Anthropic's HH-RLHF dataset, 170,000 plus human preference annotations. A rater sees 2 AI responses to the same conversation and just picks the one they prefer. No rubric, no scoring guide, only judgment. That is the signal I trained on. The task is fundamentally one of natural language understanding: can a model learn what humans find genuinely useful or convincing in text?</p>
-    <p class="reveal">Then I tried to break them. LLM-Bar gives me 419 adversarially constructed NLP pairs built specifically to fool automated text evaluators. My plan was simple: train NLP scoring models on the clean preference data, then see how each architecture behaves the moment something is engineered to trip it.</p>
+  <footer class="pfoot"><a href="/">&larr; Back to all work</a></footer>
+</div>
 
-    <h2 class="reveal">3 things I walked away with</h2>
-    <div class="finding reveal"><strong>The signal was there. It cancelled itself out.</strong> Pooled across the dataset, 4 surface features sit at chance: 0.512 and 0.517 AUC-ROC. Inside a single subset they reach 0.57. On helpfulness data, length is the strongest predictor and longer answers win, coefficient +0.220. On harmlessness data it is still the strongest predictor and longer answers lose, coefficient −0.252. Pool the 2 and length predicts nothing, because it predicts opposite things in each half.</div>
-    <div class="finding reveal"><strong>Competence is not robustness.</strong> DeBERTa was the only model that learned the task, and it degraded the most: 19.3 points, against 18.3 for Logistic Regression and 8.4 for XGBoost. The weak models could not fall far because they were already at chance. Whatever it actually learned is what the attack had to work with.</div>
-    <div class="finding reveal"><strong>Every model was inverted, not just confused.</strong> All 3 architectures scored below 50 percent on adversarial pairs. On a forced binary choice that is systematic inversion: the attacks do not make a judge uncertain, they reliably flip it. Neighbor, the smallest edit of the 4, beat every architecture.</div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">Attack surface</p>
-    <h2 class="section-title reveal">4 ways to fool a judge</h2>
-    <p class="section-sub reveal">LLM-Bar groups its adversarial pairs into 4 families. Each one goes after a different weakness in how automated evaluators decide what looks good.</p>
-    <div class="feature-grid" style="grid-template-columns:1fr 1fr;">
-      <div class="feature reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="8" r="2.5"/><path d="M6 8.5v7"/><path d="M18 10.5c0 4-5 3-7 5.5"/></svg></div><h4>Neighbor</h4><p>A worse answer made by small local edits to the better one, so the 2 look almost identical on the surface. This is the attack that broke Logistic Regression hardest.</p></div>
-      <div class="feature reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H10l-4.5 4v-4H4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></div><h4>GPT instruction</h4><p>A weaker answer generated by prompting a strong model with the instruction. Fluent and confident, but not actually better.</p></div>
-      <div class="feature reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 16l9 5 9-5"/></svg></div><h4>GPT output</h4><p>A polished variation crafted to carry the markers of quality, length, structure, vocabulary, with none of the substance.</p></div>
-      <div class="feature reveal d3"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/></svg></div><h4>Manual</h4><p>Hand written deceptive answers. The hardest and most creative cases, built by people specifically to exploit the blind spots automated generation misses.</p></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">The headline</p>
-    <h2 class="section-title reveal">2 models, identical on paper, opposite under fire</h2>
-    <p class="section-sub reveal">All 3 models scored near 0.50 AUC-ROC on clean evaluation. The real separation only shows up once you attack them. Read the clean column alone and these 3 models look interchangeable.</p>
-    <div class="tbl-wrap reveal">
-      <table>
-        <thead><tr><th>Model</th><th>Clean AUC-ROC</th><th>Worst case under attack</th><th>Verdict</th></tr></thead>
-        <tbody>
-          <tr><td>Logistic Regression</td><td>0.512</td><td>82.1% false preference (Neighbor), 18.3pp overall</td><td><span class="pill bad">fragile</span></td></tr>
-          <tr><td>XGBoost</td><td>0.517</td><td>65.7% false preference (Neighbor), 8.4pp overall</td><td><span class="pill warn">degrades least, learned least</span></td></tr>
-          <tr><td>DeBERTa-v3-small</td><td>0.622</td><td>70.2% false preference (Neighbor), 19.3pp overall</td><td><span class="pill bad">most capable, most fragile</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="finding reveal" style="margin-top:20px;"><strong>The model you would pick from the leaderboard is the one that fails hardest.</strong> DeBERTa wins on clean data by 11 AUC points and loses the most under attack. Rank these 3 by benchmark score and you rank them almost exactly wrong for adversarial robustness. That is why you cannot choose an evaluator without attacking it first.</div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">What the data said</p>
-    <h2 class="section-title reveal">Length is the opposite of quality</h2>
-    <p class="section-sub reveal">Before I touched a single label, I wanted to know what the response space naturally looks like, so I clustered 182K sentence embeddings with K-Means, DBSCAN and Ward. K-Means selected 4 groups by silhouette and those became the archetypes below. The structure is thin though: the silhouette score is 0.020, close to zero, and allowed to choose for themselves Ward and DBSCAN both prefer 2 groups rather than 4. These are useful descriptive labels, not cleanly separated clusters.</p>
-    <div class="2-col">
-      <div class="chart-card reveal">
-        <h4>Human preference rate by archetype</h4>
-        <p class="cap">Share of responses in each cluster that a human chose over its alternative.</p>
-        <div class="chart-holder"><canvas id="archChart"></canvas></div>
-      </div>
-      <div class="arch-grid" style="grid-template-columns:1fr;">
-        <div class="arch reveal"><div class="top"><h4>Conversational Engaging</h4><span class="pill good">51.6%</span></div><span class="meta">shorter, warmer, direct</span><div class="bar"><i style="width:90%; background:var(--good);"></i></div></div>
-        <div class="arch reveal d1"><div class="top"><h4>Medium-Length Mixed</h4><span class="pill warn">50.3%</span></div><span class="meta">middle of the pack</span><div class="bar"><i style="width:55%; background:var(--warn);"></i></div></div>
-        <div class="arch reveal d2"><div class="top"><h4>Ultra-Short Minimal</h4><span class="pill warn">50.1%</span></div><span class="meta">terse, sometimes too terse</span><div class="bar"><i style="width:50%; background:var(--warn);"></i></div></div>
-        <div class="arch reveal d3"><div class="top"><h4>Verbose Inconsistent</h4><span class="pill bad">48.9%</span></div><span class="meta">the longest responses, the lowest pick rate</span><div class="bar"><i style="width:30%; background:var(--bad);"></i></div></div>
-      </div>
-    </div>
-    <div class="finding reveal" style="margin-top:20px;"><strong>The longest responses were the least preferred.</strong> I went in assuming elaborate answers would win. The humans disagreed. A scorer that rewards length is not measuring quality, it is measuring word count and that is exactly the lever an adversary pulls.</div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap prose">
-    <p class="kicker reveal">Takeaways</p>
-    <h2 class="reveal">What a team should walk away with</h2>
-    <ul class="reveal">
-      <li>Clean benchmark accuracy tells you almost nothing about whether an NLP evaluator can be trusted under adversarial attack. The best model on the benchmark degraded the most under it.</li>
-      <li>Pick your automated NLP judge by stress-testing it against adversarial text, not by reading a leaderboard. Know which NLP attack families break which architecture and by how much.</li>
-      <li>Be suspicious of any quality signal that tracks length. It is not that length means nothing, it is that length means opposite things depending on whether the user wanted help or wanted something they should not get. An evaluator leaning on it is silently assuming which situation it is in.</li>
-    </ul>
-    <p class="reveal">The full pipeline, all 3 model architectures, the clustering notebooks and the LLM-Bar stress-test are on GitHub.</p>
-    <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/Inference-Lens" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="wrap footer-inner">
-    <div class="col">
-      <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
-      <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
-    </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="secret-agent">secret-agent</a><a href="groundtruth">GroundTruth</a><a href="streamlake">StreamLake</a><a href="vaultex">vaultex</a><a href="predictops">PredictOps</a><a href="#demo">Live demo</a></div>
-    <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/Inference-Lens" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
-  </div>
-  <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
-</footer>
-
-<script src="assets/script.js?v=5"></script>
 <script src="assets/model.js"></script>
 <script src="assets/scorer.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script>
-window.addEventListener('load', () => {
-  if (!window.Chart) return;
-  applyChartTheme();
-  const ctx = document.getElementById('archChart');
-  if (!ctx) return;
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Conversational\nEngaging', 'Medium-Length\nMixed', 'Ultra-Short\nMinimal', 'Verbose\nInconsistent'],
-      datasets: [{
-        data: [51.6, 50.3, 50.1, 48.9],
-        backgroundColor: ['#4ade80','#fbbf24','#fbbf24','#fb7185'],
-        borderRadius: 8, barThickness: 36,
-      }]
-    },
-    options: {
-      indexAxis: 'y', maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => c.parsed.x + '% chosen' } } },
-      scales: {
-        x: { min: 47, max: 53, ticks: { callback: (v) => v + '%' }, grid: { color: 'rgba(130,140,160,0.16)' } },
-        y: { grid: { display: false } }
-      }
-    }
-  });
-});
-</script>
 <script src="assets/blueprint.js?v=2"></script>
 <script>
 /* Diagram specs for this project. The engine that draws them is shared
@@ -422,124 +261,12 @@ window.addEventListener('load', () => {
     ]
   };
 
-  /* =====================================================================
-     SPEC 2 - CODE MAP (every file + data lineage)
-     centre spine = data artifacts; left = notebooks (drivers);
-     inner-left = package modules; right = config / meta / deploy
-     ===================================================================== */
-  function crow(i){ return 92 + i*120; }
-  var CX=430, CW=250;                          // module column
-  var AX=760, AW=250;                          // artifact spine column
-  var code={
-    w:1240, h:1400, r:4.5, every:720,
-    steps:[
-      {label:"notebooks",target:"nb1",color:"#d8cf9a"},
-      {label:"package",target:"loader",color:"#818cf8"},
-      {label:"data",target:"raw",color:"#818cf8"},
-      {label:"models",target:"mdls",color:"#4ade80"},
-      {label:"reports",target:"stress",color:"#fbbf24"},
-      {label:"deploy",target:"deploy",color:"#f0abfc"}
-    ],
-    bands:[
-      {x:20,y:60,w:360,h:1300,label:"NOTEBOOKS",stroke:"#3a381f"},
-      {x:CX-14,y:60,w:CW+28,h:1300,label:"src/inference_lens",stroke:"#2b3350"},
-      {x:AX-14,y:60,w:AW+28,h:1300,label:"DATA LINEAGE",stroke:"#24304a"},
-      {x:1050,y:60,w:170,h:1300,label:"META",stroke:"#262b3d"}
-    ],
-    nodes:[
-      // ----- package modules (centre-left), top: utils/config feed everything -----
-      {id:"cfg",kind:"config",x:CX,y:crow(0),w:CW,h:92,title:"utils/config.py",titleSize:14,sub:"+ configs/base.yaml",stripe:"#5eead4",lines:[
-        {t:"1 YAML source of truth"},{t:"paths · seed 42 · splits · model name"}]},
-      {id:"log",kind:"config",x:CX,y:crow(1)-8,w:CW,h:64,title:"utils/logging.py",titleSize:14,lines:[{t:"timestamped logs, quiets libs"}]},
-      {id:"loader",kind:"module",x:CX,y:crow(2)-14,w:CW,h:104,title:"data/loader.py",titleSize:14,stripe:"#818cf8",lines:[
-        {t:"extract_assistant_response()"},{t:"flatten_hh_rlhf() · split_dataframe()"},{t:"load_llm_bar()  (held-out)"}]},
-      {id:"extr",kind:"module",x:CX,y:crow(3)+2,w:CW,h:104,title:"features/extractor.py",titleSize:14,stripe:"#818cf8",lines:[
-        {t:"lexical · Flesch · ROUGE-L"},{t:"MiniLM embeddings · BERTScore"},{t:"extract_all_features()  (caches)"}]},
-      {id:"clus",kind:"module",x:CX,y:crow(4)+18,w:CW,h:104,title:"clustering/cluster.py",titleSize:14,stripe:"#5eead4",lines:[
-        {t:"run_kmeans / dbscan / hierarchical"},{t:"summarize_clusters()"},{t:"cluster × preference cross-tab"}]},
-      {id:"train",kind:"module",x:CX,y:crow(6)-6,w:CW,h:104,title:"models/train.py",titleSize:14,stripe:"#818cf8",lines:[
-        {t:"train_logreg() · train_xgboost()"},{t:"load_deberta_for_inference()"},{t:"evaluate_model() → MLflow"}]},
-      {id:"eval",kind:"gate",x:CX,y:crow(8)-14,w:CW,h:96,title:"stress_test/evaluator.py",titleSize:13.5,sub:"the core contribution",stripe:"#fbbf24",lines:[
-        {t:"run_stress_test(): zero-shot on LLM-Bar,"},{t:"per-category degradation + FPR"}]},
-      {id:"app",kind:"module",x:CX,y:crow(10)-24,w:CW,h:90,title:"app/main.py",titleSize:14,stripe:"#4ade80",lines:[
-        {t:"Streamlit scorer, loads 3 joblibs"},{t:"symmetric A/B scoring + vote"}]},
-
-      // ----- notebooks (left) -----
-      {id:"nb1",kind:"notebook",x:20,y:crow(2)-14,w:360,h:60,title:"01_eda / 01_data_loading",titleSize:12.5,lines:[{t:"runs loader → flat parquet"}]},
-      {id:"nb2",kind:"notebook",x:20,y:crow(3)+2,w:360,h:60,title:"01_eda / 02_feature_extraction",titleSize:12.5,lines:[{t:"runs extractor → features + embeddings"}]},
-      {id:"nb3",kind:"notebook",x:20,y:crow(4)-40,w:360,h:56,title:"01_eda / 03_eda_visualization",titleSize:12.5,lines:[{t:"→ figures 01-05"}]},
-      {id:"nb4",kind:"notebook",x:20,y:crow(4)+18,w:360,h:78,title:"02_clustering / 01-03",titleSize:12.5,lines:[
-        {t:"01_kmeans · 02_advanced_clustering",mono:true,size:11},{t:"03_archetype_analysis → archetypes",mono:true,size:11}]},
-      {id:"nb5",kind:"notebook",x:20,y:crow(6)-6,w:360,h:78,title:"03_models / 01 & 02",titleSize:12.5,lines:[
-        {t:"01_logreg_xgboost (Colab)",mono:true,size:11},{t:"02_deberta_colab (GPU)",mono:true,size:11}]},
-      {id:"nb6",kind:"notebook",x:20,y:crow(7)+10,w:360,h:56,title:"03_models / 03_model_comparison",titleSize:12.5,lines:[{t:"→ comparison csv + ROC/PR/calibration"}]},
-      {id:"nb7",kind:"notebook",x:20,y:crow(8)-14,w:360,h:56,title:"03_models / 04_stress_test",titleSize:12.5,lines:[{t:"drives evaluator → stress csv"}]},
-      {id:"setup",kind:"config",x:20,y:crow(10)-24,w:360,h:56,title:"scripts/setup_mlflow.py",titleSize:12.5,lines:[{t:"creates the MLflow experiment"}]},
-
-      // ----- data lineage spine (right-centre) -----
-      {id:"raw",kind:"data",x:AX,y:crow(2)-14,w:AW,h:76,title:"data/raw/",titleSize:13.5,sub:"inputs on disk",lines:[
-        {t:"hh_rlhf/*.arrow (HF cache)",mono:true,size:11},{t:"llm_bar/*.json",mono:true,size:11}]},
-      {id:"flat",kind:"data",x:AX,y:crow(3)+2,w:AW,h:64,title:"hh_rlhf_flat.parquet",titleSize:12.5,sub:"data/processed/",lines:[{t:"+ hh_rlhf_long.parquet"}]},
-      {id:"feat",kind:"data",x:AX,y:crow(4)+18,w:AW,h:80,title:"features.parquet",titleSize:13,sub:"data/processed/",lines:[
-        {t:"+ embeddings.npy (384-d)",mono:true,size:11},{t:"+ features_with_labels.parquet",mono:true,size:11}]},
-      {id:"clusout",kind:"data",x:AX,y:crow(5)+34,w:AW,h:80,title:"features_with_clusters.parquet",titleSize:11.5,sub:"data/processed/",lines:[
-        {t:"+ umap_2d.npy · umap_sample_idx.npy",mono:true,size:10.5},{t:"→ reports/archetype_summary.csv",mono:true,size:10.5}]},
-      {id:"mdls",kind:"artifact",x:AX,y:crow(6)+38,w:AW,h:92,title:"models/*.joblib",titleSize:13,sub:"+ deberta_checkpoint/",stripe:"#818cf8",lines:[
-        {t:"logreg · xgboost · scaler · kmeans",mono:true,size:10.5},{t:"+ test_predictions.parquet",mono:true,size:10.5},{t:"+ deberta_test_predictions.parquet",mono:true,size:10.5}]},
-      {id:"cmp",kind:"data",x:AX,y:crow(8)-14,w:AW,h:64,title:"model_comparison_summary.csv",titleSize:11,sub:"reports/",lines:[{t:"clean-benchmark scores"}]},
-      {id:"stress",kind:"result",x:AX,y:crow(9)-8,w:AW,h:72,title:"stress_test_results.csv",titleSize:12.5,sub:"reports/",stripe:"#fbbf24",lines:[{t:"per-model × per-category degradation"}]},
-      {id:"mlruns",kind:"data",x:AX,y:crow(10)-24,w:AW,h:60,title:"mlruns/",titleSize:13.5,sub:"MLflow tracking store",lines:[{t:"params · metrics · model registry"}]},
-
-      // ----- meta / config / deploy (right) -----
-      {id:"cfgs",kind:"config",x:1050,y:crow(2)-14,w:170,h:104,title:"configs/",titleSize:13,lines:[
-        {t:"base.yaml",mono:true,size:11},{t:"models/logreg·xgboost",mono:true,size:10.5},{t:"·deberta.yaml",mono:true,size:10.5},{t:"clustering/kmeans.yaml",mono:true,size:10.5}]},
-      {id:"deploy",kind:"deploy",x:1050,y:crow(4)+2,w:170,h:104,title:"deploy/hf-space/",titleSize:12.5,lines:[
-        {t:"app.py",mono:true,size:11},{t:"3 joblib models",mono:true,size:11},{t:"requirements.txt",mono:true,size:10.5},{t:"(torch-free)",size:11}]},
-      {id:"docs",kind:"deploy",x:1050,y:crow(6)+6,w:170,h:76,title:"docs/ + site",titleSize:13,lines:[
-        {t:"index.html",mono:true,size:11},{t:"portfolio deep-dive",size:11}]},
-      {id:"meta",kind:"meta",x:1050,y:crow(8)-8,w:170,h:120,title:"project meta",titleSize:13,lines:[
-        {t:"pyproject.toml",mono:true,size:10.5},{t:"requirements.txt",mono:true,size:10.5},{t:"Makefile",mono:true,size:10.5},{t:"README.md",mono:true,size:10.5},{t:"LICENSE",mono:true,size:10.5}]}
-    ],
-    edges:[
-      // lineage spine (vertical) 0..7
-      {from:"raw",to:"flat",stroke:"#3b4570"},{from:"flat",to:"feat",stroke:"#3b4570"},
-      {from:"feat",to:"clusout",stroke:"#3b4570"},{from:"clusout",to:"mdls",stroke:"#3b4570"},
-      {from:"mdls",to:"cmp",stroke:"#3b4570"},{from:"cmp",to:"stress",stroke:"#3b4570"},
-      {from:"stress",to:"mlruns",stroke:"#2a2f45"},
-      // modules -> the artifact they produce (r -> l) 7..13
-      {from:"loader",to:"flat",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"extr",to:"feat",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"clus",to:"clusout",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"train",to:"mdls",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"eval",to:"stress",fromSide:"r",toSide:"l",stroke:"#5b4a24",dash:"6 5"},
-      {from:"raw",to:"loader",fromSide:"l",toSide:"r",stroke:"#3b4570",d:"M760,"+(crow(2)-14+38)+" H"+(CX+CW)},
-      // notebooks -> modules (r -> l) 13..19
-      {from:"nb1",to:"loader",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
-      {from:"nb2",to:"extr",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
-      {from:"nb4",to:"clus",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
-      {from:"nb5",to:"train",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
-      {from:"nb7",to:"eval",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
-      // config feeds package (down) 18
-      {from:"cfg",to:"loader",stroke:"#2c5148",dash:"5 5"},
-      // deploy consumes models 19
-      {from:"mdls",to:"deploy",fromSide:"r",toSide:"l",stroke:"#4a2f4a",dash:"5 5"},
-    ],
-    flow:[
-      {paths:[0,1,2,3,4,5],cls:"data",weight:6,dur:9000,splits:[{at:3,cls:"out"}]}, // lineage spine, turns green at models
-      {paths:[7],cls:"data",weight:2,dur:1500},   // loader->flat
-      {paths:[8],cls:"data",weight:2,dur:1500},   // extr->feat
-      {paths:[9],cls:"data",weight:2,dur:1500},   // clus->clusout
-      {paths:[10],cls:"out",weight:2,dur:1500},   // train->models
-      {paths:[11],cls:"adv",weight:2,dur:1500},   // eval->stress
-      {paths:[13],cls:"data",weight:1,dur:1400},  // nb1->loader
-      {paths:[14],cls:"data",weight:1,dur:1400},  // nb2->extr
-      {paths:[16],cls:"out",weight:1,dur:1400}    // nb5->train
-    ]
-  };
-
   KVBlueprint.mount("svg-system","wrap-system",sys,"system");
-  KVBlueprint.mount("svg-code","wrap-code",code,"code");
 })();
+</script>
+<script>
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 </script>
 </body>
 </html>

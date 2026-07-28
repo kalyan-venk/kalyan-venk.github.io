@@ -1,30 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<link rel="canonical" href="https://kalyanvenk.com/streamlake">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalyan's work</title>
-<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
-<meta name="description" content="A streaming lakehouse for NYC taxi data where every hop asserts a data contract and fails loudly when the data breaks it. Spark, Iceberg, Kafka, dbt, Airflow, Kubernetes, and a contract engine that runs in one scan.">
-<meta property="og:title" content="StreamLake - a streaming lakehouse with enforced data contracts">
-<meta property="og:description" content="2.96M taxi trips through bronze, silver, gold, dbt and a Kafka arm. 7 contracts, 47 checks, one that quarantines bad rows and one that stops the DAG.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://kalyanvenk.com/streamlake">
-<meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="StreamLake - a streaming lakehouse with enforced data contracts">
-<meta name="twitter:description" content="Every hop asserts a contract and fails loudly when the data breaks it. Try the validator live in your browser.">
-<meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
-<link rel="stylesheet" href="assets/style.css?v=6">
-<link rel="stylesheet" href="assets/blueprint.css?v=1">
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://kalyanvenk.com/streamlake">
+  <title>StreamLake · Kalyan Venkatesh</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
+  <meta name="description" content="A streaming lakehouse where every hop checks a data contract and stops the run when the data breaks it.">
+  <script>document.documentElement.setAttribute('data-theme','dark');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/proj.css?v=2">
+  <link rel="stylesheet" href="assets/blueprint.css?v=1">
+  <style>
+/* vars used by the kept validator that proj.css does not define */
+:root { --good: var(--ok); --text-faint: var(--text-dim); --shadow: 0 1px 2px rgba(0,0,0,.3); }
 /* --- data-contract validator, page-specific --- */
 .cd-app{background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);}
 .cd-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;}
@@ -36,6 +27,11 @@
 .cd-chip{font-family:var(--mono);font-size:.76rem;padding:6px 12px;border-radius:999px;border:1px solid var(--border);color:var(--text-dim);background:var(--bg-soft);cursor:pointer;transition:all .15s;}
 .cd-chip:hover{border-color:var(--bad);color:var(--text);}
 .cd-controls{display:flex;gap:12px;margin-top:16px;}
+.cd-btn{font-family:var(--mono);font-size:.8rem;font-weight:600;letter-spacing:.02em;padding:11px 18px;border-radius:var(--radius-sm);border:1px solid var(--border);cursor:pointer;transition:all .15s;}
+.cd-btn.primary{background:var(--accent);color:#141210;border-color:var(--accent);}
+.cd-btn.primary:hover{filter:brightness(1.08);}
+.cd-btn.ghost{background:transparent;color:var(--text);}
+.cd-btn.ghost:hover{border-color:var(--accent);color:var(--head);}
 .cd-out{opacity:0;transform:translateY(8px);transition:opacity .3s ease,transform .3s ease;}
 .cd-out.show{opacity:1;transform:none;}
 .cd-verdict{border-radius:var(--radius-sm);padding:16px 18px;font-size:.95rem;line-height:1.5;color:var(--text);border:1px solid var(--border-soft);}
@@ -59,94 +55,58 @@
 .cd-note{font-size:.8rem;color:var(--text-faint);margin-top:14px;line-height:1.5;}
 .cd-err{font-family:var(--mono);font-size:.8rem;color:var(--bad);margin-top:10px;white-space:pre-wrap;}
 @media(max-width:760px){.cd-grid{grid-template-columns:1fr;}}
-</style>
+  </style>
 </head>
 <body>
-<div class="progress"></div>
+<div class="pwrap">
+  <a class="back" href="/">&larr; Kalyan Venkatesh</a>
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="/" class="brand"><span class="mark">KV</span>Kalyan Venkatesh</a>
-    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <div class="nav-drop">
-        <button class="nav-drop-btn active" aria-expanded="false" aria-haspopup="true">Projects <span class="caret">&#9662;</span></button>
-        <div class="mega" role="menu">
-          <div class="mega-col">
-            <p class="mega-h">Agents &amp; LLM reliability</p>
-            <a href="inference-lens">Inference-Lens <span>judge robustness, live demo</span></a>
-            <a href="secret-agent">secret-agent <span>frameworkless agent runtime</span></a>
-          </div>
-          <div class="mega-col">
-            <p class="mega-h">Experimentation &amp; MLOps</p>
-            <a href="groundtruth">GroundTruth <span>A/B testing, CUPED</span></a>
-            <a href="predictops">PredictOps <span>CI-gated MLOps loop</span></a>
-          </div>
-          <div class="mega-col">
-            <p class="mega-h">Data &amp; systems</p>
-            <a href="streamlake">StreamLake <span>streaming lakehouse, contracts</span></a>
-            <a href="vaultex">vaultex <span>double-entry ledger</span></a>
+  <header class="phero">
+    <h1 class="reveal">StreamLake</h1>
+    <p class="ptag reveal">A streaming lakehouse for NYC taxi data where every hop checks a data contract and stops the run when the data breaks it.</p>
+    <ul class="pstats reveal">
+      <li><b>2.96M</b> trips ingested</li>
+      <li><b>47</b> checks across 7 contracts</li>
+      <li><b>1.30%</b> rows quarantined</li>
+      <li><b>46</b> dbt tests green</li>
+    </ul>
+    <div class="plinks reveal">
+      <a href="https://github.com/kalyan-venk/Streamlake" target="_blank" rel="noopener">GitHub</a>
+      <a href="#try">Try it</a>
+    </div>
+  </header>
+
+  <section class="psec reveal" id="try">
+    <h2>Try it</h2>
+    <p class="ptag" style="margin:0 0 20px;">Edit a <code>silver.trips</code> record or inject a real TLC failure, then validate against the row assertions the Spark engine runs over 2.9M rows.</p>
+    <div class="cd-app">
+      <div class="cd-grid">
+        <div class="cd-pane">
+          <label for="cd-json">silver.trips record (editable JSON)</label>
+          <textarea id="cd-json" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+          <div class="cd-presets" id="cd-presets"><span class="cd-presets-lbl">Or inject a real TLC failure mode:</span></div>
+          <div class="cd-controls">
+            <button id="cd-validate" class="cd-btn primary" type="button">Validate against the contract</button>
+            <button id="cd-reset" class="cd-btn ghost" type="button">Reset</button>
           </div>
         </div>
+        <div class="cd-pane">
+          <label>Contract result</label>
+          <div id="cd-out" class="cd-out"></div>
+        </div>
       </div>
-      <a href="about">About</a>
-      <a href="inference-lens#demo" class="nav-cta">Live demo</a>
-          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
-        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
-      </button>
-</div>
-  </div>
-</nav>
-
-<header class="proj-hero">
-  <div class="wrap">
-    <span class="eyebrow reveal"><span class="blip"></span>Streaming lakehouse &middot; contracts at every hop</span>
-    <h1 class="reveal">StreamLake</h1>
-    <p class="lead reveal d1">Most pipelines fail silently: the job succeeds, the dashboard renders, and the number is wrong because a vendor changed a column or last night's load only got half the rows. StreamLake puts a data contract next to every table, checked before the next hop is allowed to read. One month of NYC taxi trips moves through bronze, silver, gold, dbt and a Kafka arm, and every hop asserts what must hold and stops the run when it does not.</p>
-    <div class="meta reveal d2">
-      <span class="chip">Spark 4</span>
-      <span class="chip">Apache Iceberg</span>
-      <span class="chip">Kafka</span>
-      <span class="chip">dbt</span>
-      <span class="chip">Airflow</span>
-      <span class="chip">Kubernetes</span>
-      <span class="chip">DuckDB / Snowflake</span>
-      <span class="chip">Terraform</span>
     </div>
-    <div class="cta-row reveal d3" style="margin-top:28px;">
-      <a href="#try" class="btn btn-primary">Try the contract validator</a>
-      <a href="https://github.com/kalyan-venk/Streamlake" target="_blank" rel="noopener" class="btn btn-ghost">View on GitHub</a>
-    </div>
-  </div>
-</header>
+  </section>
 
-<section style="padding-top:30px;">
-  <div class="wrap">
-    <div class="stats">
-      <div class="stat reveal"><div class="num">2,964,624</div><div class="lbl">trips ingested, NYC yellow taxi 2024-01</div></div>
-      <div class="stat reveal d1"><div class="num">47</div><div class="lbl">contract checks across 7 contracts</div></div>
-      <div class="stat reveal d2"><div class="num">1.30%</div><div class="lbl">rows quarantined, each with a reason</div></div>
-      <div class="stat reveal d3"><div class="num">46</div><div class="lbl">dbt tests green, incl. cross-engine parity</div></div>
-    </div>
-  </div>
-</section>
-
-<section id="blueprints">
-  <div class="wrap">
-    <p class="kicker reveal">Under the hood</p>
-    <h2 class="section-title reveal">The whole lakehouse, drawn twice</h2>
-    <p class="section-sub reveal">2 live blueprints. One traces the pipeline hop by hop with contracts feeding in from the left. The other maps every file in the repo and how a parquet file becomes a served mart. The moving dots are rows in flight, coloured by whether they cleared the contract.</p>
+  <section class="psec reveal" id="how">
+    <h2>How it works</h2>
+    <p class="ptag" style="margin:0 0 20px;">A live map of the pipeline, hop by hop. Moving dots are rows in flight, coloured by whether they cleared the contract.</p>
 
     <!-- ============================ DIAGRAM 1 ============================ -->
     <div class="bpx" id="system">
       <div class="sec-head">
         <h3><span class="num">01</span>System design, the hops in run order</h3>
-        <p>
-          Read it top to bottom. On the left are the inputs and the <b>contracts</b>, a YAML file per table that states what must hold.
-          The centre spine is the pipeline in run order: ingest to bronze, conform and quarantine and dedup into silver, gold aggregates, the DuckDB warehouse, dbt marts.
-          The amber path at the bottom is the <b>streaming arm</b>: a synthetic Kafka producer that misbehaves on purpose, consumed into its own Iceberg table. The right shows what each hop writes.
-        </p>
+        <p>Read top to bottom. Inputs and contracts on the left, the ingest to marts spine in the centre, Iceberg tables and the dashboard on the right, and the Kafka streaming arm at the bottom.</p>
       </div>
 
       <div class="dgm-frame">
@@ -165,109 +125,21 @@
           <div><span class="k swatch"></span>Hop &middot; table &middot; artifact</div>
         </div>
       </div>
-
-      <div class="bp-notes">
-        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>A contract at every hop</h4>
-          <p>7 contracts, <b>47 checks</b>, run before the next hop reads. An <code>error</code> breach raises and stops the DAG; a <code>warn</code> breach is recorded and surfaced. Last run: 0 errors, 2 warnings.</p></div>
-        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>Quarantine is not failing</h4>
-          <p>Individual bad trips (fares of &minus;$300, dropoffs in 2098) are <b>moved</b> to <code>silver.trips_quarantine</code> with the rule that rejected them. The run fails only if quarantine swallows more than 10% of the month.</p></div>
-        <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>One scan, not N</h4>
-          <p>Every check compiles to a Spark aggregate expression, merged into one <code>df.agg</code>. Silver's 14 assertions over 2.9M rows cost one pass, about <b>2 seconds</b>. A test asserts the single pass.</p></div>
-      </div>
     </div>
+  </section>
 
-    <!-- ============================ DIAGRAM 2 ============================ -->
-    <div class="bpx" id="code">
-      <div class="sec-head">
-        <h3><span class="num">02</span>Code map, every file and the data lineage</h3>
-        <p>
-          Same repo, viewed by file. The centre spine is <b>src/streamlake</b>: the contract engine, the shared transforms, the batch hops and the streaming arm.
-          The right is the <b>data lineage</b>: a parquet file becomes bronze, silver, gold, a DuckDB warehouse, dbt marts, a dashboard, plus the stream's own 1-minute table.
-          Tests, Airflow and infra sit on the left. If a file is in the repo, it is on this map.
-        </p>
-      </div>
-
-      <div class="dgm-frame">
-        <div class="dgm-bar">
-          <span class="tag">code.blueprint</span>
-          <div class="flowsteps" data-steps="code"></div>
-          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
-        </div>
-        <div class="dgm-wrap" id="wrap-code">
-          <svg class="dgm" id="svg-code" role="img" aria-label="Code map of StreamLake: every file with its role, arranged around the data lineage spine from parquet to served marts."></svg>
-        </div>
-        <div class="legend">
-          <div><span class="k data"></span>Data moving through the lineage</div>
-          <div><span class="k out"></span>Conformed, tested, served</div>
-          <div><span class="k swatch"></span>File &middot; module &middot; table</div>
-          <div><span style="font-family:var(--mono);font-size:.8rem;color:var(--text-faint)">italic monospace = a file on disk</span></div>
-        </div>
-      </div>
+  <section class="psec reveal">
+    <h2>Notes</h2>
+    <div class="notes">
+      <div class="note reveal"><b>Error stops, warn surfaces.</b><p>An error breach halts the DAG, so the warehouse keeps serving yesterday's correct data. A warn breach is logged and shown.</p></div>
+      <div class="note reveal"><b>Bad rows are quarantined.</b><p>Bad trips (fares of -$300, dropoffs in 2098) move to <code>silver.trips_quarantine</code> with the rule that caught them. The run fails only past 10% of the month.</p></div>
+      <div class="note reveal"><b>1 scan for the whole batch.</b><p>Every check compiles to a Spark aggregate, merged into one <code>df.agg</code>. Silver's 14 assertions over 2.9M rows cost about 2 seconds.</p></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="try">
-  <div class="wrap">
-    <p class="kicker reveal">Try it live</p>
-    <h2 class="section-title reveal">Break a field, watch the contract catch it</h2>
-    <p class="section-sub reveal">Below is one <code>silver.trips</code> record and the row-level assertions from <code>conf/contracts/silver_trips.yml</code>, ported to run in your browser. Edit a value, or click a preset breakage, then validate. The record passes, or it is rejected with the exact assertion that broke. This is the same logic the Spark engine runs over 2.9M rows.</p>
+  <footer class="pfoot"><a href="/">&larr; Back to all work</a></footer>
+</div>
 
-    <div class="cd-app reveal">
-      <div class="cd-grid">
-        <div class="cd-pane">
-          <label for="cd-json">silver.trips record (editable JSON)</label>
-          <textarea id="cd-json" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
-          <div class="cd-presets" id="cd-presets"><span class="cd-presets-lbl">Or inject a real TLC failure mode:</span></div>
-          <div class="cd-controls">
-            <button id="cd-validate" class="btn btn-primary" type="button">Validate against the contract</button>
-            <button id="cd-reset" class="btn btn-ghost" type="button">Reset</button>
-          </div>
-        </div>
-        <div class="cd-pane">
-          <label>Contract result</label>
-          <div id="cd-out" class="cd-out"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="kicker reveal">Why it holds up</p>
-    <h2 class="section-title reveal">3 decisions in the engine worth stating</h2>
-    <div class="finding-grid" style="grid-template-columns:1fr 1fr;">
-      <div class="finding reveal"><strong>Error stops, warn surfaces.</strong> A breach at <code>error</code> severity raises and the DAG halts, so the warehouse keeps serving yesterday's correct data instead of today's broken data. A <code>warn</code> breach is logged and shown on the dashboard.</div>
-      <div class="finding reveal d1"><strong>Freshness is measured against the logical run time.</strong> A backfill of January 2024 data is not stale because it ran in 2026. The assertion is that the data covers its own period, not the wall clock.</div>
-      <div class="finding reveal d2"><strong>dbt recomputes Spark's gold aggregate.</strong> The same daily number is built twice, in Spark and in warehouse SQL, and a parity test fails the build if the two engines disagree by more than a cent. The duplication is the reconciliation.</div>
-      <div class="finding reveal d3"><strong>The stream arm misbehaves on purpose.</strong> The producer sends 5% of events twice and 3% late. The consumer's 2-minute watermark and dedup removed exactly the 182 injected redeliveries: 4,182 produced, 4,000 counted.</div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap prose">
-    <p class="kicker reveal">Status</p>
-    <h2 class="reveal">What actually ran</h2>
-    <p class="reveal">The batch spine, the Kafka arm, dbt on DuckDB, an Airflow DAG (9 tasks, 66s) and a Kubernetes consumer on kind have all run on a laptop, for free, off the numbers in this repo. The same code points at S3, a real Kafka and Snowflake by changing environment variables, nothing is hardcoded to the local setup. The Snowflake path is written but has not been run against a live account.</p>
-    <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/Streamlake" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="wrap footer-inner">
-    <div class="col">
-      <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
-      <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
-    </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="secret-agent">secret-agent</a><a href="groundtruth">GroundTruth</a><a href="streamlake">StreamLake</a><a href="vaultex">vaultex</a><a href="predictops">PredictOps</a><a href="inference-lens#demo">Live demo</a></div>
-    <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/Streamlake" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
-  </div>
-  <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
-</footer>
-
-<script src="assets/script.js?v=5"></script>
 <script src="assets/blueprint.js?v=2"></script>
 <script src="assets/contract-demo.js?v=1"></script>
 <script>
@@ -297,7 +169,7 @@
     ],
     nodes:[
       {id:"src",kind:"resource",x:20,y:srow(0),w:300,h:84,title:"NYC TLC parquet",sub:"data/raw/",stripe:"#818cf8",lines:[
-        {t:"2,964,624 trips · 48 MB · 2024-01"},{t:"one month of yellow taxi"}]},
+        {t:"2,964,624 trips · 48 MB · 2024-01"},{t:"1 month of yellow taxi"}]},
       {id:"ctr",kind:"config",x:20,y:srow(1)+6,w:300,h:104,title:"conf/contracts/*.yml",sub:"7 specs · 47 checks",stripe:"#5eead4",lines:[
         {t:"schema (strict) + row assertions"},{t:"error stops the DAG · warn surfaces"},{t:"read by every hop before it advances"}]},
       {id:"prod",kind:"data",x:20,y:srow(6),w:300,h:84,title:"synthetic Kafka producer",sub:"stream/producer",lines:[
@@ -306,7 +178,7 @@
       {id:"s1",kind:"stage",x:470,y:srow(0),w:300,h:88,tag:"01",title:"Ingest → bronze",sub:"batch/ingest · bronze",lines:[
         {t:"faithful copy + lineage columns"},{t:"trip_id, source_file, batch_id, ingested_at"}]},
       {id:"s2",kind:"stageKey",x:470,y:srow(1),w:300,h:112,tag:"02",title:"Silver",sub:"conform · quarantine · dedup",stripe:"#818cf8",lines:[
-        {t:"14 contract checks, one df.agg pass"},{t:"dedup on trip_id, join the zone dim"},{t:"2,926,133 rows · 38,491 quarantined",cls:"em-good"}]},
+        {t:"14 contract checks, 1 df.agg pass"},{t:"dedup on trip_id, join the zone dim"},{t:"2,926,133 rows · 38,491 quarantined",cls:"em-good"}]},
       {id:"s3",kind:"stage",x:470,y:srow(2)+8,w:300,h:96,tag:"03",title:"Gold aggregates",sub:"batch/gold + export",lines:[
         {t:"6,940 zone-days · 4,475 borough-hours"},{t:"Iceberg, partitioned by day"}]},
       {id:"s4",kind:"stageKey",x:470,y:srow(4),w:300,h:88,tag:"04",title:"Warehouse",sub:"DuckDB (or Snowflake)",stripe:"#4ade80",lines:[
@@ -354,81 +226,11 @@
     ]
   };
 
-  /* =====================================================================
-     SPEC 2 - CODE MAP (files around the data lineage spine)
-     ===================================================================== */
-  function crow(i){ return 92 + i*120; }
-  var CX=430, CW=250, AX=760, AW=250;
-  var code={
-    w:1240, h:1180, r:4.5, every:720,
-    steps:[
-      {label:"parquet",target:"csv",color:"#818cf8"},
-      {label:"contracts/",target:"eng",color:"#5eead4"},
-      {label:"batch/",target:"batch",color:"#818cf8"},
-      {label:"silver.trips",target:"silver",color:"#4ade80"},
-      {label:"dbt marts",target:"marts",color:"#4ade80"},
-      {label:"stream/",target:"stream",color:"#fbbf24"}
-    ],
-    bands:[
-      {x:20,y:60,w:360,h:1060,label:"TESTS · AIRFLOW · INFRA",stroke:"#3a381f"},
-      {x:CX-14,y:60,w:CW+28,h:1060,label:"src/streamlake",stroke:"#2b3350"},
-      {x:AX-14,y:60,w:AW+28,h:1060,label:"DATA LINEAGE",stroke:"#24304a"}
-    ],
-    nodes:[
-      {id:"conf",kind:"config",x:CX,y:crow(0),w:CW,h:72,title:"conf/contracts/",titleSize:14,stripe:"#5eead4",lines:[
-        {t:"7 YAML specs · 47 checks"}]},
-      {id:"eng",kind:"module",x:CX,y:crow(1),w:CW,h:126,title:"contracts/ (the engine)",titleSize:13.5,stripe:"#5eead4",lines:[
-        {t:"spec.py : parse the YAML"},{t:"checks.py : compile to aggregates"},{t:"engine.py : one df.agg runner"},{t:"summary.py : report + severity"}]},
-      {id:"tr",kind:"module",x:CX,y:crow(3),w:CW,h:70,title:"transforms.py",titleSize:14,stripe:"#818cf8",lines:[
-        {t:"one definition of a valid trip"}]},
-      {id:"batch",kind:"module",x:CX,y:crow(4),w:CW,h:110,title:"batch/",titleSize:14,stripe:"#818cf8",lines:[
-        {t:"ingest · bronze · silver"},{t:"gold · export"}]},
-      {id:"stream",kind:"module",x:CX,y:crow(6),w:CW,h:88,title:"stream/",titleSize:14,stripe:"#fbbf24",lines:[
-        {t:"producer : misbehaves on purpose"},{t:"consumer : watermark + MERGE"}]},
-
-      {id:"tests",kind:"notebook",x:20,y:crow(0),w:360,h:64,title:"tests/",titleSize:12.5,lines:[
-        {t:"36 unit tests on real local Spark"}]},
-      {id:"airflow",kind:"notebook",x:20,y:crow(2),w:360,h:72,title:"airflow/dags/",titleSize:12.5,lines:[
-        {t:"streamlake_batch : 9 tasks, 66s"},{t:"+ streaming supervisor DAG"}]},
-      {id:"infra",kind:"notebook",x:20,y:crow(4),w:360,h:64,title:"infra/",titleSize:12.5,lines:[
-        {t:"Terraform module + kustomize (kind)"}]},
-      {id:"docker",kind:"notebook",x:20,y:crow(5)+2,w:360,h:64,title:"docker/",titleSize:12.5,lines:[
-        {t:"Kafka/MinIO compose + consumer image"}]},
-
-      {id:"csv",kind:"data",x:AX,y:crow(0),w:AW,h:62,title:"data/raw/*.parquet",titleSize:11.5,sub:"NYC TLC",lines:[]},
-      {id:"bronze",kind:"data",x:AX,y:crow(1),w:AW,h:64,title:"bronze.trips_raw",titleSize:12.5,sub:"as landed",lines:[]},
-      {id:"silver",kind:"result",x:AX,y:crow(2),w:AW,h:84,title:"silver.trips",titleSize:13,stripe:"#4ade80",lines:[
-        {t:"2,926,133 rows",mono:true,size:10.5},{t:"+ trips_quarantine",mono:true,size:10.5}]},
-      {id:"gold",kind:"data",x:AX,y:crow(3),w:AW,h:72,title:"gold.* tables",titleSize:13,sub:"lake serving",lines:[{t:"zone / borough / payment"}]},
-      {id:"duck",kind:"data",x:AX,y:crow(4),w:AW,h:70,title:"DuckDB warehouse",titleSize:12.5,sub:"warehouse/",lines:[]},
-      {id:"marts",kind:"result",x:AX,y:crow(5),w:AW,h:78,title:"dbt marts",titleSize:13,sub:"dbt/streamlake",stripe:"#4ade80",lines:[
-        {t:"5 marts · 46 tests",mono:true,size:10.5},{t:"cross-engine parity test",mono:true,size:10}]},
-      {id:"dash",kind:"deploy",x:AX,y:crow(6),w:AW,h:64,title:"dashboard",titleSize:13,sub:"dashboard/build/",lines:[{t:"index.html",mono:true,size:11}]},
-      {id:"stab",kind:"result",x:AX,y:crow(7),w:AW,h:66,title:"stream.trip_metrics_1m",titleSize:11,stripe:"#fbbf24",sub:"1-min windows",lines:[]}
-    ],
-    edges:[
-      {from:"csv",to:"bronze",stroke:"#3b4570"},{from:"bronze",to:"silver",stroke:"#3b4570"},
-      {from:"silver",to:"gold",stroke:"#2c5148"},{from:"gold",to:"duck",stroke:"#2c5148"},
-      {from:"duck",to:"marts",stroke:"#2c5148"},{from:"marts",to:"dash",stroke:"#2c5148"},
-      {from:"conf",to:"eng",stroke:"#2c5148",dash:"5 5"},
-      {from:"batch",to:"silver",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"tr",to:"silver",fromSide:"r",toSide:"l",stroke:"#2b3350"},
-      {from:"eng",to:"silver",fromSide:"r",toSide:"l",stroke:"#2c5148",dash:"5 5"},
-      {from:"stream",to:"stab",fromSide:"r",toSide:"l",stroke:"#5b4a24"},
-      {from:"tests",to:"eng",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
-      {from:"airflow",to:"batch",fromSide:"r",toSide:"l",stroke:"#4d4a2a"}
-    ],
-    flow:[
-      {paths:[0,1,2,3,4,5],cls:"data",weight:6,dur:9600,splits:[{at:2,cls:"out"}]},
-      {paths:[7],cls:"out",weight:2,dur:1500},
-      {paths:[8],cls:"out",weight:2,dur:1500},
-      {paths:[10],cls:"adv",weight:2,dur:1600},
-      {paths:[6],cls:"adv",weight:1,dur:1600}
-    ]
-  };
-
   KVBlueprint.mount("svg-system","wrap-system",sys,"system");
-  KVBlueprint.mount("svg-code","wrap-code",code,"code");
+
+  /* reveal on scroll */
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 })();
 </script>
 </body>
