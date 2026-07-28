@@ -28,7 +28,7 @@
   --warn: #e0b877;
   --bad: #e0857a;
   --mono: 'JetBrains Mono', ui-monospace, monospace;
-  --maxw: 820px;
+  --maxw: 1080px;
 }
 
 * { box-sizing: border-box; }
@@ -53,7 +53,10 @@ a:hover { text-decoration: underline; }
 
 .phero { margin: 48px 0 0; }
 .phero h1 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--head); margin: 0; }
-.ptag { margin: 12px 0 0; font-size: 1.1rem; max-width: 620px; }
+.phero h1 .gh { display: inline-flex; vertical-align: middle; margin-left: 14px; color: var(--text-dim); }
+.phero h1 .gh:hover { color: var(--accent); }
+.phero h1 .gh svg { width: 0.62em; height: 0.62em; }
+.ptag { margin: 12px 0 0; font-size: 1.1rem; max-width: 680px; }
 .pstats { display: flex; flex-wrap: wrap; gap: 28px; margin: 26px 0 0; padding: 0; list-style: none; }
 .pstats li { font-size: 0.9rem; color: var(--text-dim); }
 .pstats b { display: block; font-family: var(--mono); font-size: 1.35rem; font-weight: 600; color: var(--head); letter-spacing: -0.01em; }
@@ -65,7 +68,7 @@ a:hover { text-decoration: underline; }
 .panel { background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
 
 .notes { display: grid; gap: 14px; }
-.note { border-left: 2px solid var(--accent); padding: 2px 0 2px 18px; }
+.note { border-left: 2px solid var(--accent); padding: 2px 0 2px 18px; max-width: 720px; }
 .note b { color: var(--head); font-weight: 600; }
 .note p { margin: 4px 0 0; font-size: 0.95rem; }
 
