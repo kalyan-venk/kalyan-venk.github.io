@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://kalyanvenk.com/vaultex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalyan's work</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
+<meta name="description" content="A concurrency-safe double-entry payments ledger in Java and Spring Boot. Cannot double-spend, cannot lose a cent to a retry, and every balance rebuilds from the ledger. Post a balanced transfer in your browser.">
+<meta property="og:title" content="Vaultex - a payments ledger that cannot double-spend">
+<meta property="og:description" content="One debit and one credit per transfer, inside one database transaction. 50-thread race proofs, idempotent retries, and a fraud model that is honest about not working.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kalyanvenk.com/vaultex">
+<meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Vaultex - a payments ledger that cannot double-spend">
+<meta name="twitter:description" content="One debit and one credit per transfer, inside one transaction. Race proofs, idempotent retries, and a fraud model honest about not working.">
+<meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="stylesheet" href="assets/style.css?v=6">
+<link rel="stylesheet" href="assets/blueprint.css?v=1">
+<style>
+/* ---- Ledger interactive (page-specific, scoped under #lgr) ---- */
+#lgr { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); }
+.lgr-accounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
+.lgr-acct { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; text-align: center; }
+.lgr-acct-name { font-weight: 600; font-size: .9rem; color: var(--text-dim); }
+.lgr-acct-bal { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--text); margin: 4px 0 2px; letter-spacing: -.5px; }
+.lgr-acct-cur { font-size: .72rem; letter-spacing: .08em; color: var(--text-faint); }
+.lgr-form { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+.lgr-form select, .lgr-form input { background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font: inherit; font-size: .95rem; outline: none; }
+.lgr-form select:focus, .lgr-form input:focus { border-color: var(--accent); }
+.lgr-form input#lgrAmt { width: 120px; font-family: var(--mono); text-align: right; }
+.lgr-arrow { color: var(--text-faint); font-size: 1.1rem; }
+.lgr-form .btn { padding: 10px 18px; }
+.lgr-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.lgr-presets .btn { padding: 7px 13px; font-size: .82rem; }
+.lgr-msg { font-size: .92rem; line-height: 1.55; border-radius: var(--radius-sm); padding: 0 14px; max-height: 0; overflow: hidden; opacity: 0; transition: max-height .25s ease, opacity .25s ease, padding .25s ease; }
+.lgr-msg.show { max-height: 200px; opacity: 1; padding: 12px 14px; margin-bottom: 16px; }
+.lgr-msg.ok { background: rgba(74,222,128,.10); border: 1px solid rgba(74,222,128,.35); color: var(--text); }
+.lgr-msg.err { background: rgba(251,113,133,.10); border: 1px solid rgba(251,113,133,.38); color: var(--text); }
+.lgr-invariant { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 18px; transition: border-color .2s, background .2s; }
+.lgr-invariant.ok { border-color: rgba(74,222,128,.4); }
+.lgr-invariant.flash { background: rgba(251,113,133,.14); border-color: rgba(251,113,133,.6); }
+.lgr-inv-row { display: flex; flex-direction: column; }
+.lgr-inv-row span { font-size: .72rem; letter-spacing: .05em; color: var(--text-faint); text-transform: uppercase; }
+.lgr-inv-row b { font-family: var(--mono); font-size: 1.15rem; color: var(--text); }
+.lgr-inv-eq { font-size: 1.4rem; color: var(--good); font-weight: 700; }
+.lgr-invariant.bad .lgr-inv-eq { color: var(--bad); }
+.lgr-inv-net { margin-left: auto; font-size: .88rem; color: var(--text-dim); }
+.lgr-inv-net b { font-family: var(--mono); color: var(--text); }
+.lgr-tick { display: inline-block; margin-left: 8px; font-family: var(--mono); font-size: .78rem; color: var(--good); }
+.lgr-cross { display: inline-block; margin-left: 8px; font-family: var(--mono); font-size: .78rem; color: var(--bad); }
+.lgr-book { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+.lgr-book table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.lgr-book thead th { text-align: left; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-faint); padding: 10px 16px; background: var(--bg-soft); border-bottom: 1px solid var(--border); }
+.lgr-book td { padding: 10px 16px; border-bottom: 1px solid var(--border-soft); color: var(--text-dim); }
+.lgr-book tbody tr:last-child td { border-bottom: none; }
+.lgr-tid { font-family: var(--mono); color: var(--text-faint); }
+.lgr-num { font-family: var(--mono); text-align: right; color: var(--text); }
+.lgr-dir { font-family: var(--mono); font-size: .74rem; padding: 2px 8px; border-radius: 20px; letter-spacing: .04em; }
+.lgr-debit { background: rgba(251,113,133,.14); color: var(--bad); }
+.lgr-credit { background: rgba(74,222,128,.14); color: var(--good); }
+.lgr-empty td { text-align: center; color: var(--text-faint); font-style: italic; padding: 22px 16px; }
+@media (max-width: 640px) { .lgr-accounts { grid-template-columns: 1fr; } .lgr-inv-net { margin-left: 0; width: 100%; } }
+</style>
+</head>
+<body>
+<div class="progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark">KV</span>Kalyan Venkatesh</a>
+    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <div class="nav-drop">
+        <button class="nav-drop-btn active" aria-expanded="false" aria-haspopup="true">Projects <span class="caret">&#9662;</span></button>
+        <div class="mega" role="menu">
+          <div class="mega-col">
+            <p class="mega-h">Agents &amp; LLM reliability</p>
+            <a href="inference-lens">Inference-Lens <span>judge robustness, live demo</span></a>
+            <a href="secret-agent">secret-agent <span>frameworkless agent runtime</span></a>
+          </div>
+          <div class="mega-col">
+            <p class="mega-h">Experimentation &amp; MLOps</p>
+            <a href="groundtruth">GroundTruth <span>A/B testing, CUPED</span></a>
+            <a href="predictops">PredictOps <span>CI-gated MLOps loop</span></a>
+          </div>
+          <div class="mega-col">
+            <p class="mega-h">Data &amp; systems</p>
+            <a href="streamlake">StreamLake <span>streaming lakehouse, contracts</span></a>
+            <a href="vaultex">vaultex <span>double-entry ledger</span></a>
+          </div>
+        </div>
+      </div>
+      <a href="about">About</a>
+      <a href="inference-lens#demo" class="nav-cta">Live demo</a>
+          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
+        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
+      </button>
+</div>
+  </div>
+</nav>
+
+<header class="proj-hero">
+  <div class="wrap">
+    <span class="eyebrow reveal"><span class="blip"></span>Payments ledger &middot; concurrency-safe &amp; double-entry</span>
+    <h1 class="reveal">Vaultex</h1>
+    <p class="lead reveal d1">A payments service that cannot double-spend and cannot lose a cent to a retry. Every transfer posts one debit and one credit of equal amount inside a single database transaction, so the whole ledger nets to zero and any balance can be rebuilt from it. The interesting part is not the happy path. It is what happens when 50 threads spend the same money at once, when a load balancer replays the same request 20 times, and when the shipped fraud model turns out to be honestly useless.</p>
+    <div class="meta reveal d2">
+      <span class="chip">Java 17</span>
+      <span class="chip">Spring Boot 3</span>
+      <span class="chip">PostgreSQL 16</span>
+      <span class="chip">Flyway</span>
+      <span class="chip">Testcontainers</span>
+      <span class="chip">XGBoost4J</span>
+    </div>
+    <div class="cta-row reveal d3" style="margin-top:28px;">
+      <a href="#demo" class="btn btn-primary">Post a transfer &rarr;</a>
+      <a href="https://github.com/kalyan-venk/vaultex" target="_blank" rel="noopener" class="btn btn-ghost">View on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:30px;">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat reveal"><div class="num"><span data-count="4">0</span></div><div class="lbl">ledger invariants, held under 50-thread races</div></div>
+      <div class="stat reveal d1"><div class="num"><span data-count="86">0</span></div><div class="lbl">tests, mostly on real PostgreSQL via Testcontainers</div></div>
+      <div class="stat reveal d2"><div class="num"><span data-count="0">0</span></div><div class="lbl">cents lost across 56,523 posted transfers under load</div></div>
+      <div class="stat reveal d3"><div class="num"><span data-count="0.0041" data-dp="4">0</span></div><div class="lbl">honest fraud AUPRC, shipped to show the path, not to block</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">The transfer path</p>
+    <h2 class="section-title reveal">One transfer, one transaction, one debit and one credit</h2>
+    <p class="section-sub reveal">A request carries an <code>X-Api-Key</code> and an <code>Idempotency-Key</code>. If the key was seen before, the service returns the stored outcome instead of moving money again. If it is new, a separate <code>TransferExecutor</code> bean opens a fresh transaction, checks status, currency and funds under an optimistic version lock, scores the amount for fraud in the same JVM, then writes the debit, the credit, both cached balances and the audit row as one commit. Everything happens together or nothing does.</p>
+    <div class="pipeline reveal">
+      <div class="flow">
+        <div class="node"><div class="nm">API + auth</div><div class="role">X-Api-Key, RFC 7807 errors</div></div>
+        <span class="edge">&rarr;</span>
+        <div class="node accent"><div class="nm">Idempotency gate</div><div class="role">UNIQUE key, replay or 409</div></div>
+        <span class="edge">&rarr;</span>
+        <div class="node accent"><div class="nm">Executor</div><div class="role">@Transactional, @Version</div></div>
+        <span class="edge">&rarr;</span>
+        <div class="node gate"><div class="nm">Post + audit</div><div class="role">1 DEBIT + 1 CREDIT</div></div>
+      </div>
+    </div>
+    <div class="finding reveal" style="margin-top:20px;"><strong>The version check is what stops the overdraft, not the balance read.</strong> In the 50-thread race, every thread reads a balance that says yes. Exactly 25 post and exactly 25 fail with <code>INSUFFICIENT_FUNDS</code>, the source lands on <code>0.00</code>, and the ledger holds exactly 50 entries. Delete <code>@Version</code> and rerun: all 50 post, and an account funded with 250.00 records 500.00 leaving it.</div>
+  </div>
+</section>
+
+<section id="blueprints">
+  <div class="wrap">
+    <p class="kicker reveal">Under the hood</p>
+    <h2 class="section-title reveal">The whole service, drawn out</h2>
+    <p class="section-sub reveal">2 live blueprints. One follows a transfer down the path in run order. The other maps every package in the source and how a request becomes ledger rows. The moving dots are data in flight, coloured by what kind of data it is.</p>
+
+    <!-- ============================ DIAGRAM 1 ============================ -->
+    <div class="bpx" id="system">
+      <div class="sec-head">
+        <h3><span class="num">01</span>System design, one transfer in run order</h3>
+        <p>
+          Read it top to bottom. On the left are the request and the things it reads: the API key, the exported fraud model, and PostgreSQL. The centre spine is the
+          <b>transfer path</b> in order: auth, the idempotency gate, the transactional executor, the inline fraud score, the double-entry post, the audit write, and reconciliation.
+          The right shows the state each stage writes. The amber path is the fraud branch, which blocks and audits without ever touching a balance.
+        </p>
+      </div>
+
+      <div class="dgm-frame">
+        <div class="dgm-bar">
+          <span class="tag">system.blueprint</span>
+          <div class="flowsteps" data-steps="system"></div>
+          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
+        </div>
+        <div class="dgm-wrap" id="wrap-system">
+          <svg class="dgm" id="svg-system" role="img" aria-label="System design of Vaultex as a top-to-bottom transfer path with the request and its inputs on the left and database state produced on the right."></svg>
+        </div>
+        <div class="legend">
+          <div><span class="k data"></span>Request &amp; money, in flight</div>
+          <div><span class="k adv"></span>Fraud block (score &ge; 0.85)</div>
+          <div><span class="k out"></span>Posted &amp; reconciled</div>
+          <div><span class="k swatch"></span>Stage &middot; table &middot; result</div>
+        </div>
+      </div>
+
+      <div class="bp-notes">
+        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>One commit or none</h4>
+          <p>The transfer row, both ledger entries, both cached balances and the audit row commit together. The <b>4</b> invariants hold across every row, checked by an <code>@AfterEach</code> on every money-moving test.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>The fraud branch is a no-op on the ledger</h4>
+          <p>A score at or above <b>0.85</b> returns <code>422 BLOCKED_FRAUD</code>, writes an audit row, and posts nothing. The block path is auditable even though the model behind it should not decide anything.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>Balances rebuild from the ledger</h4>
+          <p><code>GET /reconciliation</code> recomputes every balance as opening balance plus the signed entries. Across a load run it rebuilt <b>100</b> accounts from <b>113,046</b> entries with zero drift.</p></div>
+      </div>
+    </div>
+
+    <!-- ============================ DIAGRAM 2 ============================ -->
+    <div class="bpx" id="code">
+      <div class="sec-head">
+        <h3><span class="num">02</span>Code map, every package and the request lineage</h3>
+        <p>
+          Same service, viewed by file instead of by stage. The centre column is the source under <b>com.vaultex</b>, one box per package. The right spine is the
+          <b>request lineage</b>: a POST becomes a transfer row, a fraud score, a pair of ledger entries, a cached balance, an audit row, then a reconciliation read.
+          The proof tests, CI and load script sit on the left; migrations, the build and the model sit on the right. If a package exists in the source, it is on this map.
+        </p>
+      </div>
+
+      <div class="dgm-frame">
+        <div class="dgm-bar">
+          <span class="tag">code.blueprint</span>
+          <div class="flowsteps" data-steps="code"></div>
+          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
+        </div>
+        <div class="dgm-wrap" id="wrap-code">
+          <svg class="dgm" id="svg-code" role="img" aria-label="Code map of Vaultex: every package with its role, arranged around the request-to-ledger lineage spine."></svg>
+        </div>
+        <div class="legend">
+          <div><span class="k data"></span>Request moving through the lineage</div>
+          <div><span class="k out"></span>Posted, cached, reconciled</div>
+          <div><span class="k swatch"></span>Package &middot; table &middot; result</div>
+          <div><span style="font-family:var(--mono);font-size:.8rem;color:var(--text-faint)">italic monospace = a file on disk</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ INTERACTIVE ============================ -->
+<section id="demo">
+  <div class="wrap">
+    <p class="kicker reveal">Try it live</p>
+    <h2 class="section-title reveal">Post to a double-entry ledger, in your browser</h2>
+    <p class="section-sub reveal">This is an in-memory version of the same rule the service enforces. Post a transfer and it writes one DEBIT and one CREDIT of equal amount, updates both balances, and keeps the ledger summing to 0.00. The presets show the guards: an unbalanced pair is rejected on integrity, and overspending an account fails on funds. Nothing here talks to a server.</p>
+
+    <div class="reveal" id="lgr">
+      <div class="lgr-accounts" id="lgrAccounts"></div>
+
+      <div class="lgr-form">
+        <select id="lgrFrom" aria-label="From account"></select>
+        <span class="lgr-arrow">&rarr;</span>
+        <select id="lgrTo" aria-label="To account"></select>
+        <input id="lgrAmt" type="number" step="0.01" min="0" value="25.00" aria-label="Amount">
+        <button id="lgrPost" class="btn btn-primary">Post transfer</button>
+      </div>
+
+      <div class="lgr-presets">
+        <button data-preset="ok" class="btn btn-ghost">Balanced 25.00</button>
+        <button data-preset="unbalanced" class="btn btn-ghost">Post an unbalanced pair</button>
+        <button data-preset="overdraft" class="btn btn-ghost">Overspend Grace</button>
+        <button data-preset="reset" class="btn btn-ghost">Reset book</button>
+      </div>
+
+      <div id="lgrMsg" class="lgr-msg"></div>
+      <div id="lgrInv" class="lgr-invariant ok"></div>
+
+      <div class="lgr-book" id="lgrBook">
+        <table>
+          <thead><tr><th>Transfer</th><th>Account</th><th>Direction</th><th>Signed amount</th></tr></thead>
+          <tbody id="lgrRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">Three things worth knowing</p>
+    <h2 class="section-title reveal">What has teeth, and what is honest about not working</h2>
+    <div class="2-col">
+      <div class="finding reveal" style="align-self:start;"><strong>One unique index closes the retry window.</strong> 20 copies of one transfer arrive at once, and the account can afford all 20. Exactly 1 transfer row is written, 25.00 moves rather than 500.00, and all 20 responses carry the same transfer id. Drop the <code>UNIQUE (idempotency_key)</code> constraint and all 20 post as distinct transfers.</div>
+      <div class="finding reveal" style="align-self:start;"><strong>The fraud model ships broken, on purpose.</strong> Its honest AUPRC is <b>0.0041</b>, against 0.784 for a reference model built on the ULB features no live system can compute. At the shipped threshold it blocks 169 legitimate transfers for every fraud it catches, so <code>99.99</code> is blocked and <code>100.00</code> posts. It is wired in to demonstrate the inline scoring and the audited block path, not to decide anything.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap prose">
+    <p class="kicker reveal">Why this project exists</p>
+    <h2 class="reveal">The correctness is the whole point</h2>
+    <p class="reveal">Most portfolio payment demos post to a balance column and call it done. This one is built around the two failures that actually cost money: spending the same balance twice, and paying twice for one retried request. Both are proven by tests that run 3 times per build against a real PostgreSQL 16 started by Testcontainers, because a concurrency test that only passes once has told you almost nothing, and the assertions check the exact split rather than roughly half. The fraud model is included with the same honesty. It measures its own AUPRC on a split that does not leak, reports that the number is near zero, and says out loud that the right posture for a control this weak is a human review queue, not an automatic block.</p>
+    <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/vaultex" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="col">
+      <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
+      <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
+    </div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="secret-agent">secret-agent</a><a href="groundtruth">GroundTruth</a><a href="streamlake">StreamLake</a><a href="vaultex">vaultex</a><a href="predictops">PredictOps</a><a href="inference-lens#demo">Live demo</a></div>
+    <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/vaultex" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
+  </div>
+  <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
+</footer>
+
+<script src="assets/script.js?v=5"></script>
+<script src="assets/blueprint.js?v=2"></script>
+<script src="assets/ledger.js?v=1"></script>
+<script>
+/* Diagram specs for Vaultex. The engine that draws them is shared
+   (assets/blueprint.js); only this data is per-page. */
+(function(){
+  "use strict";
+  /* =====================================================================
+     SPEC 1 - SYSTEM DESIGN (a transfer in run order)
+     3 columns: request + inputs (left) · transfer path (centre) · state (right)
+     ===================================================================== */
+  function srow(i){ return 96 + i*128; }
+  var sys={
+    w:1220, h:1020, r:5, every:760,
+    steps:[
+      {label:"API + auth",target:"s1",color:"#818cf8"},
+      {label:"Idempotency",target:"s2",color:"#818cf8"},
+      {label:"Executor",target:"s3",color:"#818cf8"},
+      {label:"Fraud gate",target:"s4",color:"#fbbf24"},
+      {label:"Post",target:"s5",color:"#4ade80"},
+      {label:"Audit",target:"s6",color:"#4ade80"},
+      {label:"Reconcile",target:"s7",color:"#4ade80"}
+    ],
+    bands:[
+      {x:20,y:60,w:300,h:900,label:"REQUEST + INPUTS",stroke:"#20283f"},
+      {x:450,y:60,w:340,h:900,label:"THE TRANSFER PATH",stroke:"#2a2f52"},
+      {x:900,y:60,w:300,h:900,label:"DATABASE STATE",stroke:"#24304a"}
+    ],
+    nodes:[
+      {id:"client",kind:"resource",x:20,y:srow(0),w:300,h:84,title:"API client",sub:"POST /api/v1/transfers",stripe:"#818cf8",lines:[
+        {t:"X-Api-Key + Idempotency-Key"},{t:"from, to, amount, currency"}]},
+      {id:"model",kind:"data",x:20,y:srow(3),w:300,h:84,title:"fraud.json",sub:"XGBoost4J, in-JVM",lines:[
+        {t:"exported by ml/train.py"},{t:"a method call, no network"}]},
+      {id:"pg",kind:"data",x:20,y:srow(5),w:300,h:80,title:"PostgreSQL 16",sub:"Flyway V1-V4",lines:[
+        {t:"accounts, transfers, ledger, audit"},{t:"UNIQUE(idempotency_key)"}]},
+
+      {id:"s1",kind:"stage",x:470,y:srow(0),w:300,h:84,tag:"01",title:"API + auth",sub:"ApiKeyFilter",lines:[
+        {t:"constant-time X-Api-Key check"},{t:"RFC 7807 problem-detail errors"}]},
+      {id:"s2",kind:"stageKey",x:470,y:srow(1),w:300,h:104,tag:"02",title:"Idempotency gate",sub:"TransferService",stripe:"#818cf8",lines:[
+        {t:"new key: start a fresh transaction"},{t:"same key + body: replay stored outcome"},{t:"same key + different body: 409"}]},
+      {id:"s3",kind:"stage",x:470,y:srow(2),w:300,h:96,tag:"03",title:"Executor @Transactional",sub:"TransferExecutor (own bean)",lines:[
+        {t:"check status, currency, funds"},{t:"@Version optimistic lock"}]},
+      {id:"s4",kind:"gate",x:470,y:srow(3),w:300,h:96,tag:"04",title:"Fraud score inline",sub:"FraudScoringService",stripe:"#fbbf24",lines:[
+        {t:"score ≥ 0.85 → 422 BLOCKED_FRAUD",cls:"em-warn"},{t:"ledger no-op, still audited"}]},
+      {id:"s5",kind:"stageKey",x:470,y:srow(4),w:300,h:104,tag:"05",title:"Post double entry",sub:"LedgerService",stripe:"#4ade80",lines:[
+        {t:"1 DEBIT + 1 CREDIT of equal amount",cls:"em-good"},{t:"write both cached balances"},{t:"same commit, immutable rows"}]},
+      {id:"s6",kind:"stage",x:470,y:srow(5),w:300,h:88,tag:"06",title:"Audit",sub:"AuditService",lines:[
+        {t:"every attempt logged"},{t:"block and post both recorded"}]},
+      {id:"s7",kind:"gate",x:470,y:srow(6),w:300,h:88,tag:"07",title:"Reconciliation",sub:"GET /reconciliation",stripe:"#5eead4",lines:[
+        {t:"rebuild balances from the ledger"},{t:"balanced: true, zero drift"}]},
+
+      {id:"aTxn",kind:"artifact",x:900,y:srow(1),w:300,h:88,title:"transfers + accounts",sub:"versioned rows",lines:[
+        {t:"1 transfer row per key",mono:true,size:11},{t:"@Version on account balance",mono:true,size:11}]},
+      {id:"aBlock",kind:"result",x:900,y:srow(3),w:300,h:110,title:"the honest result",titleSize:14,stripe:"#fbbf24",lines:[
+        {t:"honest fraud AUPRC 0.0041",cls:"em-warn"},
+        {t:"169 false blocks per catch"},
+        {t:"99.99 blocked, 100.00 posts",mono:true,size:11}]},
+      {id:"aLedger",kind:"result",x:900,y:srow(4),w:300,h:92,title:"ledger_entries",titleSize:14,stripe:"#4ade80",lines:[
+        {t:"immutable, 2 per transfer",cls:"em-good"},{t:"whole table nets to 0.00"}]},
+      {id:"aAudit",kind:"data",x:900,y:srow(5),w:300,h:80,title:"audit_log",sub:"append-only",lines:[
+        {t:"POSTED and BLOCKED_FRAUD"}]},
+      {id:"aRec",kind:"deploy",x:900,y:srow(6),w:300,h:80,title:"balanced: true",sub:"reconciliation",lines:[
+        {t:"100 accounts, 0 drift"}]}
+    ],
+    edges:[
+      {from:"s1",to:"s2",stroke:"#3b4570"},{from:"s2",to:"s3",stroke:"#3b4570"},{from:"s3",to:"s4",stroke:"#3b4570"},
+      {from:"s4",to:"s5",stroke:"#2c5148"},{from:"s5",to:"s6",stroke:"#2c5148"},{from:"s6",to:"s7",stroke:"#2c5148"},
+      {from:"client",to:"s1",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"model",to:"s4",fromSide:"r",toSide:"l",stroke:"#5b4a24",dash:"5 5"},
+      {from:"pg",to:"s5",fromSide:"r",toSide:"l",stroke:"#2c3450",dash:"5 5"},
+      {from:"s3",to:"aTxn",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s4",to:"aBlock",fromSide:"r",toSide:"l",stroke:"#5b4a24"},
+      {from:"s5",to:"aLedger",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"s6",to:"aAudit",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s7",to:"aRec",fromSide:"r",toSide:"l",stroke:"#2c5148"}
+    ],
+    flow:[
+      {paths:[0,1,2,3,4,5],cls:"data",weight:6,dur:8600,splits:[{at:3,cls:"out"}]},
+      {paths:[6],cls:"data",weight:2,dur:1600},
+      {paths:[7],cls:"adv",weight:1,dur:1500},
+      {paths:[9],cls:"data",weight:1,dur:1500},
+      {paths:[10],cls:"adv",weight:1,dur:1500},
+      {paths:[11],cls:"out",weight:2,dur:1500},
+      {paths:[12],cls:"out",weight:1,dur:1500},
+      {paths:[13],cls:"out",weight:2,dur:1500}
+    ]
+  };
+
+  /* =====================================================================
+     SPEC 2 - CODE MAP (packages + request lineage)
+     ===================================================================== */
+  function crow(i){ return 92 + i*120; }
+  var CX=430, CW=250, AX=760, AW=250;
+  var code={
+    w:1240, h:1000, r:4.5, every:720,
+    steps:[
+      {label:"POST",target:"r0",color:"#818cf8"},
+      {label:"transfer/",target:"mtransfer",color:"#818cf8"},
+      {label:"fraud/",target:"mfraud",color:"#fbbf24"},
+      {label:"ledger/",target:"mledger",color:"#4ade80"},
+      {label:"balance",target:"r3",color:"#4ade80"},
+      {label:"reconcile",target:"r5",color:"#4ade80"}
+    ],
+    bands:[
+      {x:20,y:60,w:360,h:900,label:"PROOF TESTS · CI · LOAD",stroke:"#3a381f"},
+      {x:CX-14,y:60,w:CW+28,h:900,label:"com.vaultex",stroke:"#2b3350"},
+      {x:AX-14,y:60,w:AW+28,h:900,label:"REQUEST LINEAGE",stroke:"#24304a"},
+      {x:1050,y:60,w:170,h:900,label:"BUILD",stroke:"#262b3d"}
+    ],
+    nodes:[
+      {id:"mapi",kind:"config",x:CX,y:crow(0),w:CW,h:70,title:"api/",titleSize:14,stripe:"#5eead4",lines:[
+        {t:"ApiKeyFilter · ApiExceptionHandler"}]},
+      {id:"mtransfer",kind:"module",x:CX,y:crow(1),w:CW,h:120,title:"transfer/",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"TransferService · TransferExecutor"},{t:"RequestHasher · idempotency"},{t:"@Transactional unit of work"}]},
+      {id:"maccount",kind:"module",x:CX,y:crow(3)-4,w:CW,h:72,title:"account/",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"Account (@Version) · AccountService"}]},
+      {id:"mfraud",kind:"module",x:CX,y:crow(4)-6,w:CW,h:88,title:"fraud/",titleSize:14,stripe:"#fbbf24",lines:[
+        {t:"FraudScoringService"},{t:"FraudFeatureExtractor · XGBoost4J"}]},
+      {id:"mledger",kind:"module",x:CX,y:crow(5)-2,w:CW,h:72,title:"ledger/",titleSize:14,stripe:"#4ade80",lines:[
+        {t:"LedgerEntry (immutable) · LedgerService"}]},
+      {id:"mrec",kind:"module",x:CX,y:crow(6)-4,w:CW,h:72,title:"reconciliation/ + audit/",titleSize:13,stripe:"#4ade80",lines:[
+        {t:"rebuild from ledger · append-only log"}]},
+
+      {id:"tds",kind:"notebook",x:20,y:crow(0),w:360,h:64,title:"DoubleSpendRaceConditionTest",titleSize:12,lines:[
+        {t:"50 threads → exactly 25 post, 25 fail"}]},
+      {id:"tidem",kind:"notebook",x:20,y:crow(1)+2,w:360,h:64,title:"IdempotentRetryTest",titleSize:12.5,lines:[
+        {t:"20 duplicates → 1 transfer, 25.00 moves"}]},
+      {id:"tc",kind:"notebook",x:20,y:crow(2)+4,w:360,h:64,title:"AbstractIntegrationTest",titleSize:12.5,lines:[
+        {t:"86 tests, mvn verify green"}]},
+      {id:"ci",kind:"notebook",x:20,y:crow(3)+6,w:360,h:60,title:".github/workflows",titleSize:12.5,lines:[
+        {t:"mvn verify + docker build on push"}]},
+      {id:"load",kind:"notebook",x:20,y:crow(4)+8,w:360,h:60,title:"load/transfers.js",titleSize:12.5,lines:[
+        {t:"k6: 50 users, 56,523 posted, 0 failed"}]},
+
+      {id:"r0",kind:"data",x:AX,y:crow(0),w:AW,h:62,title:"POST /api/v1/transfers",titleSize:11,sub:"X-Api-Key + Idempotency-Key",lines:[]},
+      {id:"r1",kind:"data",x:AX,y:crow(1),w:AW,h:64,title:"transfers row",titleSize:13,sub:"1 per key",lines:[{t:"replay-safe"}]},
+      {id:"r2",kind:"data",x:AX,y:crow(2),w:AW,h:70,title:"fraud score",titleSize:13,sub:"score ≥ 0.85 blocks",lines:[{t:"in-JVM, audited"}]},
+      {id:"r3b",kind:"data",x:AX,y:crow(3),w:AW,h:70,title:"ledger_entries",titleSize:12.5,sub:"1 DEBIT + 1 CREDIT",lines:[{t:"immutable, nets to 0",mono:true,size:10.5}]},
+      {id:"r3",kind:"data",x:AX,y:crow(4),w:AW,h:64,title:"balance_cached",titleSize:12.5,sub:"same commit",lines:[]},
+      {id:"r5",kind:"result",x:AX,y:crow(5),w:AW,h:80,title:"GET /reconciliation",titleSize:12,sub:"rebuild from ledger",stripe:"#4ade80",lines:[
+        {t:"balanced: true",mono:true,size:10.5},{t:"zero drift",mono:true,size:10.5}]},
+
+      {id:"docker",kind:"deploy",x:1050,y:crow(0),w:170,h:88,title:"Docker",titleSize:13,lines:[
+        {t:"Dockerfile",mono:true,size:10},{t:"docker-compose.yml",mono:true,size:9.5}]},
+      {id:"pom",kind:"config",x:1050,y:crow(2),w:170,h:96,title:"pom.xml",titleSize:12.5,lines:[
+        {t:"Spring Boot 3",mono:true,size:10},{t:"XGBoost4J",mono:true,size:10},{t:"Testcontainers",mono:true,size:9.5}]},
+      {id:"mig",kind:"data",x:1050,y:crow(4),w:170,h:80,title:"db/migration",titleSize:12.5,lines:[
+        {t:"Flyway V1-V4",mono:true,size:10}]},
+      {id:"docs",kind:"meta",x:1050,y:crow(6)-8,w:170,h:60,title:"docs",titleSize:13,lines:[
+        {t:"README.md",mono:true,size:10.5}]}
+    ],
+    edges:[
+      {from:"r0",to:"r1",stroke:"#3b4570"},{from:"r1",to:"r2",stroke:"#3b4570"},
+      {from:"r2",to:"r3b",stroke:"#3b4570"},{from:"r3b",to:"r3",stroke:"#2c5148"},
+      {from:"r3",to:"r5",stroke:"#2c5148"},
+      {from:"mapi",to:"r0",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"mtransfer",to:"r1",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"mfraud",to:"r2",fromSide:"r",toSide:"l",stroke:"#5b4a24"},
+      {from:"mledger",to:"r3b",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"maccount",to:"r3",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"mrec",to:"r5",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"tds",to:"mtransfer",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"tidem",to:"mtransfer",fromSide:"r",toSide:"l",stroke:"#4d4a2a"}
+    ],
+    flow:[
+      {paths:[0,1,2,3,4],cls:"data",weight:6,dur:9000,splits:[{at:3,cls:"out"}]},
+      {paths:[5],cls:"data",weight:2,dur:1500},
+      {paths:[6],cls:"data",weight:2,dur:1500},
+      {paths:[7],cls:"adv",weight:1,dur:1500},
+      {paths:[8],cls:"out",weight:2,dur:1500},
+      {paths:[10],cls:"data",weight:2,dur:1500}
+    ]
+  };
+
+  KVBlueprint.mount("svg-system","wrap-system",sys,"system");
+  KVBlueprint.mount("svg-code","wrap-code",code,"code");
+})();
+</script>
+</body>
+</html>

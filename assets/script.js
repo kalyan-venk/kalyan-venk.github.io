@@ -18,6 +18,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const links = document.querySelector('.nav-links');
   if (toggle) toggle.addEventListener('click', () => links.classList.toggle('open'));
 
+  // projects mega-menu (hover on desktop, click anywhere to toggle/close)
+  const drop = document.querySelector('.nav-drop');
+  const dropBtn = document.querySelector('.nav-drop-btn');
+  if (drop && dropBtn) {
+    dropBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      drop.classList.toggle('open');
+      dropBtn.setAttribute('aria-expanded', drop.classList.contains('open'));
+    });
+    document.addEventListener('click', (e) => {
+      if (!drop.contains(e.target)) { drop.classList.remove('open'); dropBtn.setAttribute('aria-expanded', 'false'); }
+    });
+  }
+
+  // home project grid: filter cards by track
+  const chips = document.querySelectorAll('.track-filter .fchip');
+  if (chips.length) {
+    chips.forEach(c => c.addEventListener('click', () => {
+      const t = c.getAttribute('data-track');
+      chips.forEach(x => x.classList.toggle('on', x === c));
+      document.querySelectorAll('.proj-grid .card').forEach(card => {
+        card.style.display = (t === 'all' || card.getAttribute('data-track') === t) ? '' : 'none';
+      });
+    }));
+  }
+
   // light / dark toggle
   const themeSwitch = document.getElementById('themeSwitch');
   if (themeSwitch) themeSwitch.addEventListener('click', () => {

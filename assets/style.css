@@ -432,3 +432,31 @@ tbody tr:hover { background: rgba(255,255,255,0.02); }
 :root[data-theme="light"] .ts-sun { opacity: 1; }
 :root[data-theme="light"] .ts-moon { opacity: 0; }
 @media (max-width: 600px) { .theme-switch { margin: 8px 0 0; } }
+
+/* projects mega-menu */
+.nav-drop { position: relative; }
+.nav-drop-btn { font: inherit; font-size: 0.84rem; font-weight: 500; color: var(--text-dim); background: none; border: 0; cursor: pointer; padding: 7px 11px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; transition: all 0.18s; }
+.nav-drop-btn:hover, .nav-drop.open .nav-drop-btn { color: var(--text); background: var(--surface); }
+.nav-drop-btn.active { color: var(--text); background: var(--accent-soft); box-shadow: inset 0 0 0 1px rgba(129,140,248,0.25); }
+.nav-drop-btn .caret { font-size: 0.66em; opacity: 0.7; transition: transform 0.18s; }
+.nav-drop.open .nav-drop-btn .caret { transform: rotate(180deg); }
+.mega { position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(6px); display: grid; grid-template-columns: repeat(3, minmax(190px, 1fr)); gap: 4px 24px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 16px; padding: 18px 22px; box-shadow: 0 24px 60px -24px rgba(0,0,0,0.55); opacity: 0; visibility: hidden; transition: opacity 0.16s, transform 0.16s; z-index: 60; }
+.nav-drop:hover .mega, .nav-drop.open .mega { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+.mega-h { font-family: var(--mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--text-dim); margin: 4px 0 6px; }
+.mega a { display: flex; flex-direction: column; gap: 1px; padding: 8px 10px; border-radius: 10px; font-size: 0.86rem; font-weight: 600; color: var(--text); white-space: nowrap; }
+.mega a span { font-size: 0.72rem; font-weight: 400; color: var(--text-dim); }
+.mega a:hover { background: var(--surface); }
+
+/* home project grid: track filter */
+.track-filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 24px; }
+.track-filter .fchip { font-family: var(--mono); font-size: 0.8rem; padding: 7px 15px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-dim); background: var(--surface); cursor: pointer; transition: all 0.16s; }
+.track-filter .fchip:hover { color: var(--text); }
+.track-filter .fchip.on { color: var(--text); background: var(--accent-soft); border-color: rgba(129,140,248,0.5); }
+
+@media (max-width: 860px) {
+  .nav-drop { width: 100%; }
+  .nav-drop-btn { width: 100%; justify-content: space-between; padding: 10px 11px; }
+  .mega { position: static; transform: none; opacity: 1; visibility: visible; display: none; grid-template-columns: 1fr; gap: 2px; background: none; border: 0; box-shadow: none; padding: 2px 0 8px 12px; }
+  .nav-drop.open .mega { display: grid; }
+  .mega a { white-space: normal; }
+}

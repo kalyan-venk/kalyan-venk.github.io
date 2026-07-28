@@ -17,7 +17,7 @@
 
    No external deps. Coordinates come from the spec on a fixed pixel grid so
    connectors stay predictable. Companion styles: assets/blueprint.css (every
-   rule scoped under .bpx — read the note at the top of that file before adding
+   rule scoped under .bpx, read the note at the top of that file before adding
    any).
    =========================================================================== */
 (function(){

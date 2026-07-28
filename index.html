@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
-<link rel="stylesheet" href="assets/style.css?v=5">
+<link rel="stylesheet" href="assets/style.css?v=6">
 </head>
 <body>
 <div class="progress"></div>
@@ -33,9 +33,26 @@
     <button class="nav-toggle" aria-label="Menu">&#9776;</button>
     <div class="nav-links">
       <a href="/" class="active">Home</a>
-      <a href="inference-lens">Inference-Lens</a>
-      <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
-      <a href="predictops">PredictOps</a>
+      <div class="nav-drop">
+        <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Projects <span class="caret">&#9662;</span></button>
+        <div class="mega" role="menu">
+          <div class="mega-col">
+            <p class="mega-h">Agents &amp; LLM reliability</p>
+            <a href="inference-lens">Inference-Lens <span>judge robustness, live demo</span></a>
+            <a href="secret-agent">secret-agent <span>frameworkless agent runtime</span></a>
+          </div>
+          <div class="mega-col">
+            <p class="mega-h">Experimentation &amp; MLOps</p>
+            <a href="groundtruth">GroundTruth <span>A/B testing, CUPED</span></a>
+            <a href="predictops">PredictOps <span>CI-gated MLOps loop</span></a>
+          </div>
+          <div class="mega-col">
+            <p class="mega-h">Data &amp; systems</p>
+            <a href="streamlake">StreamLake <span>streaming lakehouse, contracts</span></a>
+            <a href="vaultex">vaultex <span>double-entry ledger</span></a>
+          </div>
+        </div>
+      </div>
       <a href="about">About</a>
       <a href="inference-lens#demo" class="nav-cta">Live demo</a>
           <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
@@ -75,45 +92,87 @@
 
 <section>
   <div class="wrap">
-    <p class="kicker reveal">The thesis</p>
-    <h2 class="section-title reveal">2 questions about trust, and 1 project outside the lab</h2>
-    <p class="section-sub reveal">Think of an AI pipeline as a factory floor. Models do the work and standing over them is a quality inspector deciding what ships. Most work studies the models, so I went after the inspector instead. The first project asks whether that inspector can be fooled. The second asks whether hiring it even helped. The third steps off the research floor and holds a plain production MLOps loop to the same standard of evidence.</p>
+    <p class="kicker reveal">The work</p>
+    <h2 class="section-title reveal">Six builds, one standard</h2>
+    <p class="section-sub reveal">Each one made to break first, then measured. Filter by track.</p>
+    <div class="track-filter reveal">
+      <button class="fchip on" data-track="all">All</button>
+      <button class="fchip" data-track="agents">Agents &amp; LLM reliability</button>
+      <button class="fchip" data-track="experimentation">Experimentation &amp; MLOps</button>
+      <button class="fchip" data-track="data">Data &amp; systems</button>
+    </div>
     <div class="proj-grid">
-      <a href="inference-lens" class="card reveal">
+      <a href="inference-lens" class="card reveal" data-track="agents">
         <span class="glow" style="background:#6366f1;"></span>
-        <span class="tag">Can the judge be fooled · Live demo</span>
+        <span class="tag">Judge robustness · live demo</span>
         <h3>Inference-Lens</h3>
-        <p>Built an NLP text classification pipeline, trained scoring models on real human preference data, then put them under systematic adversarial pressure. The only model that actually learned human preference is the one that lost the most under attack. Competence is not robustness, and no clean benchmark shows you that.</p>
+        <p>Trained NLP scoring models on human preference data, then attacked them. The one model that learned preference lost the most under attack.</p>
         <div class="metrics">
           <div><div class="m-num">182K</div><div class="m-lbl">labeled responses</div></div>
           <div><div class="m-num">419</div><div class="m-lbl">adversarial pairs</div></div>
-          <div><div class="m-num">3</div><div class="m-lbl">model architectures</div></div>
+          <div><div class="m-num">3</div><div class="m-lbl">architectures</div></div>
         </div>
         <span class="arrow">Explore and try it live &rarr;</span>
       </a>
-      <a href="agentic-llmops" class="card reveal d1">
+      <a href="secret-agent" class="card reveal d1" data-track="agents">
         <span class="glow" style="background:#a855f7;"></span>
-        <span class="tag">First-author research · under peer review</span>
-        <h3>Multi-Agent Inference Reliability</h3>
-        <p>A 3 agent monitor, Planner, Critic, Fixer, that catches and corrects bad LLM output at runtime without retraining. The finding I care about is the failure condition: it lifts weak models about +30 points pass@1 but leaves strong ones worse off, so above roughly 60 percent baseline the benefit fades.</p>
+        <span class="tag">Frameworkless agent runtime</span>
+        <h3>secret-agent</h3>
+        <p>An LLM agent loop in 53 lines, no LangChain. A hostile review found a total sandbox escape, now closed. Step through a live trace.</p>
         <div class="metrics">
-          <div><div class="m-num">+30.3pp</div><div class="m-lbl">weak-model gain, p=0.002</div></div>
-          <div><div class="m-num">10</div><div class="m-lbl">research phases</div></div>
-          <div><div class="m-num">5</div><div class="m-lbl">model families</div></div>
+          <div><div class="m-num">0.90</div><div class="m-lbl">retrieval hit@3</div></div>
+          <div><div class="m-num">0.756</div><div class="m-lbl">MRR</div></div>
+          <div><div class="m-num">219</div><div class="m-lbl">tests</div></div>
         </div>
-        <span class="arrow">Read the research &rarr;</span>
+        <span class="arrow">Step through a run &rarr;</span>
       </a>
-      <a href="predictops" class="card reveal d2">
+      <a href="groundtruth" class="card reveal d2" data-track="experimentation">
         <span class="glow" style="background:#22c55e;"></span>
+        <span class="tag">A/B testing · CUPED</span>
+        <h3>GroundTruth</h3>
+        <p>Variance-reduced A/B analysis on a 14M-row log. Move the sliders and watch power and CUPED confidence intervals recompute live.</p>
+        <div class="metrics">
+          <div><div class="m-num">+47.4%</div><div class="m-lbl">CUPED lift</div></div>
+          <div><div class="m-num">14M</div><div class="m-lbl">row log</div></div>
+          <div><div class="m-num">live</div><div class="m-lbl">A/B simulator</div></div>
+        </div>
+        <span class="arrow">Run the simulator &rarr;</span>
+      </a>
+      <a href="predictops" class="card reveal" data-track="experimentation">
+        <span class="glow" style="background:#10b981;"></span>
         <span class="tag">Production MLOps · shipped</span>
         <h3>PredictOps</h3>
-        <p>A deliberately boring tabular model with all the depth put into the ops loop around it: cross-validated training comparison, a validated FastAPI serving layer, a multi-stage Docker build, a CI gate that blocks a bad model from shipping, MLflow registry promotion and PSI-based drift detection. Most portfolio projects end at the trained model. This one starts there.</p>
+        <p>A boring tabular model wrapped in a real ops loop. A CI gate blocks a bad model, PSI catches drift, and MLflow promotes on merit.</p>
         <div class="metrics">
           <div><div class="m-num">&ge;0.80</div><div class="m-lbl">ROC-AUC CI gate</div></div>
           <div><div class="m-num">0.846</div><div class="m-lbl">CV ROC-AUC</div></div>
-          <div><div class="m-num">4</div><div class="m-lbl">served endpoints</div></div>
+          <div><div class="m-num">71%</div><div class="m-lbl">smaller image</div></div>
         </div>
         <span class="arrow">See what's built &rarr;</span>
+      </a>
+      <a href="streamlake" class="card reveal d1" data-track="data">
+        <span class="glow" style="background:#fbbf24;"></span>
+        <span class="tag">Streaming lakehouse · contracts</span>
+        <h3>StreamLake</h3>
+        <p>Kafka to Iceberg with a custom data-contract engine. Bad rows get quarantined, not silently ingested. Break a record and watch it get caught.</p>
+        <div class="metrics">
+          <div><div class="m-num">3M</div><div class="m-lbl">trips processed</div></div>
+          <div><div class="m-num">47</div><div class="m-lbl">contract checks</div></div>
+          <div><div class="m-num">1.3%</div><div class="m-lbl">quarantined</div></div>
+        </div>
+        <span class="arrow">Break a record &rarr;</span>
+      </a>
+      <a href="vaultex" class="card reveal d2" data-track="data">
+        <span class="glow" style="background:#5eead4;"></span>
+        <span class="tag">Double-entry ledger</span>
+        <h3>vaultex</h3>
+        <p>A Java payments ledger where debits always equal credits, held under concurrent load. Post a transaction in the browser and watch the invariant hold.</p>
+        <div class="metrics">
+          <div><div class="m-num">86</div><div class="m-lbl">tests green</div></div>
+          <div><div class="m-num">0</div><div class="m-lbl">lost of 56,523</div></div>
+          <div><div class="m-num">live</div><div class="m-lbl">ledger demo</div></div>
+        </div>
+        <span class="arrow">Post a transaction &rarr;</span>
       </a>
     </div>
   </div>
@@ -188,7 +247,7 @@
     <div class="col">
       <h5>Projects</h5>
       <a href="inference-lens">Inference-Lens</a>
-      <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
+      <a href="secret-agent">secret-agent</a><a href="groundtruth">GroundTruth</a><a href="streamlake">StreamLake</a><a href="vaultex">vaultex</a>
       <a href="predictops">PredictOps</a>
       <a href="inference-lens#demo">Live demo</a>
     </div>
@@ -202,7 +261,7 @@
   <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh. Built with care, hosted on GitHub Pages.</p></div>
 </footer>
 
-<script src="assets/script.js?v=4"></script>
+<script src="assets/script.js?v=5"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 window.addEventListener('load', () => {

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://kalyanvenk.com/groundtruth">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalyan's work</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
+<meta name="description" content="Experimentation analysis on a 13.9M-row Criteo uplift log: six validity guardrails, CUPED variance reduction, always-valid sequential testing, and a ship decision with the caveats attached. Includes a live in-browser A/B power and CUPED simulator.">
+<meta property="og:title" content="GroundTruth - an A/B test that argues with itself before it ships">
+<meta property="og:description" content="13.9M rows, six guardrails (three fire), CUPED, sequential testing, and a live browser simulator for power, CUPED, and peeking.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kalyanvenk.com/groundtruth">
+<meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GroundTruth - experimentation analysis with the guardrails first">
+<meta name="twitter:description" content="A 13.9M-row A/B log run through six validity checks, CUPED, and sequential testing, with a live in-browser simulator.">
+<meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="stylesheet" href="assets/style.css?v=6">
+<link rel="stylesheet" href="assets/blueprint.css?v=1">
+<style>
+/* ---- GroundTruth A/B simulator, page-local styles (tokens from style.css) ---- */
+.gt-sim { background: linear-gradient(180deg, var(--surface), var(--bg-soft)); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 26px; }
+.gt-grid { display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: start; }
+@media (max-width: 820px) { .gt-grid { grid-template-columns: 1fr; } }
+.gt-controls { display: flex; flex-direction: column; gap: 20px; }
+.gt-ctrl label { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.82rem; color: var(--text-dim); margin-bottom: 8px; }
+.gt-ctrl label b { font-family: var(--mono); color: var(--text); font-weight: 600; font-size: 0.92rem; }
+.gt-ctrl input[type=range] { width: 100%; accent-color: var(--indigo); height: 4px; }
+.gt-ctrl .hint { font-size: 0.72rem; color: var(--text-faint); margin-top: 6px; }
+.gt-out { display: flex; flex-direction: column; gap: 22px; }
+.gt-panel { background: var(--bg-soft); border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 18px 20px; }
+.gt-panel h4 { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--indigo); margin-bottom: 14px; }
+.gt-big { font-family: var(--mono); font-size: 2.2rem; font-weight: 700; line-height: 1; }
+.gt-big.ok { color: var(--good); } .gt-big.warn { color: var(--warn); } .gt-big.bad { color: var(--bad); }
+.gt-meter { height: 8px; border-radius: 999px; background: var(--surface-3); overflow: hidden; margin: 12px 0 8px; }
+.gt-meter > div { height: 100%; background: var(--grad); transition: width 0.15s; }
+.gt-note { font-size: 0.8rem; color: var(--text-dim); }
+.gt-cirow { display: grid; grid-template-columns: 92px 1fr; gap: 12px; align-items: center; margin-bottom: 14px; }
+.gt-cirow .k { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); }
+.gt-bar { position: relative; height: 26px; background: var(--surface-3); border-radius: 6px; }
+.gt-zero { position: absolute; top: -4px; bottom: -4px; width: 1px; background: var(--text-faint); }
+.gt-span { position: absolute; top: 9px; height: 8px; border-radius: 999px; opacity: 0.85; }
+.gt-span.naive { background: var(--text-faint); }
+.gt-span.cuped { background: var(--grad-2); }
+.gt-dot { position: absolute; top: 7px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; }
+.gt-dot.naive { background: var(--text-dim); }
+.gt-dot.cuped { background: var(--cyan); }
+.gt-citxt { font-family: var(--mono); font-size: 0.74rem; color: var(--text-faint); margin: 4px 0 0 104px; }
+.gt-mini { display: flex; gap: 22px; font-family: var(--mono); font-size: 0.82rem; margin-top: 6px; }
+.gt-mini span { color: var(--text-faint); }
+.gt-mini b { color: var(--cyan); font-weight: 600; }
+.gt-verdict { font-size: 0.95rem; font-weight: 600; padding: 12px 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--indigo); }
+.gt-verdict.ok { background: rgba(74,222,128,0.1); border-color: var(--good); color: var(--good); }
+.gt-verdict.warn { background: rgba(251,191,36,0.1); border-color: var(--warn); color: var(--warn); }
+.gt-verdict.bad { background: rgba(251,113,133,0.1); border-color: var(--bad); color: var(--bad); }
+.gt-seqmeta { font-family: var(--mono); font-size: 0.76rem; color: var(--text-faint); margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.gt-seqmeta b { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="mark">KV</span>Kalyan Venkatesh</a>
+    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <div class="nav-drop">
+        <button class="nav-drop-btn active" aria-expanded="false" aria-haspopup="true">Projects <span class="caret">&#9662;</span></button>
+        <div class="mega" role="menu">
+          <div class="mega-col">
+            <p class="mega-h">Agents &amp; LLM reliability</p>
+            <a href="inference-lens">Inference-Lens <span>judge robustness, live demo</span></a>
+            <a href="secret-agent">secret-agent <span>frameworkless agent runtime</span></a>
+          </div>
+          <div class="mega-col">
+            <p class="mega-h">Experimentation &amp; MLOps</p>
+            <a href="groundtruth">GroundTruth <span>A/B testing, CUPED</span></a>
+            <a href="predictops">PredictOps <span>CI-gated MLOps loop</span></a>
+          </div>
+          <div class="mega-col">
+            <p class="mega-h">Data &amp; systems</p>
+            <a href="streamlake">StreamLake <span>streaming lakehouse, contracts</span></a>
+            <a href="vaultex">vaultex <span>double-entry ledger</span></a>
+          </div>
+        </div>
+      </div>
+      <a href="about">About</a>
+      <a href="inference-lens#demo" class="nav-cta">Live demo</a>
+          <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
+        <span class="ts-track"><span class="ts-knob"><svg class="ts-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg><svg class="ts-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span>
+      </button>
+</div>
+  </div>
+</nav>
+
+<header class="proj-hero">
+  <div class="wrap">
+    <span class="eyebrow reveal"><span class="blip"></span>Experimentation &middot; CUPED &middot; sequential testing</span>
+    <h1 class="reveal">GroundTruth</h1>
+    <p class="lead reveal d1">An A/B analysis that runs its validity checks before it computes the effect, and reports the ones that fire. 13.9M rows of a Criteo uplift log through Spark, six guardrails, CUPED variance reduction, always-valid sequential testing, and a ship recommendation with the caveats attached. Three of the guardrails fire on this data, and the number moves by a factor of two depending on how you treat 1.26M duplicate rows. The ship decision survives all of it. The precise number does not.</p>
+    <div class="meta reveal d2">
+      <span class="chip">PySpark 3.5</span>
+      <span class="chip">CUPED</span>
+      <span class="chip">Lin estimator</span>
+      <span class="chip">Hotelling T&sup2;</span>
+      <span class="chip">always-valid CI</span>
+      <span class="chip">Qini / uplift</span>
+      <span class="chip">SQL cross-check</span>
+    </div>
+    <div class="cta-row reveal d3" style="margin-top:28px;">
+      <a href="https://github.com/kalyan-venk/GroundTruth" target="_blank" rel="noopener" class="btn btn-primary">View on GitHub</a>
+      <a href="#sim" class="btn btn-ghost">Try the simulator &rarr;</a>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:30px;">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat reveal"><div class="num">+<span data-count="47.4" data-dp="1">0</span>%</div><div class="lbl">CUPED-adjusted lift, 95% CI +43.2% to +51.7%</div></div>
+      <div class="stat reveal d1"><div class="num"><span data-count="13.98" data-dp="2">0</span>M</div><div class="lbl">rows to per-arm sums in 1 Spark pass</div></div>
+      <div class="stat reveal d2"><div class="num"><span data-count="6">0</span></div><div class="lbl">validity guardrails, 3 of them fire</div></div>
+      <div class="stat reveal d3"><div class="num"><span data-count="0.814" data-dp="3">0</span></div><div class="lbl">Qini coefficient, targeting works</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">The recommendation</p>
+    <h2 class="section-title reveal">Ship it, and target it.</h2>
+    <p class="section-sub reveal">Conversion rises 47.4% in relative terms once the covariate imbalance is adjusted out. The bar for "worth shipping" was set at a 10% relative lift before any effect was computed, and the weakest lower bound across every specification tried is +38.6%, so the decision holds however the data is handled. Then targeting: 95% of the incremental conversions come from the top 30% of users by predicted uplift, so roughly 70% of the ad spend could go without losing much.</p>
+    <div class="finding reveal"><strong>The number is honest about its own softness.</strong> This log is a constructed 85/15 split, not a clean randomised experiment. The arms differ on every observed pre-assignment feature, and the measured magnitude moves by 2x depending on how 1.26M duplicate rows are treated. The direction and the ship call survive all of that. No adjustment fixes imbalance on features nobody recorded, so the precise number is reported with a plausible range of +42.1% to +85.4%, not a single confident figure.</div>
+  </div>
+</section>
+
+<section id="blueprints">
+  <div class="wrap">
+    <p class="kicker reveal">Under the hood</p>
+    <h2 class="section-title reveal">The whole pipeline, drawn out</h2>
+    <p class="section-sub reveal">2 live blueprints. One traces the stages in run order: the guardrails run first, then the effect. The other maps every file in the repo and how one artifact becomes the next. The moving dots are data in flight, coloured by what kind of data it is.</p>
+
+    <!-- ============================ DIAGRAM 1 ============================ -->
+    <div class="bpx" id="system">
+      <div class="sec-head">
+        <h3><span class="num">01</span>System design, the stages in run order</h3>
+        <p>
+          Read it top to bottom. On the left are the raw log and the config that fixes alpha, power, the MDE and the ship bar <b>before</b> any effect is seen.
+          The centre spine runs in order: ingest to per-arm sums, then the <b>six guardrails</b> (SRM, balance, the specification curve), then power, then the effect (z-test, CUPED, Lin, CACE), then the sequential and uplift stages.
+          The right shows what each stage writes. The amber path is a guardrail firing.
+        </p>
+      </div>
+
+      <div class="dgm-frame">
+        <div class="dgm-bar">
+          <span class="tag">system.blueprint</span>
+          <div class="flowsteps" data-steps="system"></div>
+          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
+        </div>
+        <div class="dgm-wrap" id="wrap-system">
+          <svg class="dgm" id="svg-system" role="img" aria-label="System design of GroundTruth as a top-to-bottom pipeline: raw log and config feed in from the left, guardrails and effect stages run down the centre spine, and results are written out on the right."></svg>
+        </div>
+        <div class="legend">
+          <div><span class="k data"></span>Sums &amp; statistics, in flight</div>
+          <div><span class="k adv"></span>Guardrail fires</div>
+          <div><span class="k out"></span>Cleared, adjusted, shipped</div>
+          <div><span class="k swatch"></span>Stage &middot; artifact &middot; result</div>
+        </div>
+      </div>
+
+      <div class="bp-notes">
+        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>The stats layer never sees a row</h4>
+          <p>Spark reduces <b>13.9M rows</b> to per-arm sums and the driver receives a <b>68 KB</b> parquet file. Every test here (z-test, CUPED, Hotelling T&sup2;) is additive, so it runs off those sums. Full run: about 80 seconds.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>Guardrails first, on purpose</h4>
+          <p>Three of six fire: the split is under-dispersed (ratio is exactly 17:3), the file is not shuffled (13% to 100% treatment by block), and all 12 features differ. The effect is only computed after they run.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>CUPED earns its place on robustness</h4>
+          <p>The unadjusted lift spans <b>1.44x</b> across three duplicate-handling specs, the adjusted one spans <b>1.12x</b>. Adjustment cuts specification sensitivity 3.5x. That, not the 10.7% variance reduction, is the case for CUPED here.</p></div>
+      </div>
+    </div>
+
+    <!-- ============================ DIAGRAM 2 ============================ -->
+    <div class="bpx" id="code">
+      <div class="sec-head">
+        <h3><span class="num">02</span>Code map, every file and the data lineage</h3>
+        <p>
+          Same repo, viewed by file instead of by stage. The centre spine is <b>src/</b>, one module per stage. The right is the <b>data lineage</b>: the raw CSV becomes a sufficient-statistics parquet, which becomes <code>summary.json</code> and five figures.
+          The tests and the SQL cross-check sit on the left; every SQL aggregation is checked against the Spark one in the test suite. If a file exists in the repo, it is on this map.
+        </p>
+      </div>
+
+      <div class="dgm-frame">
+        <div class="dgm-bar">
+          <span class="tag">code.blueprint</span>
+          <div class="flowsteps" data-steps="code"></div>
+          <span class="dgm-controls"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>hover a chip to spotlight its stage</span>
+        </div>
+        <div class="dgm-wrap" id="wrap-code">
+          <svg class="dgm" id="svg-code" role="img" aria-label="Code map of GroundTruth: every file with its role, arranged around the data lineage spine from raw CSV to summary.json and figures."></svg>
+        </div>
+        <div class="legend">
+          <div><span class="k data"></span>Data moving through the lineage</div>
+          <div><span class="k out"></span>Adjusted, decided, shipped</div>
+          <div><span class="k swatch"></span>File &middot; module &middot; artifact</div>
+          <div><span style="font-family:var(--mono);font-size:.8rem;color:var(--text-faint)">italic monospace = a file on disk</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sim">
+  <div class="wrap">
+    <p class="kicker reveal">Live, in your browser</p>
+    <h2 class="section-title reveal">An A/B test simulator, no backend</h2>
+    <p class="section-sub reveal">The same three questions this pipeline answers, computed live in JavaScript as you move the sliders. Am I powered for this effect? How much does CUPED tighten the interval? And would I have called it early if I peeked? The formulas are the repo's own: Cohen's h for power, variance times (1 minus rho squared) for CUPED, and the Howard always-valid boundary for the sequential decision.</p>
+
+    <div class="gt-sim reveal">
+      <div class="gt-grid">
+        <div class="gt-controls">
+          <div class="gt-ctrl">
+            <label>Baseline conversion rate <b id="gt-baseline-v">2.0%</b></label>
+            <input type="range" id="gt-baseline" min="0.1" max="20" step="0.1" value="2.0">
+            <div class="hint">control-arm conversion, the thing the lift is measured against</div>
+          </div>
+          <div class="gt-ctrl">
+            <label>Minimum detectable effect <b id="gt-mde-v">10%</b></label>
+            <input type="range" id="gt-mde" min="1" max="50" step="1" value="10">
+            <div class="hint">the relative lift you want to be able to catch</div>
+          </div>
+          <div class="gt-ctrl">
+            <label>Sample size per arm <b id="gt-n-v">80,000</b></label>
+            <input type="range" id="gt-n" min="1000" max="200000" step="1000" value="80000">
+            <div class="hint">users in each of the two arms</div>
+          </div>
+          <div class="gt-ctrl">
+            <label>Pre-period correlation &rho; <b id="gt-rho-v">0.50</b></label>
+            <input type="range" id="gt-rho" min="0" max="0.9" step="0.01" value="0.50">
+            <div class="hint">correlation of the CUPED covariate with the outcome</div>
+          </div>
+        </div>
+
+        <div class="gt-out">
+          <div class="gt-panel">
+            <h4>Statistical power &middot; two-proportion z-test</h4>
+            <div class="gt-big warn" id="gt-power">0%</div>
+            <div class="gt-meter"><div id="gt-power-fill" style="width:0%"></div></div>
+            <div class="gt-note" id="gt-power-note"></div>
+          </div>
+
+          <div class="gt-panel">
+            <h4>95% confidence interval &middot; naive vs CUPED</h4>
+            <div class="gt-cirow"><span class="k">naive</span><div id="gt-ci-naive"></div></div>
+            <div class="gt-citxt" id="gt-ci-naive-txt"></div>
+            <div class="gt-cirow" style="margin-top:12px;"><span class="k">CUPED</span><div id="gt-ci-cuped"></div></div>
+            <div class="gt-citxt" id="gt-ci-cuped-txt"></div>
+            <div class="gt-mini">
+              <span>effect <b id="gt-effect" style="color:var(--text)"></b></span>
+            </div>
+            <div class="gt-mini">
+              <span>variance cut <b id="gt-varcut"></b></span>
+              <span>interval cut <b id="gt-cicut"></b></span>
+            </div>
+          </div>
+
+          <div class="gt-panel">
+            <h4>Sequential decision &middot; if you peeked</h4>
+            <div class="gt-verdict warn" id="gt-seq"></div>
+            <div class="gt-seqmeta">
+              <span>always-valid interval is <b id="gt-penalty"></b> wider than fixed-horizon</span>
+              <span id="gt-av-txt"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="section-sub reveal" style="margin-top:18px;font-size:0.9rem;">The CUPED bar is the cyan one. Variance falls by &rho;&sup2;, so the interval, which scales with the square root of variance, falls by 1 minus the square root of (1 minus &rho;&sup2;): a smaller number, and quoting the variance figure as an interval improvement would nearly double the claim. On the Criteo log the covariate correlates at 0.34, giving an 11.8% theoretical variance reduction and 10.7% actually achieved.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">What each guardrail catches</p>
+    <h2 class="section-title reveal">Six checks run before any effect is computed</h2>
+    <p class="section-sub reveal">They catch different failures. On this dataset three of them fire, and the SRM pass is itself a finding.</p>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead><tr><th>Check</th><th>Asks</th><th>Result here</th></tr></thead>
+        <tbody>
+          <tr><td>SRM</td><td>do the arms have the right number of users?</td><td><span class="pill good">pass</span> suspiciously well</td></tr>
+          <tr><td>Under-dispersion</td><td>is the split too close to design?</td><td><span class="pill warn">fires</span> ratio is exactly 17:3</td></tr>
+          <tr><td>Row-order</td><td>is assignment correlated with file position?</td><td><span class="pill warn">fires</span> 13% to 100% by block</td></tr>
+          <tr><td>Balance</td><td>do the arms hold the same kind of user?</td><td><span class="pill warn">fires</span> all 12 features differ</td></tr>
+          <tr><td>Specification curve</td><td>does the answer depend on a cleaning choice?</td><td><span class="pill warn">fires</span> 1.44x spread</td></tr>
+          <tr><td>Peeking</td><td>would early looks have inflated the error rate?</td><td><span class="pill bad">28.8%</span> at 30 looks</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="finding-grid" style="grid-template-columns:1fr 1fr;">
+      <div class="finding reveal"><strong>The perfect SRM pass is the problem.</strong> The split is 85.00/15.00, off by 2 users out of 13,979,592, at chi-square p = 0.9989. Random assignment lands that close 0.11% of the time, and the arm ratio agrees with 17/3 to seven significant figures. Control was downsampled to hit exactly 15%, so the pass shows the guardrail runs, not that the upstream randomiser is sound.</div>
+      <div class="finding reveal"><strong>The duplicate rows decide the magnitude.</strong> 2.22M rows sit in byte-identical groups with no user ID to disambiguate them. They carry zero conversions across 2.22M rows where outcome-independent duplication predicts about 7,700, which is why all rows are kept. Raw lift runs +59.45% / +73.38% / +85.37% across the three readings; the CUPED-adjusted lift barely moves.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap prose">
+    <p class="kicker reveal">What I got wrong</p>
+    <h2 class="reveal">An external review caught three wrong numbers in the shipped headline</h2>
+    <p class="reveal">The first version reported a CUPED lift of +50.76%, an adjusted numerator over an unadjusted control mean, which is exactly the denominator CUPED says you cannot use. The consistent figure is +47.36%. The relative confidence intervals were 1.49x too narrow because they divided by a fixed control mean, and control is the small arm in an 85/15 split. The CACE was built on the wrong ITT. All three are corrected, and there is a regression test in <code>tests/test_stats.py</code> for each so they cannot come back. The corrections are the most useful part of the repo, and <code>MISTAKES.md</code> has the longer list.</p>
+    <div class="cta-row reveal"><a href="https://github.com/kalyan-venk/GroundTruth" target="_blank" rel="noopener" class="btn btn-primary">Browse the code &rarr;</a><a href="#sim" class="btn btn-ghost">Back to the simulator</a></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="col">
+      <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
+      <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
+    </div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="secret-agent">secret-agent</a><a href="groundtruth">GroundTruth</a><a href="streamlake">StreamLake</a><a href="vaultex">vaultex</a><a href="predictops">PredictOps</a><a href="inference-lens#demo">Live demo</a></div>
+    <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk/GroundTruth" target="_blank" rel="noopener">Repo</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
+  </div>
+  <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
+</footer>
+
+<script src="assets/script.js?v=5"></script>
+<script src="assets/blueprint.js?v=2"></script>
+<script src="assets/ab-sim.js?v=1"></script>
+<script>
+/* Diagram specs for GroundTruth. The engine that draws them is shared
+   (assets/blueprint.js); only this data is per-page. */
+(function(){
+  "use strict";
+  /* =====================================================================
+     SPEC 1 - SYSTEM DESIGN (stages in run order)
+     3 columns: inputs (left) · pipeline spine (centre) · results (right)
+     ===================================================================== */
+  function srow(i){ return 96 + i*130; }
+  var sys={
+    w:1220, h:1180, r:5, every:780,
+    steps:[
+      {label:"Ingest",target:"s1",color:"#818cf8"},
+      {label:"Guardrails",target:"s2",color:"#fbbf24"},
+      {label:"Power",target:"s5",color:"#818cf8"},
+      {label:"Effect + CUPED",target:"s6",color:"#4ade80"},
+      {label:"Sequential",target:"s7",color:"#4ade80"},
+      {label:"Uplift",target:"s8",color:"#4ade80"}
+    ],
+    bands:[
+      {x:20,y:60,w:300,h:1060,label:"INPUTS + CONFIG",stroke:"#20283f"},
+      {x:450,y:60,w:360,h:1060,label:"THE PIPELINE",stroke:"#2a2f52"},
+      {x:900,y:60,w:300,h:1060,label:"RESULTS",stroke:"#24304a"}
+    ],
+    nodes:[
+      {id:"data",kind:"resource",x:20,y:srow(0),w:300,h:88,title:"Criteo Uplift v2.1",sub:"data/raw/ · 311 MB",stripe:"#818cf8",lines:[
+        {t:"13,979,592 rows, 12 features"},{t:"treatment / conversion / visit"}]},
+      {id:"cfg",kind:"config",x:20,y:srow(1),w:300,h:104,title:"config.py",sub:"fixed before any effect",stripe:"#5eead4",lines:[
+        {t:"alpha 0.05 · power 0.80"},{t:"MDE 5% rel · 85/15 design"},{t:"ship bar = 10% rel lift"}]},
+      {id:"stats",kind:"data",x:20,y:srow(4),w:300,h:84,title:"sufficient statistics",sub:"the only thing stats sees",lines:[
+        {t:"n, sum(Y), sum(X), sum(X²), sum(XY)"},{t:"all additive, one Spark pass"}]},
+
+      {id:"s1",kind:"stageKey",x:470,y:srow(0),w:320,h:96,tag:"01",title:"Ingest",sub:"ingest.py · Spark",stripe:"#818cf8",lines:[
+        {t:"13.9M rows → per-arm sums"},{t:"driver gets a 68 KB parquet",cls:"em-good"}]},
+      {id:"s2",kind:"gate",x:470,y:srow(1),w:320,h:96,tag:"02",title:"SRM + under-dispersion",sub:"srm.py",stripe:"#fbbf24",lines:[
+        {t:"p=0.999 pass, but 17:3 exactly",cls:"em-warn"},{t:"under-dispersed: split constructed"}]},
+      {id:"s3",kind:"gate",x:470,y:srow(2),w:320,h:96,tag:"03",title:"Balance + robustness",sub:"balance.py · robustness.py",stripe:"#fbbf24",lines:[
+        {t:"Hotelling F=428.6, all 12 differ",cls:"em-warn"},{t:"spec curve: 1.44x raw spread"}]},
+      {id:"s5",kind:"stage",x:470,y:srow(3),w:320,h:96,tag:"04",title:"Power",sub:"power.py",lines:[
+        {t:"MDE + required N, before the effect"},{t:"smallest detectable 4.82% rel"}]},
+      {id:"s6",kind:"stageKey",x:470,y:srow(4),w:320,h:112,tag:"05",title:"Effect",sub:"analyze.py",stripe:"#4ade80",lines:[
+        {t:"z-test · CUPED · Lin · CACE"},{t:"CUPED lift +47.36%",cls:"em-good"},{t:"variance cut 10.7%, cross-fitted"}]},
+      {id:"s7",kind:"stage",x:470,y:srow(5),w:320,h:96,tag:"06",title:"Sequential",sub:"sequential.py",lines:[
+        {t:"peeking: 28.8% FPR at 30 looks",cls:"em-warn"},{t:"always-valid CI, 3.01x wider"}]},
+      {id:"s8",kind:"stage",x:470,y:srow(6),w:320,h:96,tag:"07",title:"Uplift",sub:"hte.py · ancova.py",lines:[
+        {t:"two-model uplift, deciles, Qini"},{t:"12-covariate ANCOVA cross-check"}]},
+
+      {id:"a1",kind:"artifact",x:900,y:srow(0),w:300,h:84,title:"cells.parquet",sub:"data/aggregate/",lines:[
+        {t:"68 KB of per-arm sums",mono:true,size:11},{t:"stats layer never reads a row"}]},
+      {id:"aFire",kind:"result",x:900,y:srow(2),w:300,h:96,title:"3 of 6 guardrails fire",titleSize:14,stripe:"#fbbf24",lines:[
+        {t:"under-dispersion · row-order",cls:"em-warn"},{t:"+ full covariate imbalance"}]},
+      {id:"aR",kind:"result",x:900,y:srow(4),w:300,h:112,title:"the decision",titleSize:14,stripe:"#4ade80",lines:[
+        {t:"ship: +47.4% [+43.2, +51.7]",cls:"em-good"},
+        {t:"target: top 30% = 95% of lift"},
+        {t:"worst-case lower bound +38.6%"}]},
+      {id:"aQ",kind:"data",x:900,y:srow(6),w:300,h:84,title:"summary.json + 5 figures",sub:"results/",lines:[
+        {t:"Qini 0.814 · forest · spec curve"},{t:"every number sourced from here"}]}
+    ],
+    edges:[
+      {from:"s1",to:"s2",stroke:"#5b4a24"},{from:"s2",to:"s3",stroke:"#5b4a24"},{from:"s3",to:"s5",stroke:"#3b4570"},
+      {from:"s5",to:"s6",stroke:"#3b4570"},{from:"s6",to:"s7",stroke:"#2c5148"},{from:"s7",to:"s8",stroke:"#2c5148"},
+      {from:"data",to:"s1",fromSide:"r",toSide:"l",stroke:"#3b4570"},
+      {from:"cfg",to:"s5",fromSide:"r",toSide:"l",stroke:"#2c5148",dash:"5 5"},
+      {from:"s1",to:"a1",fromSide:"r",toSide:"l",stroke:"#2a2f45"},
+      {from:"s3",to:"aFire",fromSide:"r",toSide:"l",stroke:"#5b4a24"},
+      {from:"s6",to:"aR",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"s8",to:"aQ",fromSide:"r",toSide:"l",stroke:"#2a2f45"}
+    ],
+    flow:[
+      {paths:[0,1,2,3,4,5],cls:"data",weight:6,dur:9200,splits:[{at:3,cls:"out"}]},
+      {paths:[6],cls:"data",weight:2,dur:1600},
+      {paths:[8],cls:"data",weight:1,dur:1500},
+      {paths:[9],cls:"adv",weight:2,dur:1500},
+      {paths:[10],cls:"out",weight:2,dur:1500},
+      {paths:[11],cls:"out",weight:2,dur:1500}
+    ]
+  };
+
+  /* =====================================================================
+     SPEC 2 - CODE MAP (files + data lineage)
+     ===================================================================== */
+  function crow(i){ return 92 + i*120; }
+  var CX=430, CW=250, AX=760, AW=250;
+  var code={
+    w:1240, h:1180, r:4.5, every:740,
+    steps:[
+      {label:"CSV",target:"csv",color:"#818cf8"},
+      {label:"ingest.py",target:"ingest",color:"#818cf8"},
+      {label:"cells.parquet",target:"parquet",color:"#818cf8"},
+      {label:"analyze.py",target:"analyze",color:"#4ade80"},
+      {label:"summary.json",target:"summary",color:"#4ade80"},
+      {label:"figures",target:"figs",color:"#4ade80"}
+    ],
+    bands:[
+      {x:20,y:60,w:360,h:1060,label:"TESTS · SQL",stroke:"#3a381f"},
+      {x:CX-14,y:60,w:CW+28,h:1060,label:"src/",stroke:"#2b3350"},
+      {x:AX-14,y:60,w:AW+28,h:1060,label:"DATA LINEAGE",stroke:"#24304a"},
+      {x:1050,y:60,w:170,h:1060,label:"META",stroke:"#262b3d"}
+    ],
+    nodes:[
+      {id:"cfg",kind:"config",x:CX,y:crow(0),w:CW,h:66,title:"config.py",titleSize:14,stripe:"#5eead4",lines:[
+        {t:"alpha · power · MDE · 85/15"}]},
+      {id:"ingest",kind:"module",x:CX,y:crow(1),w:CW,h:84,title:"ingest.py",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"Spark: 13.9M rows → sums"},{t:"SRM + row-order guardrail"}]},
+      {id:"guard",kind:"module",x:CX,y:crow(2)+2,w:CW,h:96,title:"srm · balance · robustness",titleSize:12.5,stripe:"#fbbf24",lines:[
+        {t:"under-dispersion, Hotelling T²"},{t:"specification curve"}]},
+      {id:"power",kind:"module",x:CX,y:crow(3)+6,w:CW,h:66,title:"power.py",titleSize:14,stripe:"#818cf8",lines:[
+        {t:"Cohen's h, required N"}]},
+      {id:"analyze",kind:"module",x:CX,y:crow(4)+8,w:CW,h:96,title:"analyze.py",titleSize:14,stripe:"#4ade80",lines:[
+        {t:"z-test · CUPED · Lin · CACE"},{t:"the 3 corrected numbers live here"}]},
+      {id:"seq",kind:"module",x:CX,y:crow(5)+12,w:CW,h:72,title:"sequential.py · hte.py",titleSize:13,stripe:"#4ade80",lines:[
+        {t:"always-valid CI · uplift · Qini"}]},
+      {id:"run",kind:"module",x:CX,y:crow(6)+16,w:CW,h:66,title:"run.py",titleSize:14,stripe:"#4ade80",lines:[
+        {t:"orchestration + the decision"}]},
+
+      {id:"tstats",kind:"notebook",x:20,y:crow(1),w:360,h:64,title:"tests/test_stats.py",titleSize:12.5,lines:[
+        {t:"regression tests on the 3 fixed numbers"}]},
+      {id:"tsql",kind:"notebook",x:20,y:crow(2)+2,w:360,h:64,title:"tests/test_sql.py",titleSize:12.5,lines:[
+        {t:"SQL vs Spark, cross-checked · 28 tests total"}]},
+      {id:"sqla",kind:"notebook",x:20,y:crow(3)+4,w:360,h:64,title:"sql/aggregate.sql · balance.sql",titleSize:11.5,lines:[
+        {t:"the same aggregation, in SQL"}]},
+
+      {id:"csv",kind:"data",x:AX,y:crow(0),w:AW,h:64,title:"criteo-uplift-v2.1.csv",titleSize:10.5,sub:"data/raw/",lines:[]},
+      {id:"parquet",kind:"data",x:AX,y:crow(1)+8,w:AW,h:74,title:"cells.parquet",titleSize:12.5,sub:"data/aggregate/ · 68 KB",lines:[{t:"per-arm sufficient stats"}]},
+      {id:"analyzeA",kind:"data",x:AX,y:crow(3),w:AW,h:70,title:"per-arm moments",titleSize:12.5,sub:"in memory",lines:[{t:"means, variances, covariance"}]},
+      {id:"summary",kind:"result",x:AX,y:crow(4)+8,w:AW,h:80,title:"results/summary.json",titleSize:11.5,stripe:"#4ade80",lines:[
+        {t:"+47.4% ship decision",mono:true,size:10.5},{t:"every site number sourced here",mono:true,size:9.5}]},
+      {id:"figs",kind:"result",x:AX,y:crow(6),w:AW,h:70,title:"results/figures/*.png",titleSize:11.5,sub:"5 figures",stripe:"#4ade80",lines:[
+        {t:"balance · power · forest · spec · uplift",mono:true,size:9}]},
+
+      {id:"readme",kind:"meta",x:1050,y:crow(0),w:170,h:64,title:"README.md",titleSize:13,lines:[
+        {t:"every number cited",mono:true,size:9.5}]},
+      {id:"reqs",kind:"config",x:1050,y:crow(2),w:170,h:80,title:"requirements",titleSize:12.5,lines:[
+        {t:"pyspark 3.5",mono:true,size:10.5},{t:"JDK 17 only",mono:true,size:10.5}]}
+    ],
+    edges:[
+      {from:"csv",to:"parquet",stroke:"#3b4570"},{from:"parquet",to:"analyzeA",stroke:"#3b4570"},
+      {from:"analyzeA",to:"summary",stroke:"#2c5148"},{from:"summary",to:"figs",stroke:"#2c5148"},
+      {from:"ingest",to:"parquet",fromSide:"r",toSide:"l",stroke:"#2b3350"},
+      {from:"analyze",to:"summary",fromSide:"r",toSide:"l",stroke:"#2c5148"},
+      {from:"csv",to:"ingest",fromSide:"l",toSide:"r",stroke:"#3b4570"},
+      {from:"tstats",to:"ingest",fromSide:"r",toSide:"l",stroke:"#4d4a2a"},
+      {from:"tsql",to:"guard",fromSide:"r",toSide:"l",stroke:"#4d4a2a",dash:"5 5"}
+    ],
+    flow:[
+      {paths:[0,1,2,3],cls:"data",weight:6,dur:9000,splits:[{at:2,cls:"out"}]},
+      {paths:[4],cls:"data",weight:2,dur:1500},
+      {paths:[5],cls:"out",weight:2,dur:1500},
+      {paths:[6],cls:"data",weight:2,dur:1500}
+    ]
+  };
+
+  KVBlueprint.mount("svg-system","wrap-system",sys,"system");
+  KVBlueprint.mount("svg-code","wrap-code",code,"code");
+})();
+</script>
+</body>
+</html>

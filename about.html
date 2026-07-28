@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>document.documentElement.className='js';(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kv-theme')||'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
-<link rel="stylesheet" href="assets/style.css?v=5">
+<link rel="stylesheet" href="assets/style.css?v=6">
 </head>
 <body>
 <div class="progress"></div>
@@ -33,9 +33,26 @@
     <button class="nav-toggle" aria-label="Menu">&#9776;</button>
     <div class="nav-links">
       <a href="/">Home</a>
-      <a href="inference-lens">Inference-Lens</a>
-      <a href="agentic-llmops">Multi-Agent Inference Reliability</a>
-      <a href="predictops">PredictOps</a>
+      <div class="nav-drop">
+        <button class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Projects <span class="caret">&#9662;</span></button>
+        <div class="mega" role="menu">
+          <div class="mega-col">
+            <p class="mega-h">Agents &amp; LLM reliability</p>
+            <a href="inference-lens">Inference-Lens <span>judge robustness, live demo</span></a>
+            <a href="secret-agent">secret-agent <span>frameworkless agent runtime</span></a>
+          </div>
+          <div class="mega-col">
+            <p class="mega-h">Experimentation &amp; MLOps</p>
+            <a href="groundtruth">GroundTruth <span>A/B testing, CUPED</span></a>
+            <a href="predictops">PredictOps <span>CI-gated MLOps loop</span></a>
+          </div>
+          <div class="mega-col">
+            <p class="mega-h">Data &amp; systems</p>
+            <a href="streamlake">StreamLake <span>streaming lakehouse, contracts</span></a>
+            <a href="vaultex">vaultex <span>double-entry ledger</span></a>
+          </div>
+        </div>
+      </div>
       <a href="about" class="active">About</a>
       <a href="inference-lens#demo" class="nav-cta">Live demo</a>
           <button class="theme-switch" id="themeSwitch" type="button" aria-label="Toggle light or dark theme" title="Light / dark">
@@ -71,7 +88,7 @@
     <p class="kicker reveal">Work</p>
     <h2 class="section-title reveal">Experience</h2>
     <div class="timeline reveal">
-      <div class="tl-item"><div class="ph">Sep 2025 to Jun 2026 · DePaul University</div><h4>Graduate Research Engineer</h4><p>First author on the multi-agent inference reliability work, alongside 2 faculty co-authors, currently under peer review. I own it end to end, from the problem to the architecture to the statistics. 10 phases, 5 model families, and the Inverse Capability Hypothesis: monitoring lifted a weak model +30.3 points pass@1 and cost a strong one 4.0, both significant, so the benefit falls as baseline capability rises.</p></div>
+      <div class="tl-item"><div class="ph">Sep 2025 to Jun 2026 · DePaul University</div><h4>Graduate Research Engineer</h4><p>First author on the multi-agent inference reliability work, alongside 2 faculty co-authors, currently under peer review. I own it end to end, from the problem to the architecture to the statistics. 10 phases, 5 model families, and the Inverse Capability Hypothesis: monitoring lifted a weak model +30.3 points pass@1 and cost a strong one 4.0, both significant, so the benefit falls as baseline capability rises.</p><a href="agentic-llmops" class="arrow" style="display:inline-block;margin-top:10px;">Read the research: Multi-Agent Inference Reliability Framework &rarr;</a></div>
       <div class="tl-item"><div class="ph">2022 to 2024 · sensen.ai</div><h4>Data Scientist</h4><p>Built the model validation framework that became the standard validation workflow across 26 global deployments, mapping every vehicle event to track accuracy continuously with reports a non-technical council member could read. Rebuilt the ETL behind weekly invoicing from 3 plus hours down to under 2 and the ticket generation pipeline from roughly 800ms to 480ms per instance.</p></div>
       <div class="tl-item"><div class="ph">2021 to 2022 · AECOM and Siri</div><h4>Data Engineer</h4><p>Built Python and Pandas pipelines for cleaning and monthly cost consolidation, cutting dashboard turnaround from 3 hours to under 1 and tuned SQL across cost databases from roughly 20 seconds to 8. Early career, but the instinct was already there. Take messy and manual, make it clean, fast and repeatable.</p></div>
     </div>
@@ -120,25 +137,46 @@
     <p class="kicker reveal">Research</p>
     <h2 class="section-title reveal">Selected work</h2>
     <div class="proj-grid">
-      <a href="agentic-llmops" class="card reveal">
-        <span class="glow" style="background:#a855f7;"></span>
-        <span class="tag">First-author · under peer review</span>
-        <h3>Multi-Agent Inference Reliability</h3>
-        <p>A 3 agent runtime monitor for code generation. The useful half is knowing when not to use it: it lifts weak models about +30 points pass@1 but costs strong ones, so above roughly 60 percent baseline the benefit fades.</p>
-        <span class="arrow">Read more &rarr;</span>
-      </a>
-      <a href="inference-lens" class="card reveal d1">
+      <a href="inference-lens" class="card reveal">
         <span class="glow" style="background:#6366f1;"></span>
-        <span class="tag">Can the judge be fooled</span>
+        <span class="tag">Judge robustness · live demo</span>
         <h3>Inference-Lens</h3>
         <p>An adversarial stress-test of automated NLP evaluators. 2 models tied on clean accuracy diverged by over 75 points under attack.</p>
         <span class="arrow">Read more &rarr;</span>
       </a>
-      <a href="predictops" class="card reveal d2">
+      <a href="secret-agent" class="card reveal d1">
+        <span class="glow" style="background:#a855f7;"></span>
+        <span class="tag">Frameworkless agent runtime</span>
+        <h3>secret-agent</h3>
+        <p>An LLM agent loop in 53 lines, no framework. A hostile review found a total sandbox escape, since closed.</p>
+        <span class="arrow">Read more &rarr;</span>
+      </a>
+      <a href="groundtruth" class="card reveal d2">
         <span class="glow" style="background:#22c55e;"></span>
+        <span class="tag">A/B testing · CUPED</span>
+        <h3>GroundTruth</h3>
+        <p>Variance-reduced A/B analysis on a 14M-row log, with an in-browser simulator for power and CUPED confidence intervals.</p>
+        <span class="arrow">Read more &rarr;</span>
+      </a>
+      <a href="predictops" class="card reveal">
+        <span class="glow" style="background:#10b981;"></span>
         <span class="tag">Production MLOps · shipped</span>
         <h3>PredictOps</h3>
-        <p>A cross-validated training pipeline, a validated FastAPI serving layer and a multi-stage Docker build, plus a CI eval gate that blocks a bad model and PSI drift detection.</p>
+        <p>A cross-validated training pipeline and FastAPI serving layer, plus a CI eval gate that blocks a bad model and PSI drift detection.</p>
+        <span class="arrow">Read more &rarr;</span>
+      </a>
+      <a href="streamlake" class="card reveal d1">
+        <span class="glow" style="background:#fbbf24;"></span>
+        <span class="tag">Streaming lakehouse · contracts</span>
+        <h3>StreamLake</h3>
+        <p>Kafka to Iceberg with a custom data-contract engine that quarantines bad rows instead of silently ingesting them.</p>
+        <span class="arrow">Read more &rarr;</span>
+      </a>
+      <a href="vaultex" class="card reveal d2">
+        <span class="glow" style="background:#5eead4;"></span>
+        <span class="tag">Double-entry ledger</span>
+        <h3>vaultex</h3>
+        <p>A Java payments ledger where debits always equal credits, proven to hold under concurrent load.</p>
         <span class="arrow">Read more &rarr;</span>
       </a>
     </div>
@@ -164,12 +202,12 @@
       <div class="brand" style="margin-bottom:14px;"><span class="mark">KV</span>Kalyan Venkatesh</div>
       <p class="muted" style="margin-top:0; max-width:280px;">ML systems that hold up when it matters.</p>
     </div>
-    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="agentic-llmops">Multi-Agent Inference Reliability</a><a href="predictops">PredictOps</a><a href="inference-lens#demo">Live demo</a></div>
+    <div class="col"><h5>Projects</h5><a href="inference-lens">Inference-Lens</a><a href="secret-agent">secret-agent</a><a href="groundtruth">GroundTruth</a><a href="streamlake">StreamLake</a><a href="vaultex">vaultex</a><a href="predictops">PredictOps</a><a href="inference-lens#demo">Live demo</a></div>
     <div class="col"><h5>Elsewhere</h5><a href="https://github.com/kalyan-venk" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:adavivenkatesh@gmail.com">Email</a></div>
   </div>
   <div class="wrap"><p class="muted">&copy; 2026 Kalyan Venkatesh.</p></div>
 </footer>
 
-<script src="assets/script.js?v=4"></script>
+<script src="assets/script.js?v=5"></script>
 </body>
 </html>
