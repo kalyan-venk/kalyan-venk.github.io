@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://kalyanvenk.com/job-search">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Scanner &middot; Kalyan Venkatesh</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
+<meta name="description" content="A personal job search buddy. Multi agent AI that scans the country for the right jobs, tailors your resume, and fills the application for you.">
+<meta property="og:title" content="Job Scanner">
+<meta property="og:description" content="A personal job search buddy. Multi agent AI that finds the right jobs first and does the busywork for you.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kalyanvenk.com/job-search">
+<meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Job Scanner">
+<meta name="twitter:description" content="A personal job search buddy. Multi agent AI that finds the right jobs first and does the busywork for you.">
+<meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/home.css?v=7">
+<style>
+  /* page-specific, scoped under .js- so it never touches shared classes */
+  .js-wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .js-top { padding: 40px 0 0; }
+  .js-back { font-family: var(--mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); }
+  .js-back:hover { color: var(--accent); }
+
+  .js-hero { padding: 76px 0 4px; }
+  .js-eyebrow { font-family: var(--mono); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+  .js-hero h1 { font-size: clamp(2.3rem, 6.5vw, 3.5rem); line-height: 1.06; letter-spacing: -.025em; color: var(--head); font-weight: 800; margin: .5em 0 0; }
+  .js-lead { font-size: 1.18rem; margin-top: 26px; max-width: 60ch; }
+
+  .js-section { padding: 40px 0; }
+  .js-section p { margin: 0 0 16px; max-width: 62ch; }
+
+  .js-features { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px; }
+  @media (max-width: 600px) { .js-features { grid-template-columns: 1fr; } }
+  .js-feat { padding: 22px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-soft); transition: border-color .18s; }
+  .js-feat:hover { border-color: var(--accent); }
+  .js-feat h3 { margin: 0; color: var(--head); font-size: 1rem; font-weight: 600; }
+  .js-feat p { margin: 9px 0 0; font-size: .93rem; max-width: none; }
+
+  .js-quote { border-left: 2px solid var(--accent); padding: 4px 0 4px 22px; margin: 8px 0; color: var(--head); font-size: 1.2rem; font-weight: 500; line-height: 1.5; max-width: 58ch; }
+
+  .js-cta { border: 1px solid var(--line); border-radius: 16px; background: var(--bg-soft); padding: 34px; margin-top: 24px; }
+  .js-badge { display: inline-block; font-family: var(--mono); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 6px 13px; border-radius: 999px; }
+  .js-cta h2 { color: var(--head); font-size: 1.4rem; font-weight: 700; margin: 18px 0 8px; letter-spacing: -.01em; }
+  .js-cta p { margin: 0; max-width: 54ch; }
+  .js-formlabel { margin: 22px 0 10px; font-size: .95rem; color: var(--head); }
+  .js-form { display: flex; gap: 10px; flex-wrap: wrap; }
+  .js-form input { flex: 1; min-width: 220px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px; color: var(--head); font-family: inherit; font-size: 1rem; }
+  .js-form input::placeholder { color: var(--text-dim); }
+  .js-form input:focus { outline: none; border-color: var(--accent); }
+  .js-form button { background: var(--accent); color: #141210; border: none; border-radius: 10px; padding: 13px 24px; font-weight: 600; font-family: inherit; font-size: 1rem; cursor: pointer; transition: filter .15s; }
+  .js-form button:hover { filter: brightness(1.08); }
+  .js-reach { margin: 22px 0 0; font-size: .95rem; color: var(--text-dim); }
+  .js-reach a { color: var(--accent); }
+  .js-reach a:hover { text-decoration: underline; }
+
+  .js-foot { padding: 40px 0 80px; margin-top: 48px; border-top: 1px solid var(--line); font-size: .84rem; color: var(--text-dim); }
+  .js-foot a { color: var(--text); }
+  .js-foot a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<main class="js-wrap">
+
+  <div class="js-top">
+    <a class="js-back" href="/">&larr; Kalyan Venkatesh</a>
+  </div>
+
+  <header class="js-hero reveal">
+    <div class="js-eyebrow">In the works</div>
+    <h1>Your personal job search buddy.</h1>
+    <p class="js-lead">Multi agent AI that scans the country for the right jobs, tailors your resume to each one, and can fill the application for you. So you show up first, and you show up ready.</p>
+  </header>
+
+  <section class="js-section reveal">
+    <p>Sometimes, out of nowhere, you have to find a new job. I know how stressful that gets, and how quickly it pulls your focus from everything else that matters. So I built something to carry part of that load for you.</p>
+  </section>
+
+  <section class="js-section reveal">
+    <div class="js-features">
+      <div class="js-feat">
+        <h3>Searches the whole map</h3>
+        <p>It scans every corner of the US job market, not one board at a time, and surfaces the roles actually worth your time.</p>
+      </div>
+      <div class="js-feat">
+        <h3>First in the door</h3>
+        <p>Soon it refreshes every 15 minutes, so the moment a good role goes live you are among the first to see it and apply.</p>
+      </div>
+      <div class="js-feat">
+        <h3>Resume, tuned per role</h3>
+        <p>Every application is tailored to the specific job, so you always put your best foot forward.</p>
+      </div>
+      <div class="js-feat">
+        <h3>The busywork, handled</h3>
+        <p>Want the application filled in for you? Say the word and it is done.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="js-section reveal">
+    <p class="js-quote">I build agentic AI systems for a living. This is one I chose to build and back myself, for anyone who has ever had to job hunt under pressure.</p>
+  </section>
+
+  <section class="reveal">
+    <div class="js-cta">
+      <span class="js-badge">Coming soon</span>
+      <h2>Not open to the public yet.</h2>
+      <p>Job Scanner is still in private development. It will be available in the near future.</p>
+
+      <p class="js-formlabel">Want to know the moment it goes live?</p>
+      <!-- Formspree waitlist form; signups land at adavivenkatesh@gmail.com. -->
+      <form class="js-form" action="https://formspree.io/f/mrennvaq" method="POST">
+        <input type="email" name="email" required placeholder="you@email.com" aria-label="Your email">
+        <input type="hidden" name="_subject" value="Job Scanner waitlist signup">
+        <button type="submit">Notify me</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="js-foot reveal">
+    <p>Built and backed by Kalyan Venkatesh. <a href="/">Back to home</a>.</p>
+  </footer>
+
+</main>
+
+<script>
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+</script>
+</body>
+</html>
