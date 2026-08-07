@@ -173,7 +173,7 @@
 
       <div class="bp-notes">
         <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>Where monitoring stops helping</h4>
-          <p>Monitoring is not a free win. On code that actually parses it stays flat everywhere from a 52% to a 91% baseline, no more than about 2 points either way. The real damage shows up when the critic false-alarms on a strong model and the fixer rewrites code that was already correct.</p></div>
+          <p>Monitoring is not a free win. The two mid-capability models moved by less than 2 points, neither distinguishable from zero. The real damage shows up when the critic false-alarms on a strong model and the fixer rewrites code that was already correct.</p></div>
         <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>What the gate is actually for</h4>
           <p>The reversion gate throws away <b>73.4%</b> of the Fixer's rewrites, keeping only strict improvements. The ablation shows problem context and fixer scale drive the gains; the gate mostly protects the downside.</p></div>
         <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>The critic is a hybrid</h4>
