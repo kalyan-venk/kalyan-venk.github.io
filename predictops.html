@@ -6,7 +6,7 @@
   <link rel="canonical" href="https://kalyanvenk.com/predictops">
   <title>PredictOps · Kalyan Venkatesh</title>
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
-  <meta name="description" content="A tabular churn classifier wrapped in a production ops loop: a CI eval gate, PSI drift detection, and MLflow registry promotion.">
+  <meta name="description" content="A real-time card-fraud scoring API wrapped in a production ops loop: a CI eval gate, PSI drift detection, and MLflow registry promotion.">
   <script>document.documentElement.setAttribute('data-theme','dark');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,12 +70,12 @@
 
   <header class="phero">
     <h1 class="reveal">PredictOps <a class="gh" href="https://github.com/kalyan-venk/PredictOps" target="_blank" rel="noopener" aria-label="GitHub repository"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.2 3.44 9.6 8.21 11.16.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.77.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58A12.02 12.02 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg></a></h1>
-    <p class="ptag reveal">A tabular churn model wrapped in a real ops loop: CI gate, drift detection, registry promotion.</p>
+    <p class="ptag reveal">A fraud-scoring API for card transactions, built so every feature is something a live authorization request could actually compute. Wrapped in a CI gate, drift detection, and registry promotion.</p>
     <ul class="pstats reveal">
-      <li><b>&ge;0.80</b> ROC-AUC CI gate</li>
-      <li><b>0.846</b> CV ROC-AUC, winner</li>
-      <li><b>71%</b> smaller serving image</li>
-      <li><b>7</b> phases shipped</li>
+      <li><b>&ge;0.55</b> AUPRC CI gate</li>
+      <li><b>0.6472</b> out-of-time AUPRC, winner</li>
+      <li><b>347MB</b> serving image, ONNX only</li>
+      <li><b>44/44</b> tests passing</li>
     </ul>
   </header>
 
@@ -114,12 +114,12 @@
       </div>
 
       <div class="bp-notes">
-        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>The churn model is plumbing</h4>
-          <p>All the depth sits after it: a CI gate that fails the build below <b>0.80</b> ROC-AUC, registry promotion, and drift detection wired into 1 make pipeline.</p></div>
-        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>The simpler model won, and shipped</h4>
-          <p>Logistic Regression beat XGBoost on cross-validated ROC-AUC, <b>0.846 to 0.842</b>, so the simpler model is the one that got promoted.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--indigo)"></span>Every feature has to be servable</h4>
+          <p>Amount, category, distance, and two velocity features computed live per card. Nothing here reads a label, a future row, or a global aggregate a live request could not assemble on its own.</p></div>
+        <div class="bp-note"><h4><span class="dot" style="background:var(--warn)"></span>The leaky version scored 0.0041</h4>
+          <p>An earlier version trained on features only available in hindsight, and it showed: <b>0.0041 AUPRC</b>, out-of-time. Rebuilt on serve-time-computable features, the winning model reaches <b>0.6472</b>.</p></div>
         <div class="bp-note"><h4><span class="dot" style="background:var(--cyan)"></span>A tiny serving image, on purpose</h4>
-          <p>A multi-stage build trains and exports to <code>ONNX</code>, then serves with onnxruntime alone, no sklearn at runtime. That takes the image from <b>1.17 GB to 343 MB</b>.</p></div>
+          <p>A multi-stage build trains and exports to <code>ONNX</code>, then serves with onnxruntime alone, no scikit-learn, pandas or xgboost anywhere near the container that takes traffic. Final size: <b>347 MB</b>.</p></div>
       </div>
     </div>
   </section>
@@ -127,9 +127,9 @@
   <section class="psec reveal">
     <h2>Notes</h2>
     <div class="notes">
-      <div class="note reveal"><b>The simpler model won.</b><p>LogReg beat XGBoost on 5-fold CV, 0.846 to 0.842, and held on the test set. The pipeline serves whichever wins.</p></div>
-      <div class="note reveal"><b>The gate blocks bad models.</b><p>CI asserts ROC-AUC &ge; 0.80 or the build fails. Proven by degrading a model, watching CI go red, then fixing it green.</p></div>
-      <div class="note reveal"><b>Multi-stage Docker, on purpose.</b><p>Trains, exports to ONNX, serves on onnxruntime alone. 1.17 GB down to 343 MB, a 71% cut.</p></div>
+      <div class="note reveal"><b>The winner is picked honestly.</b><p>XGBoost beat Logistic Regression 0.6472 to 0.1228 on out-of-time AUPRC, the same metric that gates promotion. Accuracy is never reported: at a 0.386% fraud rate a model that predicts never-fraud scores 99.6%+ accuracy and catches nothing.</p></div>
+      <div class="note reveal"><b>The gate blocks bad models.</b><p>CI asserts out-of-time AUPRC &ge; 0.55 or the build fails, and a second test asserts the winner was actually picked by AUPRC, not accuracy or ROC-AUC.</p></div>
+      <div class="note reveal"><b>Multi-stage Docker, on purpose.</b><p>Trains, exports to ONNX, serves on onnxruntime alone, no scikit-learn, pandas or xgboost in the container that takes traffic. Final image: 347 MB.</p></div>
     </div>
   </section>
 
@@ -164,40 +164,40 @@
       {x:900,y:60,w:300,h:900,label:"ARTIFACTS",stroke:"#24304a"}
     ],
     nodes:[
-      {id:"data",kind:"resource",x:20,y:srow(0),w:300,h:84,title:"Telco churn CSV",sub:"data/raw/",stripe:"#818cf8",lines:[
-        {t:"~7k customers, tabular"},{t:"a deliberately boring classifier"}]},
+      {id:"data",kind:"resource",x:20,y:srow(0),w:300,h:84,title:"Sparkov transaction CSVs",sub:"data/raw/",stripe:"#818cf8",lines:[
+        {t:"1.3M train / 556K test rows"},{t:"an out-of-time split, not a random one"}]},
       {id:"cfg",kind:"config",x:20,y:srow(1),w:300,h:96,title:"config.py",sub:"1 import-light source",stripe:"#5eead4",lines:[
-        {t:"seed 42 · 80/20 split · 5-fold"},{t:"gate ≥ 0.80 · PSI 0.15"},{t:"paths + experiment name"}]},
+        {t:"seed 42 · fixed out-of-time split"},{t:"gate ≥ 0.55 AUPRC · PSI 0.15"},{t:"paths + experiment name"}]},
       {id:"mlf",kind:"data",x:20,y:srow(4),w:300,h:80,title:"MLflow (file store)",sub:"mlruns/",lines:[
         {t:"nested runs: parent + per model"},{t:"tracks CV + test metrics"}]},
 
-      {id:"s1",kind:"stage",x:470,y:srow(0),w:300,h:84,tag:"01",title:"Data load + normalize",sub:"data.py load_dataset()",lines:[
-        {t:"drop customerID, coerce TotalCharges"},{t:"derive binary target (Churn = Yes)"}]},
-      {id:"s2",kind:"stageKey",x:470,y:srow(1),w:300,h:104,tag:"02",title:"Train + CV compare",sub:"train.py",stripe:"#818cf8",lines:[
-        {t:"preprocess: scale + one-hot (ONNX-safe)"},{t:"LogReg vs XGBoost · 5-fold ROC-AUC"},{t:"LogReg wins 0.846 vs 0.842",cls:"em-good"}]},
+      {id:"s1",kind:"stage",x:470,y:srow(0),w:300,h:84,tag:"01",title:"Data load + normalize",sub:"data.py load_train_test()",lines:[
+        {t:"train/test loaded as separate files"},{t:"0.579% / 0.386% fraud rate"}]},
+      {id:"s2",kind:"stageKey",x:470,y:srow(1),w:300,h:104,tag:"02",title:"Train + compare",sub:"train.py",stripe:"#818cf8",lines:[
+        {t:"features: haversine, time, age, velocity"},{t:"LogReg vs XGBoost · out-of-time AUPRC"},{t:"XGBoost wins 0.6472 vs 0.1228",cls:"em-good"}]},
       {id:"s3",kind:"stage",x:470,y:srow(2),w:300,h:96,tag:"03",title:"Select + ONNX export",sub:"export_onnx()",lines:[
-        {t:"save winner to model.joblib"},{t:"export model.onnx (opset 17) + meta"}]},
+        {t:"save winner to model.joblib"},{t:"export model.onnx (opset 17) + encoders.json"}]},
       {id:"s4",kind:"gate",x:470,y:srow(3),w:300,h:96,tag:"04",title:"CI eval gate",sub:".github/workflows + pytest",stripe:"#4ade80",lines:[
-        {t:"fails the build if ROC-AUC < 0.80",cls:"em-good"},{t:"the centerpiece: no bad model ships"}]},
+        {t:"fails the build if AUPRC < 0.55",cls:"em-good"},{t:"the centerpiece: no bad model ships"}]},
       {id:"s5",kind:"stage",x:470,y:srow(4),w:300,h:96,tag:"05",title:"Registry promote",sub:"registry.py",lines:[
-        {t:"register predictops-classifier"},{t:"Staging → Production (archive old)"}]},
+        {t:"register predictops-fraud-classifier"},{t:"Staging → Production (archive old)"}]},
       {id:"s6",kind:"stageKey",x:470,y:srow(5),w:300,h:104,tag:"06",title:"Serve",sub:"app.py · FastAPI",stripe:"#4ade80",lines:[
         {t:"onnxruntime only, no sklearn at runtime"},{t:"/health · /predict · /info · /reload"},{t:"Pydantic-validated requests"}]},
       {id:"s7",kind:"gate",x:470,y:srow(6),w:300,h:96,tag:"07",title:"Drift monitor",sub:"drift.py · Evidently",stripe:"#fbbf24",lines:[
         {t:"PSI per feature, alert at > 0.15",cls:"em-warn"},{t:"writes an HTML drift report"}]},
 
       {id:"a1",kind:"artifact",x:900,y:srow(2),w:300,h:88,title:"model artifacts",sub:"models/",lines:[
-        {t:"model.joblib: gate + MLflow",mono:true,size:11},{t:"model.onnx + model_meta.json",mono:true,size:11}]},
+        {t:"model.joblib: gate + MLflow",mono:true,size:11},{t:"model.onnx + encoders.json",mono:true,size:11}]},
       {id:"aR",kind:"result",x:900,y:srow(3),w:300,h:110,title:"the proof",titleSize:14,stripe:"#4ade80",lines:[
-        {t:"LogReg 0.846 > XGBoost 0.842 CV",cls:"em-good"},
-        {t:"gate holds at ROC-AUC ≥ 0.80"},
-        {t:"Docker 1.17 GB → 343 MB (~71%)"}]},
+        {t:"XGBoost 0.6472 AUPRC, out-of-time",cls:"em-good"},
+        {t:"gate holds at AUPRC ≥ 0.55"},
+        {t:"leaky features once scored 0.0041",cls:"em-warn"}]},
       {id:"a2",kind:"data",x:900,y:srow(4),w:300,h:80,title:"model registry",sub:"mlruns/",lines:[
-        {t:"predictops-classifier v2"},{t:"stage = Production (v1 archived)"}]},
+        {t:"predictops-fraud-classifier"},{t:"Staging → Production (archive old)"}]},
       {id:"a3",kind:"deploy",x:900,y:srow(5),w:300,h:80,title:"live API",sub:"onnxruntime",lines:[
-        {t:"POST /predict →"},{t:"{ prediction, probability }",mono:true,size:11}]},
+        {t:"POST /predict →"},{t:"{ fraud_probability, block }",mono:true,size:11}]},
       {id:"a4",kind:"result",x:900,y:srow(6),w:300,h:80,title:"drift_report.html",titleSize:13,sub:"reports/",stripe:"#fbbf24",lines:[
-        {t:"per-feature PSI, logged to MLflow"}]}
+        {t:"max PSI 0.054, 0/15 over threshold",cls:"em-good"}]}
     ],
     edges:[
       {from:"s1",to:"s2",stroke:"#3b4570"},{from:"s2",to:"s3",stroke:"#3b4570"},{from:"s3",to:"s4",stroke:"#3b4570"},

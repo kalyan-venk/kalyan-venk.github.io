@@ -2,13 +2,13 @@
    StreamLake data-contract validator, run entirely in the browser.
 
    This is a faithful port of the row-level checks in
-   conf/contracts/silver_trips.yml and the semantics in
+   conf/contracts/silver_transactions.yml and the semantics in
    src/streamlake/contracts/checks.py. It validates ONE record against the
-   silver.trips contract and reports PASS or REJECTED with the exact assertion
-   that broke, the same way the real engine reports a CheckResult (observed vs
-   expected).
+   silver.transactions contract and reports PASS or REJECTED with the exact
+   assertion that broke, the same way the real engine reports a CheckResult
+   (observed vs expected).
 
-   What it deliberately does NOT do: the dataset-level checks (unique(trip_id),
+   What it deliberately does NOT do: the dataset-level checks (unique(trans_num),
    row_count, null_rate, freshness) cannot be judged from a single record, so
    they are named on the page but not run here. Everything below is a check
    that a single row can actually satisfy or break.
@@ -16,38 +16,45 @@
 (function () {
   "use strict";
 
-  // ---- a valid silver.trips record, the checker's starting point ----
+  // ---- a valid silver.transactions record, the checker's starting point ----
   var VALID = {
-    trip_id: "2024-01-7f3c9a12",
-    pickup_ts: "2024-01-15T08:31:00",
-    dropoff_ts: "2024-01-15T08:52:00",
-    pickup_date: "2024-01-15",
-    passenger_count: 1,
-    trip_distance_mi: 3.4,
-    trip_duration_min: 21.0,
-    avg_speed_mph: 9.7,
-    payment_type: 1,
-    tip_pct: 18.5,
-    total_amount: 24.30
+    trans_num: "1f2e3d4c5b6a79881c0f9e8d7c6b5a4f",
+    trans_time: "2020-06-21T14:32:00",
+    trans_date: "2020-06-21",
+    trans_hour: 14,
+    cc_num_last4: "4562",
+    cc_num_hash: "a91f7c3e8b2d4f605e19c8a7b6d5e4f3",
+    merchant: "Kub, Kessler and Sons",
+    category: "grocery_pos",
+    channel: "in_person",
+    amt: 42.13,
+    state: "OH",
+    cardholder_age: 41,
+    merch_lat: 40.12,
+    merch_long: -82.55,
+    distance_km: 6.4,
+    is_fraud: 0
   };
 
-  // ---- preset breakages, one field each, drawn from real TLC failure modes ----
+  // ---- preset breakages, one field each, each one breaking a real check in the contract ----
   var PRESETS = {
-    "negative fare": function (r) { r.total_amount = -37.5; },
-    "time runs backwards": function (r) { r.dropoff_ts = "2024-01-15T08:12:00"; },
-    "300-mile cab ride": function (r) { r.trip_distance_mi = 512.0; r.avg_speed_mph = 210; },
-    "bad payment_type": function (r) { r.payment_type = 9; },
-    "missing pickup_ts": function (r) { r.pickup_ts = null; },
-    "date disagrees with ts": function (r) { r.pickup_date = "2024-01-14"; },
-    "huge tip (warn only)": function (r) { r.tip_pct = 140; }
+    "amount above the $30k bound": function (r) { r.amt = 84999.99; },
+    "negative amount": function (r) { r.amt = -12.5; },
+    "category not on the list": function (r) { r.category = "electronics"; },
+    "is_fraud outside {0,1}": function (r) { r.is_fraud = 2; },
+    "merch_lat out of range": function (r) { r.merch_lat = 142.0; },
+    "missing cc_num_hash": function (r) { r.cc_num_hash = null; },
+    "cardholder_age 140 (warn only)": function (r) { r.cardholder_age = 140; }
   };
 
   // Non-nullable columns in the silver contract (schema: nullable:false).
-  var REQUIRED = ["trip_id", "pickup_ts", "dropoff_ts", "pickup_date",
-                  "trip_distance_mi", "trip_duration_min", "total_amount"];
+  var REQUIRED = ["trans_num", "trans_time", "trans_date", "trans_hour",
+                  "cc_num_last4", "cc_num_hash", "merchant", "category",
+                  "channel", "amt", "state", "merch_lat", "merch_long", "is_fraud"];
 
-  function tsval(v) { var t = Date.parse(v); return isNaN(t) ? null : t; }
-  function dateOf(v) { return (typeof v === "string" && v.indexOf("T") > -1) ? v.slice(0, 10) : null; }
+  var CATEGORIES = ["entertainment", "food_dining", "gas_transport", "grocery_net",
+                     "grocery_pos", "health_fitness", "home", "kids_pets", "misc_net",
+                     "misc_pos", "personal_care", "shopping_net", "shopping_pos", "travel"];
 
   /* Each check returns { name, severity, passed, observed, expected }, echoing
      the real engine's CheckResult fields. severity "error" stops the run;
@@ -63,60 +70,51 @@
       }
     },
     {
-      name: "dropoff_ts > pickup_ts", type: "expression", severity: "error",
+      name: "amt in [0, 30000]", type: "accepted_range", severity: "error",
       run: function (r) {
-        var a = tsval(r.pickup_ts), b = tsval(r.dropoff_ts);
-        var ok = a !== null && b !== null && b > a;
-        return { passed: ok, observed: r.pickup_ts + " to " + r.dropoff_ts, expected: "dropoff_ts > pickup_ts" };
+        var v = Number(r.amt);
+        return { passed: v >= 0 && v <= 30000, observed: v, expected: "0 <= amt <= 30000" };
       }
     },
     {
-      name: "trip_duration_min in (0, 1440]", type: "expression", severity: "error",
+      name: "category in the 14 accepted values", type: "accepted_values", severity: "error",
       run: function (r) {
-        var d = Number(r.trip_duration_min);
-        return { passed: d > 0 && d <= 1440, observed: d, expected: "trip_duration_min > 0 AND <= 1440" };
+        return { passed: CATEGORIES.indexOf(r.category) > -1, observed: r.category, expected: "category in " + JSON.stringify(CATEGORIES) };
       }
     },
     {
-      name: "pickup_date = date(pickup_ts)", type: "expression", severity: "error",
+      name: "is_fraud in {0, 1}", type: "accepted_values", severity: "error",
       run: function (r) {
-        var d = dateOf(r.pickup_ts);
-        return { passed: d !== null && r.pickup_date === d, observed: r.pickup_date + " vs " + d, expected: "partition column agrees with pickup_ts" };
+        var v = Number(r.is_fraud);
+        return { passed: v === 0 || v === 1, observed: r.is_fraud, expected: "is_fraud in (0, 1)" };
       }
     },
     {
-      name: "trip_distance_mi in [0, 300]", type: "accepted_range", severity: "error",
+      name: "merch_lat in [-90, 90]", type: "accepted_range", severity: "error",
       run: function (r) {
-        var v = Number(r.trip_distance_mi);
-        return { passed: v >= 0 && v <= 300, observed: v, expected: "0 <= trip_distance_mi <= 300" };
+        var v = Number(r.merch_lat);
+        return { passed: v >= -90 && v <= 90, observed: v, expected: "-90 <= merch_lat <= 90" };
       }
     },
     {
-      name: "total_amount in [0, 100000]", type: "accepted_range", severity: "error",
+      name: "merch_long in [-180, 180]", type: "accepted_range", severity: "error",
       run: function (r) {
-        var v = Number(r.total_amount);
-        return { passed: v >= 0 && v <= 100000, observed: v, expected: "0 <= total_amount <= 100000" };
+        var v = Number(r.merch_long);
+        return { passed: v >= -180 && v <= 180, observed: v, expected: "-180 <= merch_long <= 180" };
       }
     },
     {
-      name: "payment_type in {0..6}", type: "accepted_values", severity: "error",
+      name: "cardholder_age in [0, 100]", type: "accepted_range", severity: "warn",
       run: function (r) {
-        var v = Number(r.payment_type);
-        return { passed: [0, 1, 2, 3, 4, 5, 6].indexOf(v) > -1, observed: r.payment_type, expected: "payment_type in (0,1,2,3,4,5,6)" };
+        var v = Number(r.cardholder_age);
+        return { passed: v >= 0 && v <= 100, observed: v, expected: "0 <= cardholder_age <= 100" };
       }
     },
     {
-      name: "avg_speed_mph in [0, 150]", type: "accepted_range", severity: "warn",
+      name: "distance_km in [0, 20000]", type: "accepted_range", severity: "warn",
       run: function (r) {
-        var v = Number(r.avg_speed_mph);
-        return { passed: v >= 0 && v <= 150, observed: v, expected: "0 <= avg_speed_mph <= 150" };
-      }
-    },
-    {
-      name: "tip_pct in [0, 100]", type: "accepted_range", severity: "warn",
-      run: function (r) {
-        var v = Number(r.tip_pct);
-        return { passed: v >= 0 && v <= 100, observed: v, expected: "0 <= tip_pct <= 100" };
+        var v = Number(r.distance_km);
+        return { passed: v >= 0 && v <= 20000, observed: v, expected: "0 <= distance_km <= 20000" };
       }
     }
   ];
@@ -171,7 +169,7 @@
 
     box.className = "cd-out show";
     box.innerHTML = head + '<div class="cd-rows">' + rows + '</div>' +
-      '<p class="cd-note">unique(trip_id), row_count, null_rate and freshness run at the dataset level, so they are not judged on one record.</p>';
+      '<p class="cd-note">unique(trans_num), row_count, null_rate and freshness run at the dataset level, so they are not judged on one record.</p>';
   }
 
   function setRecord(obj) {
