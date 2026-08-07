@@ -63,24 +63,24 @@
 
   <header class="phero">
     <h1 class="reveal">StreamLake <a class="gh" href="https://github.com/kalyan-venk/Streamlake" target="_blank" rel="noopener" aria-label="GitHub repository"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.2 3.44 9.6 8.21 11.16.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.77.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58A12.02 12.02 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg></a></h1>
-    <p class="ptag reveal">A streaming lakehouse for NYC taxi data where every hop checks a data contract and stops the run when the data breaks it.</p>
+    <p class="ptag reveal">A streaming lakehouse for card transactions where every hop checks a data contract and stops the run when the data breaks it.</p>
     <ul class="pstats reveal">
-      <li><b>2.96M</b> trips ingested</li>
-      <li><b>47</b> checks across 7 contracts</li>
-      <li><b>1.30%</b> rows quarantined</li>
-      <li><b>46</b> dbt tests green</li>
+      <li><b>1.85M</b> transactions ingested</li>
+      <li><b>49</b> checks across 7 contracts</li>
+      <li><b>44/44</b> dbt tests, DuckDB + Snowflake</li>
+      <li><b>0.52%</b> fraud rate</li>
     </ul>
   </header>
 
   <section class="psec reveal" id="try">
     <h2>Try it</h2>
-    <p class="ptag" style="margin:0 0 20px;">Edit a <code>silver.trips</code> record or inject a real TLC failure, then validate against the row assertions the Spark engine runs over 2.9M rows.</p>
+    <p class="ptag" style="margin:0 0 20px;">Edit a <code>silver.transactions</code> record or trigger a preset breakage, then validate it against the same row assertions the Spark engine runs over 1.85M rows.</p>
     <div class="cd-app">
       <div class="cd-grid">
         <div class="cd-pane">
-          <label for="cd-json">silver.trips record (editable JSON)</label>
+          <label for="cd-json">silver.transactions record (editable JSON)</label>
           <textarea id="cd-json" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
-          <div class="cd-presets" id="cd-presets"><span class="cd-presets-lbl">Or inject a real TLC failure mode:</span></div>
+          <div class="cd-presets" id="cd-presets"><span class="cd-presets-lbl">Or break one of the checks in the real contract:</span></div>
           <div class="cd-controls">
             <button id="cd-validate" class="cd-btn primary" type="button">Validate against the contract</button>
             <button id="cd-reset" class="cd-btn ghost" type="button">Reset</button>
@@ -128,8 +128,8 @@
     <h2>Notes</h2>
     <div class="notes">
       <div class="note reveal"><b>Error stops, warn surfaces.</b><p>An error breach halts the DAG, so the warehouse keeps serving yesterday's correct data. A warn breach is logged and shown.</p></div>
-      <div class="note reveal"><b>Bad rows are quarantined.</b><p>Bad trips (fares of -$300, dropoffs in 2098) move to <code>silver.trips_quarantine</code> with the rule that caught them. The run fails only past 10% of the month.</p></div>
-      <div class="note reveal"><b>1 scan for the whole batch.</b><p>Every check compiles to a Spark aggregate, merged into one <code>df.agg</code>. Silver's 14 assertions over 2.9M rows cost about 2 seconds.</p></div>
+      <div class="note reveal"><b>Bad rows are quarantined.</b><p>Bad transactions (amounts outside $0 to $30k, a card with no hash) would move to <code>silver.transactions_quarantine</code> with the rule that caught them. The run fails only past 10% quarantined, a budget this clean, synthetic feed has never come close to.</p></div>
+      <div class="note reveal"><b>1 scan for the whole batch.</b><p>Every check compiles to a Spark aggregate, merged into one <code>df.agg</code>. Silver's 14 assertions over 1.85M rows cost about 3.6 seconds.</p></div>
     </div>
   </section>
 
@@ -164,40 +164,40 @@
       {x:900,y:60,w:300,h:904,label:"ARTIFACTS",stroke:"#24304a"}
     ],
     nodes:[
-      {id:"src",kind:"resource",x:20,y:srow(0),w:300,h:84,title:"NYC TLC parquet",sub:"data/raw/",stripe:"#818cf8",lines:[
-        {t:"2,964,624 trips · 48 MB · 2024-01"},{t:"1 month of yellow taxi"}]},
-      {id:"ctr",kind:"config",x:20,y:srow(1)+6,w:300,h:104,title:"conf/contracts/*.yml",sub:"7 specs · 47 checks",stripe:"#5eead4",lines:[
+      {id:"src",kind:"resource",x:20,y:srow(0),w:300,h:84,title:"Sparkov transaction CSVs",sub:"data/raw/",stripe:"#818cf8",lines:[
+        {t:"1,852,394 transactions · ~506 MB"},{t:"train + test, Jan 2019 to Dec 2020"}]},
+      {id:"ctr",kind:"config",x:20,y:srow(1)+6,w:300,h:104,title:"conf/contracts/*.yml",sub:"7 specs · 49 checks",stripe:"#5eead4",lines:[
         {t:"schema (strict) + row assertions"},{t:"error stops the DAG · warn surfaces"},{t:"read by every hop before it advances"}]},
       {id:"prod",kind:"data",x:20,y:srow(6),w:300,h:84,title:"synthetic Kafka producer",sub:"stream/producer",lines:[
-        {t:"replays curated trips, fresh event_ts"},{t:"5% sent twice · 3% arrive late"}]},
+        {t:"replays curated transactions, fresh event_ts"},{t:"5% sent twice · 3% arrive late"}]},
 
       {id:"s1",kind:"stage",x:470,y:srow(0),w:300,h:88,tag:"01",title:"Ingest → bronze",sub:"batch/ingest · bronze",lines:[
-        {t:"faithful copy + lineage columns"},{t:"trip_id, source_file, batch_id, ingested_at"}]},
+        {t:"faithful copy + lineage columns"},{t:"trans_num, source_file, batch_id, ingested_at"}]},
       {id:"s2",kind:"stageKey",x:470,y:srow(1),w:300,h:112,tag:"02",title:"Silver",sub:"conform · quarantine · dedup",stripe:"#818cf8",lines:[
-        {t:"14 contract checks, 1 df.agg pass"},{t:"dedup on trip_id, join the zone dim"},{t:"2,926,133 rows · 38,491 quarantined",cls:"em-good"}]},
+        {t:"14 contract checks, 1 df.agg pass"},{t:"dedup on trans_num, mask PII to a hash"},{t:"1,852,394 rows · 0 quarantined",cls:"em-good"}]},
       {id:"s3",kind:"stage",x:470,y:srow(2)+8,w:300,h:96,tag:"03",title:"Gold aggregates",sub:"batch/gold + export",lines:[
-        {t:"6,940 zone-days · 4,475 borough-hours"},{t:"Iceberg, partitioned by day"}]},
+        {t:"172,753 category-hours · 627,828 state-hours"},{t:"Iceberg, partitioned by day"}]},
       {id:"s4",kind:"stageKey",x:470,y:srow(4),w:300,h:88,tag:"04",title:"Warehouse",sub:"DuckDB (or Snowflake)",stripe:"#4ade80",lines:[
         {t:"loads curated parquet"},{t:"DBT_TARGET picks the engine"}]},
       {id:"s5",kind:"stage",x:470,y:srow(5),w:300,h:96,tag:"05",title:"dbt marts",sub:"dbt/streamlake",lines:[
-        {t:"5 staging views · 5 marts"},{t:"46 tests green, incl. parity",cls:"em-good"}]},
+        {t:"5 staging views · 5 marts"},{t:"44 tests green, incl. parity",cls:"em-good"}]},
       {id:"s7",kind:"gate",x:470,y:srow(6),w:300,h:88,tag:"S",title:"Streaming arm",sub:"Structured Streaming",stripe:"#fbbf24",lines:[
         {t:"2-min watermark, dedup, MERGE",cls:"em-warn"},{t:"contract runs before the merge"}]},
 
-      {id:"a1",kind:"data",x:900,y:srow(0),w:300,h:80,title:"bronze.trips_raw",sub:"Iceberg",lines:[
-        {t:"as landed, nothing filtered"},{t:"what you replay from"}]},
-      {id:"a2",kind:"result",x:900,y:srow(1),w:300,h:112,title:"silver.trips",titleSize:14,stripe:"#4ade80",lines:[
-        {t:"2,926,133 rows, one per trip_id",cls:"em-good"},
-        {t:"+ silver.trips_quarantine",mono:true,size:11},
-        {t:"38,491 bad rows, each with a reason",cls:"em-warn"}]},
+      {id:"a1",kind:"data",x:900,y:srow(0),w:300,h:80,title:"bronze.transactions",sub:"Iceberg",lines:[
+        {t:"as landed, raw PII included"},{t:"what you replay from"}]},
+      {id:"a2",kind:"result",x:900,y:srow(1),w:300,h:112,title:"silver.transactions",titleSize:14,stripe:"#4ade80",lines:[
+        {t:"1,852,394 rows, one per trans_num",cls:"em-good"},
+        {t:"+ silver.transactions_quarantine",mono:true,size:11},
+        {t:"0 bad rows, a clean synthetic feed"}]},
       {id:"a3",kind:"data",x:900,y:srow(2)+8,w:300,h:80,title:"gold.* tables",sub:"lake serving",lines:[
-        {t:"zone-days, borough-hours,"},{t:"payment-day (155 rows)"}]},
+        {t:"category-hours, state-hours,"},{t:"card velocity, 700-merchant risk"}]},
       {id:"a4",kind:"data",x:900,y:srow(4),w:300,h:80,title:"DuckDB warehouse",sub:"warehouse/",lines:[
         {t:"curated parquet loaded"},{t:"same models on Snowflake"}]},
       {id:"a5",kind:"deploy",x:900,y:srow(5),w:300,h:96,title:"dashboard + reports",sub:"dashboard/build/",lines:[
         {t:"index.html, self-contained",mono:true,size:11},{t:"freshness + contract results"}]},
-      {id:"a7",kind:"result",x:900,y:srow(6),w:300,h:88,title:"stream.trip_metrics_1m",titleSize:13,stripe:"#fbbf24",lines:[
-        {t:"4,182 produced → 4,000 counted",cls:"em-warn"},{t:"dedup removed the 182 redeliveries"}]}
+      {id:"a7",kind:"result",x:900,y:srow(6),w:300,h:88,title:"stream.txn_metrics_1m",titleSize:13,stripe:"#fbbf24",lines:[
+        {t:"20,985 produced → 20,000 counted",cls:"em-warn"},{t:"dedup removed the 985 redeliveries"}]}
     ],
     edges:[
       {from:"s1",to:"s2",stroke:"#3b4570"},{from:"s2",to:"s3",stroke:"#3b4570"},
