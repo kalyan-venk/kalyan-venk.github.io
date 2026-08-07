@@ -6,7 +6,7 @@
   <link rel="canonical" href="https://kalyanvenk.com/agentic-llmops">
   <title>Multi-Agent Inference Reliability Framework · Kalyan Venkatesh</title>
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
-  <meta name="description" content="A 3-agent runtime monitor for LLM code. Flat on code that parses, risky for strong models when the critic false-alarms. Local, no retraining.">
+  <meta name="description" content="A 3-agent runtime monitor for LLM code. The stronger the base model, the more the critic-fixer loop costs it. Local, no retraining.">
   <script>document.documentElement.setAttribute('data-theme','dark');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,9 +66,9 @@
 
   <header class="phero">
     <h1 class="reveal">Multi-Agent Inference Reliability Framework <a class="gh" href="https://github.com/kalyan-venk/agentic-llmops" target="_blank" rel="noopener" aria-label="GitHub repository"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.2 3.44 9.6 8.21 11.16.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.77.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58A12.02 12.02 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg></a></h1>
-    <p class="ptag reveal">A 3-agent runtime monitor for LLM code. Flat on code that parses, risky for strong models when the critic false-alarms.</p>
+    <p class="ptag reveal">A 3-agent runtime monitor for LLM code. The stronger the base model, the more the critic-fixer loop costs it.</p>
     <ul class="pstats reveal">
-      <li><b>&minus;0.8pp</b> Code Llama 7B, parseable code (true baseline 52%, not 20%)</li>
+      <li><b>~54%</b> of Code Llama's valid code mis-scored by the old extractor</li>
       <li><b>&minus;4.0pp</b> Qwen2.5 Coder 7B, p=0.020</li>
       <li><b>73.4%</b> fixer rewrites the gate discarded</li>
       <li><b>10</b> experiment phases</li>
@@ -185,7 +185,7 @@
   <section class="psec reveal">
     <h2>Notes</h2>
     <div class="notes">
-      <div class="note reveal"><b>Flat once fences are stripped.</b><p>Four models, 52% to 91% baseline: none moved by more than about 2 points once formatting artifacts are corrected for.</p></div>
+      <div class="note reveal"><b>The headline number did not survive its audit.</b><p>The old extractor only matched python-tagged fences, so ~54% of Code Llama's valid code was scored as failure. The corrected table keeps the models with clean re-runs and retires the rest.</p></div>
       <div class="note reveal"><b>The gate exists to prevent harm.</b><p>It reverts 73.4% of the Fixer's rewrites, keeping only strict improvements.</p></div>
       <div class="note reveal"><b>False alarms cost more than gains help.</b><p>When the critic wrongly flags code a strong model already got right, the fixer can gut it: one slice fell from 92.9% to 50.0%.</p></div>
     </div>
@@ -205,10 +205,10 @@ window.addEventListener('load', () => {
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Code Llama 7B', 'Llama 3.1 8B', 'DeepSeek 6.7B', 'Qwen2.5 7B'],
+      labels: ['Llama 3.1 8B', 'DeepSeek 6.7B', 'Qwen2.5 7B'],
       datasets: [{
-        data: [-0.8, 0.7, -1.7, -1.0],
-        backgroundColor: ['#e0b877','#86c98a','#e0b877','#e0b877'],
+        data: [0.7, -1.7, -4.0],
+        backgroundColor: ['#86c98a','#e0b877','#e0b877'],
         borderRadius: 8, barThickness: 42,
       }]
     },
@@ -281,9 +281,9 @@ window.addEventListener('load', () => {
       {id:"a3",kind:"artifact",x:900,y:srow(3)+8,w:300,h:82,title:"summary + CI CSVs",sub:"results/summary/",lines:[
         {t:"master_results_phase*.csv",mono:true,size:11},{t:"phase7_ci_summary.csv → 95% CIs",mono:true,size:11}]},
       {id:"a4",kind:"result",x:900,y:srow(4)+6,w:300,h:120,title:"Corrected finding",titleSize:13.5,stripe:"#5eead4",lines:[
-        {t:"Code Llama 7B: 52% baseline (not 20%), −0.8pp",cls:"em-warn"},
+        {t:"Code Llama 7B retired: extraction bug, no clean number",cls:"em-warn"},
         {t:"Qwen2.5 Coder 7B: 90% baseline, −4.0pp",cls:"em-bad"},
-        {t:"flat everywhere from 52% to 91% baseline"},
+        {t:"mid models flat, strong model measurably hurt"},
         {t:"false alarms can gut a strong model's working code"}]},
       {id:"aml",kind:"data",x:900,y:srow(5),w:300,h:64,title:"MLflow tracking",sub:"results/tracking.db",lines:[
         {t:"params · metrics · every run (SQLite)"}]}
