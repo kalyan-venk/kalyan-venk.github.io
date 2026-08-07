@@ -1,4 +1,4 @@
-/* flow.js — animated packets travelling an SVG pipeline.
+/* flow.js: animated packets travelling an SVG pipeline.
    Reads a spec from each <svg data-flow='{...}'> on the page.
 
    spec = {

@@ -378,7 +378,7 @@ tbody tr:hover { background: rgba(255,255,255,0.02); }
 @media (max-width: 720px) { .agentflow { padding: 18px 14px 14px; } }
 @media (prefers-reduced-motion: reduce) { .pkt { transition: none; } }
 
-/* redacted platform names — the real names are not in the DOM at all */
+/* redacted platform names, the real names are not in the DOM at all */
 .redact { filter: blur(5px); user-select: none; pointer-events: none; color: var(--text-dim); letter-spacing: 0.06em; }
 .redact-note { color: var(--text-faint); font-size: 0.86rem; margin-top: 14px; }
 
