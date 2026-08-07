@@ -1,5 +1,5 @@
 /* ===========================================================================
-   Blueprint diagrams — the system-design + code-map maps that live inside each
+   Blueprint diagrams: the system-design + code-map maps that live inside each
    project page's #blueprints section.
 
    EVERY rule is scoped under .bpx on purpose. style.css already owns .card,
@@ -10,7 +10,7 @@
    (style.css has an unscoped .node{padding:16px 20px;min-width:120px} that
    stretches it into a wide empty box).
 
-   Design tokens come from style.css — this file defines none of its own.
+   Design tokens come from style.css, this file defines none of its own.
    =========================================================================== */
 
 .bpx{margin-top:38px;position:relative;z-index:1}
@@ -23,7 +23,7 @@
   border:1px solid var(--border);border-radius:8px;padding:3px 9px;margin-right:12px;vertical-align:middle}
 .bpx .sec-head p{color:var(--text-dim);max-width:74ch;margin-top:12px}
 
-/* diagram frame — flips with the page theme */
+/* diagram frame: flips with the page theme */
 .bpx .dgm-frame{margin-top:24px;border:1px solid var(--border);border-radius:var(--radius);
   background:linear-gradient(180deg,var(--surface-2),var(--bg-soft));
   box-shadow:var(--shadow);overflow:hidden}
@@ -36,7 +36,7 @@
   letter-spacing:.04em;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .bpx .dgm-controls svg{width:13px;height:13px;color:var(--indigo)}
 
-/* the flow breadcrumb — one chip per stage, hover to spotlight it in the diagram */
+/* the flow breadcrumb: one chip per stage, hover to spotlight it in the diagram */
 .bpx .flowsteps{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
 .bpx .fstep{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600;color:var(--text-dim);
   background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:4px 10px;cursor:pointer;
@@ -54,7 +54,7 @@
    shift the page under the reader. blueprint.js sets --dgm-ar per diagram. */
 .bpx .dgm-wrap:not(.rendered){aspect-ratio:var(--dgm-ar,1220/900)}
 
-/* node fills by kind — CSS beats the inline fills, so the diagram recolours on a
+/* node fills by kind, CSS beats the inline fills, so the diagram recolours on a
    theme flip. Dark defaults first, light overrides after. */
 .bpx .nk-resource,.bpx .nk-data{fill:#12182a;stroke:#3b4570}
 .bpx .nk-stage,.bpx .nk-module{fill:#161a28;stroke:#2b3350}
@@ -106,7 +106,7 @@
 .bpx svg .result b{fill:var(--text)}
 
 /* packets. NOTE: style.css already defines .pkt/.pkt.muted for flow.js on
-   agentic-llmops.html with different colours — that is why these are scoped. */
+   agentic-llmops.html with different colours, that is why these are scoped. */
 .bpx .pkt{transition:fill .25s linear}
 .bpx .pkt.data{fill:var(--indigo);filter:drop-shadow(0 0 5px rgba(129,140,248,.85))}
 .bpx .pkt.adv{fill:var(--warn);filter:drop-shadow(0 0 5px rgba(251,191,36,.85))}
@@ -123,7 +123,7 @@
 .bpx .legend .k.out{background:var(--good);box-shadow:0 0 6px rgba(74,222,128,.8)}
 /* the square "a node/stage/artifact" swatch. Named .swatch, NOT .node:
    style.css has an unscoped .node{padding:16px 20px;min-width:120px} for the
-   old .pipeline markup, and min-width beat the 12px here — it stretched the
+   old .pipeline markup, and min-width beat the 12px here, it stretched the
    swatch into a wide empty box. */
 .bpx .legend .k.swatch{background:var(--surface-2);border:1px solid var(--border);border-radius:3px}
 
