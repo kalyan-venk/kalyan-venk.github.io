@@ -6,7 +6,7 @@
    threshold and both gates clear through to a promoted deploy. Drift on, the
    PSI crosses 0.15, the drift gate trips red and deploy is blocked.
 
-   Real numbers only: ROC-AUC gate at 0.80 with the winning 0.846 model, PSI
+   Real numbers only: AUPRC gate at 0.55 with the winning 0.6472 model, PSI
    threshold 0.15, Staging to Production promotion. The two PSI readouts are
    labelled "simulated" on the page: they drive the toggle, they are not a
    measured repo result.
@@ -24,8 +24,8 @@
   var PSI_MAX  = 0.50;   // meter scale
 
   var stages = [
-    {id:"train", tag:"01", nm:"Train", role:"LogReg vs XGBoost, 5-fold CV"},
-    {id:"eval",  tag:"02", nm:"Eval gate", role:"ROC-AUC ≥ 0.80"},
+    {id:"train", tag:"01", nm:"Train", role:"LogReg vs XGBoost, out-of-time AUPRC"},
+    {id:"eval",  tag:"02", nm:"Eval gate", role:"AUPRC ≥ 0.55"},
     {id:"drift", tag:"03", nm:"Drift gate", role:"PSI ≤ 0.15"},
     {id:"deploy",tag:"04", nm:"Deploy", role:"Staging to Production"}
   ];
@@ -82,7 +82,7 @@
     fill.style.width = (psi/PSI_MAX*100).toFixed(1)+"%";
     fill.classList.toggle("over", drift);
 
-    // train and eval always clear: the model is good (0.846 >= 0.80)
+    // train and eval always clear: the model is good (0.6472 >= 0.55)
     trainNode.className = "dt-stage is-done";
     evalNode.className  = "dt-stage is-ok";
 
