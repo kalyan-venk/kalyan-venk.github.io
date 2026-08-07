@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kalyan Venkatesh</title>
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
-<meta name="description" content="Kalyan Venkatesh, machine learning engineer. I build and ensure AI systems stay reliable in production.">
+<meta name="description" content="Kalyan Venkatesh. Research Engineer: LLMs, Agents, Computer Vision.">
 <meta property="og:title" content="Kalyan Venkatesh">
-<meta property="og:description" content="I build and ensure AI systems stay reliable in production.">
+<meta property="og:description" content="Research Engineer: LLMs, Agents, Computer Vision.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalyanvenk.com/">
 <meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Kalyan Venkatesh">
-<meta name="twitter:description" content="I build and ensure AI systems stay reliable in production.">
+<meta name="twitter:description" content="Research Engineer: LLMs, Agents, Computer Vision.">
 <meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,8 +27,7 @@
   <header class="rail">
     <div>
       <h1><a href="/">Kalyan Venkatesh</a></h1>
-      <h2>Data &middot; AI</h2>
-      <p class="pitch">I build and ensure AI systems stay reliable in production.</p>
+      <h2>Research Engineer &middot; LLMs &middot; Agents &middot; Computer Vision</h2>
       <nav class="nav">
         <a href="#about" data-sec="about"><span class="ind"></span>About</a>
         <a href="#experience" data-sec="experience"><span class="ind"></span>Experience</a>
@@ -58,7 +57,7 @@
         <p class="reveal">Hey! I'm Kalyan, and I love experimenting with agents across AI systems. I just finished my Master's in Computer Science from DePaul University, Chicago this June. I take pride in my expertise across the fields Computer Vision and LLMs.</p>
         <p class="reveal">At sensen.ai my computer vision models turned traffic footage into enforcement tickets that reached real people, so a digit misread in bad light became someone's actual problem. That taught me to distrust clean metrics and keep asking whether a system still holds 6 months after it ships, and whether I can prove it.</p>
         <p class="reveal">My 2 research projects come from the same instinct. <a href="inference-lens">Inference-Lens</a> asks whether the automated judge inside an LLM pipeline can be fooled. The <a href="agentic-llmops">multi-agent reliability work</a> asks whether a runtime monitor actually helps, and finds the point where it starts to hurt. Both are under review.</p>
-        <p class="reveal">Away from the models I build the plumbing too: a streaming lakehouse with its own data-contract engine, a double-entry payments ledger in Java, and an MLOps pipeline that fails a bad model in CI.</p>
+        <p class="reveal">Away from the models I build the plumbing too: a streaming lakehouse with its own data-contract engine and an MLOps pipeline that fails a bad model in CI.</p>
       </div>
     </section>
 
@@ -101,7 +100,7 @@
         <div class="when">LLM-as-a-judge</div>
         <div>
           <h3>Inference-Lens</h3>
-          <p>Trained NLP scoring models on human preference data, then attacked them. The model that learned preference lost the most under attack. Includes a live in-browser scorer.</p>
+          <p>Can you trust an AI that grades other AI? Trained models to pick the better of two answers, then tested them on a set built to fool them. Try the live scorer.</p>
           <ul class="tags"><li>PyTorch</li><li>transformers</li><li>adversarial NLP</li></ul>
         </div>
       </a>
@@ -110,7 +109,7 @@
         <div class="when">Agents</div>
         <div>
           <h3>secret-agent</h3>
-          <p>An LLM agent loop in 53 lines, no framework. A hostile review found a total sandbox escape, since closed. Step through a live agent trace.</p>
+          <p>Curious what runs under the hood of Claude Code. Built the agent loop from scratch, no framework, 53 lines. A hostile review found a full sandbox escape, since closed. Step through a live trace.</p>
           <ul class="tags"><li>Python</li><li>RAG</li><li>agents</li></ul>
         </div>
       </a>
@@ -119,7 +118,7 @@
         <div class="when">Data Science</div>
         <div>
           <h3>GroundTruth</h3>
-          <p>Variance-reduced A/B analysis on a 14M-row log, with an in-browser simulator for power and CUPED confidence intervals.</p>
+          <p>Telling a real effect from luck on a 14M-row A/B log. CUPED cut the noise and tightened the intervals, turning a borderline result into a clear signal. Try the simulator.</p>
           <ul class="tags"><li>statistics</li><li>CUPED</li><li>Spark</li></ul>
         </div>
       </a>
@@ -128,7 +127,7 @@
         <div class="when">MLOps</div>
         <div>
           <h3>PredictOps</h3>
-          <p>A tabular model wrapped in a real ops loop. A CI gate fails a bad model, PSI catches drift, and MLflow promotes on merit.</p>
+          <p>A model that looks great in a notebook isn't enough. A CI gate blocks a worse model, Evidently catches drift, and MLflow promotes on merit.</p>
           <ul class="tags"><li>FastAPI</li><li>MLflow</li><li>Docker</li><li>CI</li></ul>
         </div>
       </a>
@@ -137,19 +136,11 @@
         <div class="when">Data</div>
         <div>
           <h3>StreamLake</h3>
-          <p>Kafka to Iceberg with a custom data-contract engine that quarantines bad rows before they land. Break a record and watch it get caught.</p>
+          <p>Bad incoming data poisons everything downstream. Kafka to Iceberg with a data-contract engine that quarantines any record breaking the rules. Break one and watch it get caught.</p>
           <ul class="tags"><li>Spark</li><li>Kafka</li><li>dbt</li><li>Airflow</li></ul>
         </div>
       </a>
 
-      <a class="row reveal title-link" href="vaultex">
-        <div class="when">Systems</div>
-        <div>
-          <h3>vaultex</h3>
-          <p>A Java payments ledger where debits always equal credits, held under concurrent load. Post a transaction in the browser and watch the invariant hold.</p>
-          <ul class="tags"><li>Java</li><li>Spring Boot</li><li>PostgreSQL</li></ul>
-        </div>
-      </a>
     </section>
 
     <footer class="foot reveal">
