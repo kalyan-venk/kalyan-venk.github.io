@@ -56,7 +56,7 @@
       <div class="prose">
         <p class="reveal">Hey! I'm Kalyan, and I love experimenting with agents across AI systems. I just finished my Master's in Computer Science from DePaul University, Chicago this June. I take pride in my expertise across the fields Computer Vision and LLMs.</p>
         <p class="reveal">At sensen.ai my computer vision models turned traffic footage into enforcement tickets that reached real people, so a digit misread in bad light became someone's actual problem. That taught me to distrust clean metrics and keep asking whether a system still holds 6 months after it ships, and whether I can prove it.</p>
-        <p class="reveal">My 2 research projects come from the same instinct. <a href="inference-lens">Inference-Lens</a> asks whether the automated judge inside an LLM pipeline can be fooled. The <a href="agentic-llmops">multi-agent reliability work</a> asks whether a runtime monitor actually helps, and finds the point where it starts to hurt. Both are under review.</p>
+        <p class="reveal">My grad research comes from the same instinct. The <a href="inference-reliability">Multi-Agent Inference Reliability Framework</a> is 2 linked studies: one asks whether a runtime monitor around an LLM actually helps, and finds the point where it starts to hurt; the other asks whether the automated judge inside an LLM pipeline can be fooled. Under review.</p>
         <p class="reveal">Away from the models I build the plumbing too: a streaming lakehouse with its own data-contract engine and an MLOps pipeline that fails a bad model in CI.</p>
       </div>
     </section>
@@ -69,7 +69,7 @@
         <div>
           <h3>Graduate Research Engineer <span class="at">· DePaul University</span></h3>
           <p>Led the multi-agent inference reliability research with 2 faculty co-authors, now under review. Owned it from the problem to the architecture to the statistics, across 10 phases and 5 model families.</p>
-          <a class="arrow-link" href="agentic-llmops">Read the research &rarr;</a>
+          <a class="arrow-link" href="inference-reliability">Read the research &rarr;</a>
           <ul class="tags"><li>Python</li><li>LangGraph</li><li>Ollama</li><li>statistics</li></ul>
         </div>
       </div>
@@ -96,12 +96,12 @@
     <section class="sec" id="projects">
       <h2 class="sec-h">Projects</h2>
 
-      <a class="row reveal title-link" href="inference-lens">
-        <div class="when">LLM-as-a-judge</div>
+      <a class="row reveal title-link" href="inference-reliability">
+        <div class="when">Research</div>
         <div>
-          <h3>Inference-Lens</h3>
-          <p>Can you trust an AI that grades other AI? Trained models to pick the better of two answers, then tested them on a set built to fool them. Try the live scorer.</p>
-          <ul class="tags"><li>PyTorch</li><li>transformers</li><li>adversarial NLP</li></ul>
+          <h3>Multi-Agent Inference Reliability Framework</h3>
+          <p>Can you trust the checks around an LLM? Part A builds a runtime monitor for generated code and finds where it hurts. Part B trains judge models, then fools them. Try the live scorer.</p>
+          <ul class="tags"><li>agents</li><li>PyTorch</li><li>LLM evaluation</li><li>adversarial NLP</li></ul>
         </div>
       </a>
 
