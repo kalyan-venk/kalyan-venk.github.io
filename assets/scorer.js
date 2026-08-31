@@ -1,4 +1,4 @@
-// Inference-Lens client-side scorer.
+// Client-side scorer.
 // The trained Logistic Regression, ported to run in the browser. See the note on
 // scoreAll() for why XGBoost is not exposed here.
 // Model parameters and trees live in window.IL_MODEL (assets/model.js).

@@ -11,11 +11,8 @@
 <meta property="og:description" content="Research Engineer: LLMs, Agents, Computer Vision.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalyanvenk.com/">
-<meta property="og:image" content="https://kalyanvenk.com/assets/og-image.png">
-<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Kalyan Venkatesh">
 <meta name="twitter:description" content="Research Engineer: LLMs, Agents, Computer Vision.">
-<meta name="twitter:image" content="https://kalyanvenk.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -31,7 +28,6 @@
       <nav class="nav">
         <a href="#about" data-sec="about"><span class="ind"></span>About</a>
         <a href="#experience" data-sec="experience"><span class="ind"></span>Experience</a>
-        <a href="#projects" data-sec="projects"><span class="ind"></span>Projects</a>
       </nav>
     </div>
     <div class="rail-foot">
@@ -57,7 +53,6 @@
         <p class="reveal">Hey! I'm Kalyan, and I love experimenting with agents across AI systems. I just finished my Master's in Computer Science from DePaul University, Chicago this June. I take pride in my expertise across the fields Computer Vision and LLMs.</p>
         <p class="reveal">At sensen.ai my computer vision models turned traffic footage into enforcement tickets that reached real people, so a digit misread in bad light became someone's actual problem. That taught me to distrust clean metrics and keep asking whether a system still holds 6 months after it ships, and whether I can prove it.</p>
         <p class="reveal">My grad research comes from the same instinct. The <a href="inference-reliability">Multi-Agent Inference Reliability Framework</a> is 2 linked studies: one asks whether a runtime monitor around an LLM actually helps, and finds the point where it starts to hurt; the other asks whether the automated judge inside an LLM pipeline can be fooled. Under review.</p>
-        <p class="reveal">Away from the models I build the plumbing too: a streaming lakehouse with its own data-contract engine and an MLOps pipeline that fails a bad model in CI.</p>
       </div>
     </section>
 
@@ -91,47 +86,6 @@
           <ul class="tags"><li>Python</li><li>pandas</li><li>SQL</li></ul>
         </div>
       </div>
-    </section>
-
-    <section class="sec" id="projects">
-      <h2 class="sec-h">Projects</h2>
-
-      <a class="row reveal title-link" href="secret-agent">
-        <div class="when">Agents</div>
-        <div>
-          <h3>secret-agent</h3>
-          <p>Curious what runs under the hood of Claude Code. Built the agent loop from scratch, no framework, 53 lines. A hostile review found a full sandbox escape, since closed. Step through a live trace.</p>
-          <ul class="tags"><li>Python</li><li>RAG</li><li>agents</li></ul>
-        </div>
-      </a>
-
-      <a class="row reveal title-link" href="groundtruth">
-        <div class="when">Data Science</div>
-        <div>
-          <h3>GroundTruth</h3>
-          <p>Telling a real effect from luck on a 14M-row A/B log. CUPED cut the noise and tightened the intervals, turning a borderline result into a clear signal. Try the simulator.</p>
-          <ul class="tags"><li>statistics</li><li>CUPED</li><li>Spark</li></ul>
-        </div>
-      </a>
-
-      <a class="row reveal title-link" href="predictops">
-        <div class="when">MLOps</div>
-        <div>
-          <h3>PredictOps</h3>
-          <p>A model that looks great in a notebook isn't enough. A CI gate blocks a worse model, Evidently catches drift, and MLflow promotes on merit.</p>
-          <ul class="tags"><li>FastAPI</li><li>MLflow</li><li>Docker</li><li>CI</li></ul>
-        </div>
-      </a>
-
-      <a class="row reveal title-link" href="streamlake">
-        <div class="when">Data</div>
-        <div>
-          <h3>StreamLake</h3>
-          <p>Bad incoming data poisons everything downstream. Kafka to Iceberg with a data-contract engine that quarantines any record breaking the rules. Break one and watch it get caught.</p>
-          <ul class="tags"><li>Spark</li><li>Kafka</li><li>dbt</li><li>Airflow</li></ul>
-        </div>
-      </a>
-
     </section>
 
     <footer class="foot reveal">
