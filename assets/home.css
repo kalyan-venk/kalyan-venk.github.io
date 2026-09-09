@@ -48,6 +48,7 @@ a { color: var(--head); text-decoration: none; }
 .rail h1 { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--head); margin: 0; }
 .rail h1 a:hover { color: var(--accent); }
 .rail h2 { font-size: 1.15rem; font-weight: 500; color: var(--head); margin: 10px 0 0; }
+.rail h2 span { display: block; }
 .pitch { margin: 18px 0 0; max-width: 340px; }
 
 .nav { margin-top: 52px; display: none; }
@@ -92,7 +93,7 @@ a { color: var(--head); text-decoration: none; }
 
 /* one company with a connected role history */
 .home-company { padding: 0; margin: 0; }
-.home-company-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; padding: 12px 0 20px; }
+.home-company-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; padding: 12px 0 6px; }
 .home-company-label { margin: 0 0 4px; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
 .home-company-head h3 { margin: 0; color: var(--head); font-size: 1.2rem; }
 .home-company-tenure { margin: 0; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; color: var(--text-dim); text-align: right; }
