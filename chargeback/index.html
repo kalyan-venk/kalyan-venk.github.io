@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://kalyanvenk.com/chargeback/">
+<meta name="description" content="ChargeBack is an AI agent for card-fraud disputes built around evaluation, observability and guardrails.">
+<title>ChargeBack · Kalyan Venkatesh</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/chargeback.css?v=1">
+</head>
+<body>
+  <header class="cb-topbar">
+    <a href="/">&#8592; Kalyan Venkatesh</a>
+    <a href="https://github.com/kalyan-venk/chargeback-bro" target="_blank" rel="noopener">View repository &#8599;</a>
+  </header>
+
+  <main class="cb-shell">
+    <section class="cb-intro">
+      <p class="cb-eyebrow">Flagship project · Work in progress</p>
+      <h1>ChargeBack</h1>
+      <p class="cb-lede">An AI agent for card-fraud disputes built around evaluation, observability and guardrails. It connects a streamed customer conversation to transaction lookup, fraud scoring and a controlled dispute decision.</p>
+    </section>
+
+    <section class="cb-proof" aria-label="Project evidence">
+      <div><strong>555K+</strong><span>transactions loaded</span></div>
+      <div><strong>9</strong><span>PostgreSQL tables</span></div>
+      <div><strong>3</strong><span>agent tools</span></div>
+      <div><strong>7</strong><span>golden conversations</span></div>
+      <div><strong>0.74</strong><span>test AUPRC</span></div>
+    </section>
+
+    <section class="cb-lab" aria-labelledby="policy-title">
+      <div class="cb-lab-copy">
+        <p class="cb-section-k">Interactive policy explorer</p>
+        <h2 id="policy-title">See how the guardrails change a dispute decision</h2>
+        <p>Move the internal fraud score or choose a sample. The explorer mirrors ChargeBack's policy gates but uses synthetic data and does not call the live model.</p>
+
+        <div class="cb-presets" aria-label="Sample fraud scores">
+          <button type="button" data-score="0.18">Low risk</button>
+          <button type="button" data-score="0.51" class="is-active">Uncertain</button>
+          <button type="button" data-score="0.84">High risk</button>
+        </div>
+
+        <label for="scoreInput">Internal fraud score <output id="scoreValue" for="scoreInput">0.51</output></label>
+        <input id="scoreInput" type="range" min="0" max="1" step="0.01" value="0.51">
+        <div class="cb-scale" aria-hidden="true">
+          <span>0.00</span><span>0.33</span><span>0.67</span><span>1.00</span>
+        </div>
+        <div class="cb-zones" aria-hidden="true"><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="cb-decision" aria-live="polite">
+        <div class="cb-decision-head">
+          <span id="decisionState" class="cb-state cb-state-review">Human review</span>
+          <span id="decisionScore">Score 0.51</span>
+        </div>
+        <h3 id="decisionTitle">File and escalate the dispute</h3>
+        <p id="decisionText">The score is uncertain. The system records the dispute with an escalation reason so a human can review it.</p>
+
+        <ol class="cb-trace" aria-label="Tool trace">
+          <li><span>1</span><div><strong>look_up_transactions</strong><small>Matched the cardholder's transaction</small></div><b>done</b></li>
+          <li><span>2</span><div><strong>score_fraud</strong><small id="traceScore">Returned 0.51 to the policy layer</small></div><b>done</b></li>
+          <li><span>3</span><div><strong id="traceAction">file_dispute</strong><small id="traceDetail">Ownership checked and escalation reason stored</small></div><b id="traceStatus">review</b></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="cb-story" aria-labelledby="workflow-title">
+      <div>
+        <p class="cb-section-k">Workflow</p>
+        <h2 id="workflow-title">One conversation with controlled actions behind it</h2>
+      </div>
+      <ol class="cb-steps">
+        <li><span>01</span><div><h3>Find the charge</h3><p>The agent searches only the signed-in cardholder's transactions and asks for clarification when several records match.</p></div></li>
+        <li><span>02</span><div><h3>Score the transaction</h3><p>A PyTorch fraud model exported to ONNX evaluates amount, hour and merchant category signals.</p></div></li>
+        <li><span>03</span><div><h3>Apply server-side policy</h3><p>The 0.33 and 0.67 gates decide whether to refuse, escalate or file. Ownership checks and a unique constraint prevent unsafe filings.</p></div></li>
+        <li><span>04</span><div><h3>Leave an audit trail</h3><p>Every tool call records its inputs, result, start time and latency beside the conversation that caused it.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="cb-evidence" aria-labelledby="evidence-title">
+      <div>
+        <p class="cb-section-k">Evaluation</p>
+        <h2 id="evidence-title">The workflow is tested as a conversation</h2>
+        <p>Seven golden conversations replay the full dispute path and check database records plus tool traces. The cases cover refusal, human escalation, duplicate prevention, unsupported action claims, score secrecy and wrong-owner access.</p>
+      </div>
+      <aside>
+        <p class="cb-section-k">Current work</p>
+        <p>The completed 0.74-AUPRC scorer is being integrated into the full workflow. Response grounding, CI gates and cloud deployment come next.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="cb-footer">
+    <p>Built by Kalyan Venkatesh.</p>
+    <a href="https://github.com/kalyan-venk/chargeback-bro" target="_blank" rel="noopener">Read the code &#8599;</a>
+  </footer>
+
+  <script src="/assets/chargeback.js?v=1"></script>
+</body>
+</html>
