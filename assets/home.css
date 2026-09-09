@@ -56,6 +56,8 @@ a { color: var(--head); text-decoration: none; }
 .nav .ind { width: 32px; height: 1px; background: var(--text-dim); transition: width 0.2s, background 0.2s; }
 .nav a:hover .ind, .nav a.active .ind { width: 64px; background: var(--head); }
 .nav a:hover, .nav a.active { color: var(--head); }
+.nav a:focus-visible { color: var(--head); outline: 2px solid var(--accent); outline-offset: 4px; }
+.nav a:focus-visible .ind { width: 64px; background: var(--head); }
 
 .rail-foot { margin-top: 48px; }
 .socials { display: flex; gap: 18px; }
@@ -90,13 +92,14 @@ a { color: var(--head); text-decoration: none; }
 
 /* one company with a connected role history */
 .home-company { padding: 0; margin: 0; }
-.home-company-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.home-company-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; padding: 12px 0 20px; }
 .home-company-label { margin: 0 0 4px; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
 .home-company-head h3 { margin: 0; color: var(--head); font-size: 1.2rem; }
 .home-company-tenure { margin: 0; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; color: var(--text-dim); text-align: right; }
-.home-role { position: relative; margin-left: 8px; padding: 22px 0 4px 28px; border-left: 1px solid var(--line); }
+.home-role { position: relative; margin-left: 8px; padding: 22px 0 4px 28px; }
 .home-role + .home-role { padding-top: 26px; }
-.home-role::before { position: absolute; top: 29px; left: -5px; width: 9px; height: 9px; border: 2px solid var(--accent); border-radius: 50%; background: var(--bg); content: ''; }
+.home-role::before { position: absolute; z-index: 1; top: 29px; left: -4px; width: 9px; height: 9px; border: 2px solid var(--accent); border-radius: 50%; background: var(--bg); content: ''; }
+.home-role:first-of-type::after { position: absolute; top: 33px; left: 0; width: 2px; height: 100%; background: var(--line); content: ''; }
 .home-role-head { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; }
 .home-role-head h4 { margin: 0; color: var(--head); font-size: 1.02rem; }
 .home-role-head p { margin: 0; flex-shrink: 0; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.04em; color: var(--text-dim); }
