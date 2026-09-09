@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/home.css?v=9">
+<link rel="stylesheet" href="assets/home.css?v=10">
 </head>
 <body>
 <main class="wrap">
@@ -121,16 +121,49 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
 
-  // scrollspy: highlight the nav item for the section in view
+  // keep the navigation aligned with the reader's position
   var links = document.querySelectorAll('.nav a');
   var secs = [].map.call(links, function (a) { return document.getElementById(a.getAttribute('data-sec')); });
-  var spy = new IntersectionObserver(function (es) {
-    es.forEach(function (e) {
-      if (!e.isIntersecting) return;
-      links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('data-sec') === e.target.id); });
+  var navTicking = false;
+
+  function setActiveSection(id) {
+    links.forEach(function (a) {
+      var active = a.getAttribute('data-sec') === id;
+      a.classList.toggle('active', active);
+      if (active) a.setAttribute('aria-current', 'location');
+      else a.removeAttribute('aria-current');
     });
-  }, { rootMargin: '-40% 0px -55% 0px' });
-  secs.forEach(function (s) { if (s) spy.observe(s); });
+  }
+
+  function updateActiveSection() {
+    var current = secs[0];
+    var marker = window.scrollY + window.innerHeight * 0.35;
+    var atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+
+    secs.forEach(function (s) {
+      if (s && s.offsetTop <= marker) current = s;
+    });
+
+    if (atBottom) current = secs[secs.length - 1];
+    if (current) setActiveSection(current.id);
+  }
+
+  function queueActiveSectionUpdate() {
+    if (navTicking) return;
+    navTicking = true;
+    window.requestAnimationFrame(function () {
+      updateActiveSection();
+      navTicking = false;
+    });
+  }
+
+  links.forEach(function (a) {
+    a.addEventListener('click', function () { setActiveSection(a.getAttribute('data-sec')); });
+  });
+  window.addEventListener('scroll', queueActiveSectionUpdate, { passive: true });
+  window.addEventListener('resize', queueActiveSectionUpdate);
+  window.addEventListener('hashchange', queueActiveSectionUpdate);
+  updateActiveSection();
 </script>
 </body>
 </html>
