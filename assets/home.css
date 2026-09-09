@@ -89,14 +89,14 @@ a { color: var(--head); text-decoration: none; }
 .tags li { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); background: var(--tag-bg); padding: 4px 11px; border-radius: 999px; }
 
 /* one company with a connected role history */
-.home-company { padding: 24px; margin: 0 -24px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-soft); }
+.home-company { padding: 0; margin: 0; }
 .home-company-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
 .home-company-label { margin: 0 0 4px; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
 .home-company-head h3 { margin: 0; color: var(--head); font-size: 1.2rem; }
 .home-company-tenure { margin: 0; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; color: var(--text-dim); text-align: right; }
 .home-role { position: relative; margin-left: 8px; padding: 22px 0 4px 28px; border-left: 1px solid var(--line); }
 .home-role + .home-role { padding-top: 26px; }
-.home-role::before { position: absolute; top: 29px; left: -5px; width: 9px; height: 9px; border: 2px solid var(--accent); border-radius: 50%; background: var(--bg-soft); content: ''; }
+.home-role::before { position: absolute; top: 29px; left: -5px; width: 9px; height: 9px; border: 2px solid var(--accent); border-radius: 50%; background: var(--bg); content: ''; }
 .home-role-head { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; }
 .home-role-head h4 { margin: 0; color: var(--head); font-size: 1.02rem; }
 .home-role-head p { margin: 0; flex-shrink: 0; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.04em; color: var(--text-dim); }
@@ -113,7 +113,6 @@ a { color: var(--head); text-decoration: none; }
 .home-project p { margin: 8px 0 0; color: var(--text); font-size: 0.95rem; }
 
 @media (max-width: 640px) {
-  .home-company { margin: 0; padding: 20px; }
   .home-company-head, .home-role-head, .home-project-head { align-items: flex-start; flex-direction: column; gap: 4px; }
   .home-company-tenure, .home-role-head p { text-align: left; }
   .home-project { margin-left: 0; margin-right: 0; }
