@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="research-panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d1b18"/>
+      <stop offset="1" stop-color="#12110f"/>
+    </linearGradient>
+    <filter id="research-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="26" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="#12110f"/>
+  <rect width="12" height="630" fill="#d7b680"/>
+  <circle cx="1040" cy="94" r="290" fill="#d7b680" opacity=".035"/>
+  <circle cx="1100" cy="580" r="330" fill="#d7b680" opacity=".025"/>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="76" y="100" fill="#d7b680" font-family="JetBrains Mono, Menlo, monospace" font-size="20" font-weight="600" letter-spacing="4">GRADUATE RESEARCH</text>
+    <rect x="76" y="128" width="90" height="4" rx="2" fill="#d7b680"/>
+
+    <text x="72" y="221" fill="#f4efe7" font-size="53" font-weight="700" letter-spacing="-1.5">Multi-Agent</text>
+    <text x="72" y="281" fill="#f4efe7" font-size="53" font-weight="700" letter-spacing="-1.5">LLM Systems</text>
+    <text x="72" y="341" fill="#f4efe7" font-size="53" font-weight="700" letter-spacing="-1.5">&amp; Reliability</text>
+    <text x="76" y="393" fill="#b7aa97" font-family="JetBrains Mono, Menlo, monospace" font-size="20">Inference-time monitoring and repair</text>
+
+    <g transform="translate(686 127)" filter="url(#research-shadow)">
+      <rect width="438" height="354" rx="22" fill="url(#research-panel)" stroke="#5d503e" stroke-width="2"/>
+      <text x="32" y="48" fill="#8e806c" font-family="JetBrains Mono, Menlo, monospace" font-size="15" letter-spacing="2">RELIABILITY PIPELINE</text>
+
+      <g transform="translate(32 92)">
+        <rect width="104" height="62" rx="12" fill="#28241e" stroke="#8d7656"/>
+        <text x="52" y="38" text-anchor="middle" fill="#f4efe7" font-size="17" font-weight="600">Planner</text>
+      </g>
+      <path d="M138 123h34" stroke="#d7b680" stroke-width="2"/>
+      <path d="m166 117 8 6-8 6" fill="none" stroke="#d7b680" stroke-width="2"/>
+      <g transform="translate(174 92)">
+        <rect width="104" height="62" rx="12" fill="#28241e" stroke="#8d7656"/>
+        <text x="52" y="38" text-anchor="middle" fill="#f4efe7" font-size="17" font-weight="600">Critic</text>
+      </g>
+      <path d="M278 123h34" stroke="#d7b680" stroke-width="2"/>
+      <path d="m306 117 8 6-8 6" fill="none" stroke="#d7b680" stroke-width="2"/>
+      <g transform="translate(314 92)">
+        <rect width="92" height="62" rx="12" fill="#28241e" stroke="#8d7656"/>
+        <text x="46" y="38" text-anchor="middle" fill="#f4efe7" font-size="17" font-weight="600">Fixer</text>
+      </g>
+
+      <path d="M360 154v45c0 18-12 28-30 28H112c-18 0-28-10-28-28v-45" fill="none" stroke="#6e604c" stroke-width="2" stroke-dasharray="6 6"/>
+      <path d="m78 161 6-8 6 8" fill="none" stroke="#6e604c" stroke-width="2"/>
+
+      <g transform="translate(32 262)">
+        <rect width="374" height="58" rx="10" fill="#1f1d19" stroke="#5d503e"/>
+        <circle cx="28" cy="29" r="7" fill="#d7b680"/>
+        <text x="50" y="36" fill="#c9bdab" font-family="JetBrains Mono, Menlo, monospace" font-size="16">Check · Diagnose · Repair</text>
+      </g>
+    </g>
+
+    <g transform="translate(76 451)">
+      <rect width="292" height="44" rx="22" fill="#27231d" stroke="#6f5f48"/>
+      <circle cx="24" cy="22" r="5" fill="#d7b680"/>
+      <text x="42" y="29" fill="#d7b680" font-family="JetBrains Mono, Menlo, monospace" font-size="15" font-weight="600" letter-spacing="1">UNDER CONFERENCE REVIEW</text>
+    </g>
+
+    <circle cx="78" cy="546" r="5" fill="#d7b680"/>
+    <text x="100" y="555" fill="#8e806c" font-family="JetBrains Mono, Menlo, monospace" font-size="21">kalyanvenk.com/inference-reliability</text>
+  </g>
+</svg>
