@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d1b18"/>
+      <stop offset="1" stop-color="#12110f"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="26" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="#12110f"/>
+  <rect width="12" height="630" fill="#d7b680"/>
+  <circle cx="1110" cy="78" r="260" fill="#d7b680" opacity=".035"/>
+  <circle cx="1070" cy="575" r="330" fill="#d7b680" opacity=".025"/>
+
+  <g opacity=".18" stroke="#d7b680" fill="none">
+    <path d="M808 70v490M924 70v490M1040 70v490"/>
+    <path d="M750 130h380M750 246h380M750 362h380M750 478h380"/>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="76" y="104" fill="#d7b680" font-family="JetBrains Mono, Menlo, monospace" font-size="20" font-weight="600" letter-spacing="4">AI ENGINEERING PORTFOLIO</text>
+    <rect x="76" y="132" width="90" height="4" rx="2" fill="#d7b680"/>
+
+    <text x="72" y="267" fill="#f4efe7" font-size="72" font-weight="700" letter-spacing="-2">Kalyan Venkatesh</text>
+    <text x="76" y="330" fill="#c6b9a5" font-family="JetBrains Mono, Menlo, monospace" font-size="28" letter-spacing="1">Research Engineer</text>
+    <text x="76" y="381" fill="#d7b680" font-family="JetBrains Mono, Menlo, monospace" font-size="24">LLMs · AI Agents · Evaluation &amp; Reliability</text>
+
+    <g transform="translate(756 157)" filter="url(#shadow)">
+      <rect width="360" height="322" rx="20" fill="url(#panel)" stroke="#5d503e" stroke-width="2"/>
+      <text x="30" y="48" fill="#8e806c" font-family="JetBrains Mono, Menlo, monospace" font-size="15" letter-spacing="2">PRODUCTION LOOP</text>
+
+      <g transform="translate(30 82)">
+        <rect width="300" height="52" rx="10" fill="#24211c" stroke="#7b694f"/>
+        <circle cx="28" cy="26" r="8" fill="#d7b680"/>
+        <text x="52" y="34" fill="#f4efe7" font-size="19" font-weight="600">Evaluate</text>
+      </g>
+      <path d="M180 134v23" stroke="#d7b680" stroke-width="2"/>
+      <path d="m174 152 6 7 6-7" fill="none" stroke="#d7b680" stroke-width="2"/>
+      <g transform="translate(30 159)">
+        <rect width="300" height="52" rx="10" fill="#24211c" stroke="#7b694f"/>
+        <circle cx="28" cy="26" r="8" fill="#d7b680"/>
+        <text x="52" y="34" fill="#f4efe7" font-size="19" font-weight="600">Observe</text>
+      </g>
+      <path d="M180 211v23" stroke="#d7b680" stroke-width="2"/>
+      <path d="m174 229 6 7 6-7" fill="none" stroke="#d7b680" stroke-width="2"/>
+      <g transform="translate(30 236)">
+        <rect width="300" height="52" rx="10" fill="#24211c" stroke="#7b694f"/>
+        <circle cx="28" cy="26" r="8" fill="#d7b680"/>
+        <text x="52" y="34" fill="#f4efe7" font-size="19" font-weight="600">Guard</text>
+      </g>
+    </g>
+
+    <circle cx="78" cy="546" r="5" fill="#d7b680"/>
+    <text x="100" y="555" fill="#8e806c" font-family="JetBrains Mono, Menlo, monospace" font-size="21">kalyanvenk.com</text>
+  </g>
+</svg>
