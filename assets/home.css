@@ -123,6 +123,8 @@ a { color: var(--head); text-decoration: none; }
 }
 
 .foot { font-size: 0.84rem; color: var(--text-dim); max-width: 520px; }
+.foot .profile-cta { margin: 0 0 18px; color: var(--head); font-size: 1rem; }
+.foot .profile-cta a { color: var(--accent); }
 .foot a { color: var(--text); }
 .foot a:hover { color: var(--accent); }
 
