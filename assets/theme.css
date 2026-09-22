@@ -1,0 +1,78 @@
+/* Shared theme for Home, ChargeBack and Research. No preference means light. */
+:root {
+  --theme-bg: #edf7f3;
+  --theme-panel: #e3f0ea;
+  --theme-deep: #f4faf7;
+  --theme-line: #bfd5cb;
+  --theme-text: #345348;
+  --theme-dim: #526a60;
+  --theme-head: #142e25;
+  --theme-accent: #116b53;
+}
+
+:root:not([data-theme="dark"]) {
+  color-scheme: light;
+  --bg: var(--theme-bg);
+  --bg-soft: var(--theme-panel);
+  --line: var(--theme-line);
+  --text: var(--theme-text);
+  --text-dim: var(--theme-dim);
+  --head: var(--theme-head);
+  --accent: var(--theme-accent);
+  --accent-soft: rgba(17, 107, 83, 0.09);
+  --tag-bg: rgba(17, 107, 83, 0.09);
+  --sel: rgba(17, 107, 83, 0.18);
+  --cb-bg: var(--theme-bg);
+  --cb-panel: var(--theme-panel);
+  --cb-panel-deep: var(--theme-deep);
+  --cb-line: var(--theme-line);
+  --cb-text: var(--theme-text);
+  --cb-dim: var(--theme-dim);
+  --cb-head: var(--theme-head);
+  --cb-accent: var(--theme-accent);
+  --cb-green: #246b43;
+  --cb-amber: #855600;
+  --cb-red: #a33536;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --theme-bg: #141210;
+  --theme-panel: #1d1915;
+  --theme-deep: #181511;
+  --theme-line: #746a5c;
+  --theme-text: #c1b7a7;
+  --theme-dim: #a69c8c;
+  --theme-head: #ece6da;
+  --theme-accent: #d9b382;
+  --text-dim: var(--theme-dim);
+  --cb-dim: var(--theme-dim);
+}
+
+.theme-toggle {
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--theme-dim);
+  border-radius: 999px;
+  background: var(--theme-deep);
+  color: var(--theme-head);
+  font: 500 0.8rem/1.4 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.theme-toggle:hover { background: var(--theme-panel); border-color: var(--theme-accent); }
+:is(a, button, input):focus-visible { outline: 2px solid var(--theme-accent); outline-offset: 4px; }
+.rail .theme-toggle { margin-top: 22px; }
+.cb-topbar { align-items: center; flex-wrap: wrap; }
+.research-page .theme-toggle { justify-self: end; }
+
+:root:not([data-theme="dark"]) ::selection { background: rgba(17, 107, 83, 0.18); }
+:root:not([data-theme="dark"]) .cb-presets button:is(:hover, .is-active),
+:root:not([data-theme="dark"]) .cb-trace li > span { background: rgba(17, 107, 83, 0.09); }
+
+.research-page { background: var(--theme-bg); color: var(--theme-head); }
+.research-page p, .research-page .findings li { color: var(--theme-text); }
+.research-page .eyebrow, .research-page a { color: var(--theme-accent); }
+.research-page .status { background: var(--theme-panel); border-color: var(--theme-line); }
+.research-page .findings li { border-color: var(--theme-accent); }
