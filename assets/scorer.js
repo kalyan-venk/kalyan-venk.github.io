@@ -115,7 +115,7 @@
 
   function verdictText(votesA, votesB, lenA, lenB) {
     if (votesA === votesB) {
-      return `<b>Dead heat.</b> The model split the difference, and that tells you something. When two answers land this close, an automated judge is at its least trustworthy.`;
+      return `<b>Dead heat.</b> The model split the difference, and that tells you something. When 2 answers land this close, an automated judge is at its least trustworthy.`;
     }
     const winner = votesA > votesB ? "A" : "B";
     const loser = winner === "A" ? "B" : "A";
