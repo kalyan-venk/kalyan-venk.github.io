@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Compass · Kalyan Venkatesh</title>
+<link rel="canonical" href="https://kalyanvenk.com/product-compass/">
+<meta name="description" content="Data Pipelines and Analytics for AI Developer Tools. Python ingestion, PostgreSQL modeling and source-verified analysis of public product issues.">
+<meta property="og:title" content="Product Compass | Data Pipelines and Analytics for AI Developer Tools">
+<meta property="og:description" content="From public issue reports to reliable datasets and operational investigation. Built with Python, SQL and PostgreSQL.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kalyanvenk.com/product-compass/">
+<meta property="og:site_name" content="Kalyan Venkatesh">
+<meta property="og:image" content="https://kalyanvenk.com/assets/og-product-compass.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Product Compass: collect, validate and analyze public product issue data">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Product Compass | Data Pipelines and Analytics for AI Developer Tools">
+<meta name="twitter:description" content="Python ingestion, PostgreSQL modeling and source-verified analysis of public product issues.">
+<meta name="twitter:image" content="https://kalyanvenk.com/assets/og-product-compass.png">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg?v=1">
+<link rel="stylesheet" href="/assets/theme.css?v=2">
+<link rel="stylesheet" href="/assets/project-page.css?v=1">
+</head>
+<body class="project-page">
+<main>
+  <p><a href="/">&#8592; Kalyan Venkatesh</a></p>
+  <p class="eyebrow">Independent project · Python / SQL / PostgreSQL</p>
+  <h1>Product Compass</h1>
+  <p class="subtitle">Data Pipelines and Analytics for AI Developer Tools</p>
+  <p>Public issue reports contain useful clues about where a product gets in the way of its users. Product Compass turns those reports into a reliable dataset for investigating the problems behind them, starting with OpenAI Codex.</p>
+
+  <dl class="stats" aria-label="First verified dataset">
+    <div><dt>Unique issue reports</dt><dd>1,159</dd></div>
+    <div><dt>Days of reported issues</dt><dd>7</dd></div>
+    <div><dt>Fields checked per record</dt><dd>14</dd></div>
+  </dl>
+
+  <section aria-labelledby="implementation">
+    <h2 id="implementation">What the pipeline does</h2>
+    <ul class="findings">
+      <li>Collects GitHub issues through a Python workflow with date filters, pagination and request pacing. Saves the source records with collection metadata so the analysis can be traced back to its inputs.</li>
+      <li>Loads records into PostgreSQL and refreshes existing issue IDs without duplicates. Preserves source links, timestamps and labels, with all 14 mapped fields reconciled against the saved JSON.</li>
+      <li>Summarizes issues by creation date, state and label to support operational investigation. Keeps overlapping labels separate from counts of distinct reports or affected users.</li>
+    </ul>
+  </section>
+
+  <ol class="flow" aria-label="Pipeline stages">
+    <li>1. GitHub API</li><li>2. JSON snapshot</li><li>3. PostgreSQL</li><li>4. SQL analysis</li>
+  </ol>
+
+  <div class="perspectives">
+    <section>
+      <h2>The data question</h2>
+      <p>Did we collect the records we intended to collect, preserve their meaning and load them correctly? The pipeline checks completeness signals, keeps unique issue IDs and reconciles database values with the source snapshot.</p>
+    </section>
+    <section>
+      <h2>The operations question</h2>
+      <p>Which reported problem deserves investigation next? Report frequency is one signal alongside severity, ongoing exposure and available workarounds. The descriptions provide context that a label count alone cannot.</p>
+    </section>
+  </div>
+
+  <div class="status">
+    <h2>First verified snapshot</h2>
+    <p>Collected November 14, 2026 for issues created November 1–7 in UTC. The dataset contains 1,052 open and 107 closed issues, with no pull requests.</p>
+    <p>These are public reports, not the complete customer-support queue. Labels overlap and a closed issue does not necessarily mean a fixed problem. Upserts retain current values rather than a history of changes.</p>
+  </div>
+
+  <div class="actions">
+    <a class="primary-link" href="https://github.com/kalyan-venk/product-compass" target="_blank" rel="noopener">View source and setup instructions &#8599;</a>
+    <a href="/#projects">Back to projects</a>
+  </div>
+</main>
+</body>
+</html>

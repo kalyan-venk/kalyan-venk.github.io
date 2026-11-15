@@ -1,0 +1,45 @@
+/* Shared presentation for project case studies. */
+* { box-sizing: border-box; }
+.project-page {
+  margin: 0;
+  background: var(--theme-bg, #edf7f3);
+  color: var(--theme-head, #142e25);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.project-page main {
+  max-width: 860px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 64px 28px;
+  display: grid;
+  align-content: start;
+  gap: 24px;
+}
+.project-page .eyebrow { margin: 0; color: var(--theme-accent); font: 600 .76rem/1.5 ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
+.project-page h1 { margin: 0; font-size: clamp(2.2rem, 6vw, 3.8rem); letter-spacing: -.045em; line-height: 1.08; }
+.project-page h2 { margin: 0 0 12px; font-size: 1.12rem; line-height: 1.45; }
+.project-page p { margin: 0; color: var(--theme-text); font-size: 1rem; line-height: 1.75; }
+.project-page a { color: var(--theme-accent); font-weight: 600; text-underline-offset: 4px; }
+.project-page .subtitle { font-size: 1.2rem; color: var(--theme-head); }
+.project-page .findings { display: grid; gap: 18px; margin: 0; padding: 0; list-style: none; }
+.project-page .findings li { padding-left: 18px; border-left: 2px solid var(--theme-accent); color: var(--theme-text); font-size: 1rem; line-height: 1.75; }
+.project-page .status { padding: 22px; border: 1px solid var(--theme-line); border-radius: 14px; background: var(--theme-panel); }
+.project-page .status p + p { margin-top: 12px; }
+.project-page .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.project-page .stats div { padding: 20px; border: 1px solid var(--theme-line); border-radius: 12px; }
+.project-page .stats dt { color: var(--theme-dim); font-size: .83rem; }
+.project-page .stats dd { margin: 8px 0 0; color: var(--theme-head); font-size: 2rem; font-weight: 700; }
+.project-page .flow { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.project-page .flow li { padding: 10px 14px; background: var(--theme-panel); border: 1px solid var(--theme-line); border-radius: 8px; font: .84rem/1.5 ui-monospace, monospace; }
+.project-page .perspectives { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.project-page .perspectives section { border-top: 1px solid var(--theme-line); padding-top: 20px; }
+.project-page .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+.project-page .primary-link { padding: 12px 18px; border: 1px solid var(--theme-accent); border-radius: 8px; text-decoration: none; }
+.project-page .primary-link:hover { background: var(--theme-panel); }
+@media (max-width: 560px) {
+  .project-page main { padding: 36px 20px; gap: 22px; }
+  .project-page .stats { grid-template-columns: 1fr; }
+  .project-page .stats div { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 18px; }
+  .project-page .stats dd { margin: 0; }
+  .project-page .perspectives { grid-template-columns: 1fr; }
+}

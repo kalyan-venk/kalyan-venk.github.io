@@ -18,14 +18,14 @@
     <text x="76" y="100" fill="#d7b680" font-family="JetBrains Mono, Menlo, monospace" font-size="20" font-weight="600" letter-spacing="4">GRADUATE RESEARCH</text>
     <rect x="76" y="128" width="90" height="4" rx="2" fill="#d7b680"/>
 
-    <text x="72" y="221" fill="#f4efe7" font-size="53" font-weight="700" letter-spacing="-1.5">Multi-Agent</text>
-    <text x="72" y="281" fill="#f4efe7" font-size="53" font-weight="700" letter-spacing="-1.5">LLM Systems</text>
-    <text x="72" y="341" fill="#f4efe7" font-size="53" font-weight="700" letter-spacing="-1.5">&amp; Reliability</text>
-    <text x="76" y="393" fill="#b7aa97" font-family="JetBrains Mono, Menlo, monospace" font-size="20">Inference-time monitoring and repair</text>
+    <text x="72" y="221" fill="#f4efe7" font-size="53" font-weight="700" letter-spacing="-1.5">Experimental</text>
+    <text x="72" y="281" fill="#f4efe7" font-size="53" font-weight="700" letter-spacing="-1.5">Design &amp;</text>
+    <text x="72" y="341" fill="#f4efe7" font-size="53" font-weight="700" letter-spacing="-1.5">Evaluation</text>
+    <text x="76" y="393" fill="#b7aa97" font-family="JetBrains Mono, Menlo, monospace" font-size="20">17,000 records · 10 phases</text>
 
     <g transform="translate(686 127)" filter="url(#research-shadow)">
       <rect width="438" height="354" rx="22" fill="url(#research-panel)" stroke="#5d503e" stroke-width="2"/>
-      <text x="32" y="48" fill="#8e806c" font-family="JetBrains Mono, Menlo, monospace" font-size="15" letter-spacing="2">RELIABILITY PIPELINE</text>
+      <text x="32" y="48" fill="#8e806c" font-family="JetBrains Mono, Menlo, monospace" font-size="15" letter-spacing="2">EVALUATION WORKFLOW</text>
 
       <g transform="translate(32 92)">
         <rect width="104" height="62" rx="12" fill="#28241e" stroke="#8d7656"/>
@@ -50,7 +50,7 @@
       <g transform="translate(32 262)">
         <rect width="374" height="58" rx="10" fill="#1f1d19" stroke="#5d503e"/>
         <circle cx="28" cy="29" r="7" fill="#d7b680"/>
-        <text x="50" y="36" fill="#c9bdab" font-family="JetBrains Mono, Menlo, monospace" font-size="16">Check · Diagnose · Repair</text>
+        <text x="50" y="36" fill="#c9bdab" font-family="JetBrains Mono, Menlo, monospace" font-size="16">Compare · Measure · Validate</text>
       </g>
     </g>
 

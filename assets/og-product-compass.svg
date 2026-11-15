@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#edf7f3"/>
+  <rect width="12" height="630" fill="#116b53"/>
+  <circle cx="1120" cy="70" r="260" fill="#116b53" opacity=".04"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="76" y="100" fill="#116b53" font-size="20" font-weight="600" letter-spacing="3">PYTHON / SQL / POSTGRESQL</text>
+    <text x="72" y="240" fill="#142e25" font-size="64" font-weight="700" letter-spacing="-2">Product Compass</text>
+    <text x="76" y="305" fill="#345348" font-size="26">Data Pipelines and Analytics</text>
+    <text x="76" y="346" fill="#345348" font-size="26">for AI Developer Tools</text>
+    <text x="76" y="422" fill="#116b53" font-size="21">1,159 reports · 7 days · 14 fields validated</text>
+    <g transform="translate(785 155)">
+      <rect width="330" height="300" rx="18" fill="#e3f0ea" stroke="#bfd5cb"/>
+      <text x="28" y="45" fill="#526a60" font-size="16" letter-spacing="2">FROM SOURCE TO INSIGHT</text>
+      <g fill="#f4faf7" stroke="#bfd5cb"><rect x="28" y="70" width="274" height="52" rx="9"/><rect x="28" y="148" width="274" height="52" rx="9"/><rect x="28" y="226" width="274" height="52" rx="9"/></g>
+      <g fill="#142e25" font-size="22" font-weight="600"><text x="52" y="104">Collect</text><text x="52" y="182">Validate</text><text x="52" y="260">Analyze</text></g>
+      <path d="M165 122v26m0 52v26" stroke="#116b53" stroke-width="2"/>
+    </g>
+    <text x="76" y="555" fill="#526a60" font-size="21">kalyanvenk.com/product-compass</text>
+  </g>
+</svg>
