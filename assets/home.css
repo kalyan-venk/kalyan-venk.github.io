@@ -61,7 +61,8 @@ a { color: var(--head); text-decoration: none; }
 .nav a:focus-visible .ind { width: 64px; background: var(--head); }
 
 .rail-foot { margin-top: 48px; }
-.public-resume { display: inline-block; margin-bottom: 16px; color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: .15em; }
+.public-resume { display: inline-block; margin-top: 10px; padding: 3px 0; color: var(--accent); font-size: .95rem; font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
+.public-resume:hover { color: var(--head); }
 .socials { display: flex; gap: 18px; }
 .socials a { color: var(--text-dim); display: inline-flex; }
 .socials a:hover { color: var(--head); transform: translateY(-2px); transition: 0.15s; }
