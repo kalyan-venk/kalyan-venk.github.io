@@ -44,3 +44,30 @@
 .research-page .eyebrow, .research-page a { color: var(--theme-accent); }
 .research-page .status { background: var(--theme-panel); border-color: var(--theme-line); }
 .research-page .findings li { border-color: var(--theme-accent); }
+
+/* First visit in this tab. The page and any incoming anchor load underneath. */
+html[data-welcome]::before {
+  content: "Welcome! Hope you are doing fantastic!";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: grid;
+  place-content: center;
+  padding: 24px;
+  background: var(--theme-bg);
+  color: var(--theme-head);
+  font: 600 clamp(1.4rem, 4vw, 2.25rem)/1.35 system-ui, sans-serif;
+  text-align: center;
+  animation: welcome-away 300ms ease-out 2s forwards;
+}
+@keyframes welcome-away {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+html[data-welcome]:focus-within::before { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  html[data-welcome]::before { animation-duration: 1ms; }
+}
+@media print {
+  html[data-welcome]::before { display: none; }
+}
