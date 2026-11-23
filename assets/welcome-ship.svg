@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="112" height="48" viewBox="0 0 112 48">
+  <style>
+    .exhaust { transform-origin: 36px 24px; animation: ignite 2s ease-out both; }
+    @keyframes ignite {
+      0% { transform: scale(.08,.25); }
+      32% { transform: scale(.7,.8); }
+      60% { transform: scale(.55,.7); }
+      100% { transform: scale(1,1); }
+    }
+    @media (prefers-reduced-motion: reduce) { .exhaust { animation: none; } }
+  </style>
+  <g class="exhaust">
+    <path fill="#e5a341" d="M36 18Q23 17 2 24Q22 31 36 30Z"/>
+    <path fill="#fff1b9" d="M36 21Q28 20 16 24Q29 28 36 27Z"/>
+  </g>
+  <g stroke="#214d43" stroke-width="2" stroke-linejoin="round">
+    <path fill="#58a694" d="M46 17L39 4Q54 5 65 14M46 31L39 44Q55 42 65 34"/>
+    <path fill="#d9eee5" d="M39 17Q71 4 98 24Q71 44 39 31Z"/>
+    <path fill="#367e72" d="M39 18L34 18V30H39Z"/>
+    <circle cx="73" cy="24" r="5" fill="#81b9bf"/>
+  </g>
+</svg>

@@ -58,16 +58,34 @@ html[data-welcome]::before {
   color: var(--theme-head);
   font: 600 clamp(1.4rem, 4vw, 2.25rem)/1.35 system-ui, sans-serif;
   text-align: center;
-  animation: welcome-away 300ms ease-out 2s forwards;
+  animation: welcome-away 240ms ease-out 1760ms forwards;
+}
+/* Decorative ship below the greeting, with no dependency on the page scripts. */
+html[data-welcome]::after {
+  content: "";
+  position: fixed;
+  z-index: 2147483647;
+  width: 100px;
+  height: 44px;
+  left: 50%;
+  top: calc(50% + 3.5rem);
+  background: url("/assets/welcome-ship.svg") center / contain no-repeat;
+  pointer-events: none;
+  animation: welcome-launch 1760ms ease-in both, welcome-away 240ms ease-out 1760ms forwards;
+}
+@keyframes welcome-launch {
+  from { transform: translateX(-90%); }
+  to { transform: translateX(-10%); }
 }
 @keyframes welcome-away {
   from { opacity: 1; }
   to { opacity: 0; visibility: hidden; }
 }
-html[data-welcome]:focus-within::before { display: none; }
+html[data-welcome]:focus-within::before, html[data-welcome]:focus-within::after { display: none; }
 @media (prefers-reduced-motion: reduce) {
-  html[data-welcome]::before { animation-duration: 1ms; }
+  html[data-welcome]::before, html[data-welcome]::after { animation: welcome-away 1ms linear 1999ms forwards; }
+  html[data-welcome]::after { transform: translateX(-50%); }
 }
 @media print {
-  html[data-welcome]::before { display: none; }
+  html[data-welcome]::before, html[data-welcome]::after { display: none; }
 }

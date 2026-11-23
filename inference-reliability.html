@@ -21,14 +21,14 @@
 <meta name="twitter:image" content="https://kalyanvenk.com/assets/og-research.png?v=20261114">
 <meta name="twitter:image:alt" content="Experimental design and statistical evaluation of language models">
 <link rel="stylesheet" href="/assets/project-page.css?v=1">
-<link rel="stylesheet" href="/assets/theme.css?v=3">
+<link rel="stylesheet" href="/assets/theme.css?v=4">
 <script>
   try {
     if (!sessionStorage.getItem('portfolio-welcomed')) {
       sessionStorage.setItem('portfolio-welcomed', '1');
       document.documentElement.setAttribute('data-welcome', '');
       const dismissWelcome = () => document.documentElement.removeAttribute('data-welcome');
-      requestAnimationFrame(() => setTimeout(dismissWelcome, 2300));
+      requestAnimationFrame(() => setTimeout(dismissWelcome, 2000));
       window.addEventListener('pagehide', dismissWelcome, { once: true });
     }
   } catch { /* If storage is unavailable, show the page immediately. */ }
