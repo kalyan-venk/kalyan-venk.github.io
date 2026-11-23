@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/home.css?v=14">
+<link rel="stylesheet" href="assets/home.css?v=15">
 <link rel="stylesheet" href="/assets/theme.css?v=4">
 <script>
   try {
@@ -49,10 +49,10 @@
         <a href="#about" data-sec="about"><span class="ind"></span>About</a>
         <a href="#experience" data-sec="experience"><span class="ind"></span>Experience</a>
         <a href="#projects" data-sec="projects"><span class="ind"></span>Projects</a>
-        <a href="#skills" data-sec="skills"><span class="ind"></span>Skills</a>
       </nav>
     </div>
     <div class="rail-foot">
+      <a class="public-resume" href="/resume.pdf">View résumé (PDF)</a>
       <div class="socials">
         <a href="https://github.com/kalyan-venk" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.05 0-1.12.39-2.03 1.03-2.74-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 2.5-.34c.85 0 1.71.12 2.5.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.71 1.03 1.62 1.03 2.74 0 3.92-2.34 4.78-4.57 5.04.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.81 0 .27.18.59.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg></a>
         <a href="https://linkedin.com/in/kalyan-venk" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.3c0-1.26-.02-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.8V21H9z"/></svg></a>
@@ -93,14 +93,9 @@
             <h4>Software Engineer</h4>
             <p>Jan 2023 to Aug 2024</p>
           </div>
-          <p>Worked with on-site stakeholders across 4 countries to investigate customer problems and deliver production data solutions.</p>
-          <ul class="experience-points">
-            <li>Maintained shared SQL logic across 80+ client deployments, using approximately 25 reusable materialized views and PostgreSQL functions to turn about 30,000 weekly vehicle observations into reporting datasets.</li>
-            <li>Built and deployed 300+ automated reporting pipelines with client-specific filters and PDF, HTML, Excel and CSV outputs. Owned requirements, testing, deployment and verification on client servers.</li>
-            <li>Developed a model evaluation framework adopted across 26 parking deployments. Connected missing entry or exit records to unbillable sessions, helping reduce unbillable events by approximately 5% and protect about $6,000 monthly per site.</li>
-            <li>Deployed solutions on AWS, Azure and GCP servers and mentored 2 data-science interns delivering SQL-based work.</li>
-          </ul>
-          <ul class="tags"><li>SQL</li><li>Python</li><li>PostgreSQL</li><li>ETL</li><li>Data Quality</li><li>Client Delivery</li></ul>
+          <p>On-site teams across 4 countries brought me the problems they were seeing. I wrote the SQL, deployed the changes and checked the results with them. Over 2 years at sensen.ai I delivered 300+ reports that clients could run themselves by choosing the dates, sites or cameras they wanted to see.</p>
+          <p>Billing was a good example. Every 2 weeks, staff counted tickets by type, looked up the charges and worked out how much to invoice. I put those calculations into the product. Nearly every client used the new report and preparing a billing cycle went from about 10 hours to 2 per client.</p>
+          <p>At parking sites, a missed entry or exit could leave a stay unbilled. I built a way for clients to see which records paired up and which ones needed investigation. Those checks became standard across 26 parking deployments and helped the team reduce unbillable events by about 5%.</p>
         </article>
 
         <article class="home-role">
@@ -108,8 +103,8 @@
             <h4>Software Engineer Intern</h4>
             <p>Aug 2022 to Jan 2023</p>
           </div>
-          <p>Built 8 ticket-generation APIs backed by PostgreSQL functions. Automated an image-retention workflow in Python that preserved readable evidence images, reclaimed 400+ GB in its initial cleanup and deferred server upgrades by 4 to 5 months.</p>
-          <ul class="tags"><li>Python</li><li>SQL</li><li>Linux</li></ul>
+          <p>When an officer issued a ticket on patrol, the system had to pull the details from several tables while the officer waited. I wrote reusable SQL functions for about 15 ticket types and used them in the ticket-generation service. That cut the database lookup from roughly 800–900 milliseconds to 400–450.</p>
+          <p>I also wrote a Python job to compress older evidence images while keeping the plates readable. Its first run freed more than 400 GB and let us put off server upgrades for 4 to 5 months.</p>
         </article>
       </div>
     </section>
@@ -133,26 +128,6 @@
         <p>Graduate research using 17,000 model-evaluation records across 10 experimental phases to measure when automated feedback improves or harms generated-code performance.</p>
         <ul class="tags"><li>Python</li><li>Statistical Analysis</li><li>Experimental Design</li><li>MLflow</li></ul>
       </a>
-    </section>
-
-    <section class="sec" id="skills">
-      <h2 class="sec-h">Skills</h2>
-      <div class="skill-group reveal">
-        <h3>Languages &amp; Databases</h3>
-        <ul class="tags"><li>Python</li><li>SQL</li><li>PostgreSQL</li></ul>
-      </div>
-      <div class="skill-group reveal">
-        <h3>Data Engineering &amp; Analytics</h3>
-        <ul class="tags"><li>Data Modeling</li><li>ETL</li><li>Data Pipelines</li><li>dbt</li><li>Snowflake</li><li>Pandas</li><li>NumPy</li></ul>
-      </div>
-      <div class="skill-group reveal">
-        <h3>Quality &amp; Measurement</h3>
-        <ul class="tags"><li>Data Validation</li><li>Data Quality</li><li>Statistical Analysis</li><li>Experimental Design</li><li>Model Evaluation</li></ul>
-      </div>
-      <div class="skill-group reveal">
-        <h3>Operations &amp; Delivery</h3>
-        <ul class="tags"><li>Requirements Gathering</li><li>Report Automation</li><li>Workflow Automation</li><li>Stakeholder Collaboration</li><li>Git</li><li>AWS</li></ul>
-      </div>
     </section>
 
     <footer class="foot reveal">

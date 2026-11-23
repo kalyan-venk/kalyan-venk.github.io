@@ -61,6 +61,7 @@ a { color: var(--head); text-decoration: none; }
 .nav a:focus-visible .ind { width: 64px; background: var(--head); }
 
 .rail-foot { margin-top: 48px; }
+.public-resume { display: inline-block; margin-bottom: 16px; color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: .15em; }
 .socials { display: flex; gap: 18px; }
 .socials a { color: var(--text-dim); display: inline-flex; }
 .socials a:hover { color: var(--head); transform: translateY(-2px); transition: 0.15s; }
