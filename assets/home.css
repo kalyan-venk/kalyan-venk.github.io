@@ -47,7 +47,7 @@ a { color: var(--head); text-decoration: none; }
 }
 .rail h1 { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--head); margin: 0; }
 .rail h1 a:hover { color: var(--accent); }
-.rail h2 { font-size: 1.15rem; font-weight: 500; color: var(--head); margin: 10px 0 0; }
+.rail h2 { font-size: 1.15rem; font-weight: 500; color: var(--head); margin: 5px 0 0; }
 .rail h2 span { display: block; }
 .pitch { margin: 18px 0 0; max-width: 340px; }
 
@@ -61,7 +61,7 @@ a { color: var(--head); text-decoration: none; }
 .nav a:focus-visible .ind { width: 64px; background: var(--head); }
 
 .rail-foot { margin-top: 48px; }
-.public-resume { display: inline-block; margin-top: 10px; padding: 3px 0; color: var(--accent); font-size: .95rem; font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
+.public-resume { display: inline-block; margin-top: 5px; padding: 3px 0; color: var(--accent); font-size: .95rem; font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
 .public-resume:hover { color: var(--head); }
 .socials { display: flex; gap: 18px; }
 .socials a { color: var(--text-dim); display: inline-flex; }
