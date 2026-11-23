@@ -57,7 +57,6 @@
       <div class="prose">
         <p class="reveal">Hey! I'm Kalyan, a Software Engineer with 2 years at sensen.ai, where I worked as the company's sole Data Scientist. Most of my work involved SQL, production data and problems reported by on-site stakeholders.</p>
         <p class="reveal">I enjoy understanding what is going wrong, investigating the data and building a solution that makes someone's work easier. At sensen.ai, that meant shared SQL across 80+ client deployments, automated reporting and an evaluation framework adopted across 26 parking deployments.</p>
-        <p class="reveal">I'm now building <a href="/product-compass/">Product Compass</a>, a data pipeline and analytics project for investigating reported problems in AI developer tools. I'm interested in data engineering, analytics and analytical operations roles, with a strong preference for the New York City and San Francisco Bay areas.</p>
       </div>
     </section>
 
@@ -102,15 +101,13 @@
     <section class="sec" id="projects">
       <h2 class="sec-h">Projects</h2>
 
-      <a class="home-project reveal" href="/product-compass/">
+      <article class="home-project reveal" id="product-compass" aria-labelledby="product-compass-title">
         <div class="home-project-head">
-          <h3>Product Compass <span aria-hidden="true">&#8599;</span></h3>
-          <span>Interactive case study</span>
+          <h3 id="product-compass-title">Product Compass</h3>
         </div>
-        <p class="project-subtitle">Data Pipelines and Analytics for AI Developer Tools</p>
-        <p>Explore 459 open Codex reports across 8 overlapping labels. Compare which 5 cases rise to the top when you prioritize a blocked task over the age of the report.</p>
+        <p>Product Compass uses Python and PostgreSQL to track public bug reports in OpenAI Codex. It compares reports over time to show which issues closed, which changed labels and why the backlog grew or shrank.</p>
         <ul class="tags"><li>Python</li><li>SQL</li><li>PostgreSQL</li><li>Data Validation</li><li>Operational Analysis</li></ul>
-      </a>
+      </article>
 
       <a class="home-project reveal" href="/inference-reliability">
         <div class="home-project-head">

@@ -109,7 +109,7 @@ a { color: var(--head); text-decoration: none; }
 /* project entries continue the homepage timeline without becoming cards */
 .home-project { display: block; padding: 20px; margin: 0 -20px; border: 1px solid transparent; border-radius: 10px; transition: background 0.18s, border-color 0.18s, transform 0.18s; }
 .home-project + .home-project { margin-top: 8px; }
-.home-project:hover { background: var(--bg-soft); border-color: var(--line); transform: translateY(-2px); }
+a.home-project:hover { background: var(--bg-soft); border-color: var(--line); transform: translateY(-2px); }
 .home-project-head { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; }
 .home-project-head h3 { margin: 0; color: var(--head); font-size: 1.02rem; }
 .home-project-head h3 span { color: var(--accent); }
